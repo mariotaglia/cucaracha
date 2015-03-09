@@ -12,7 +12,7 @@ subroutine calc_conductance(pHbulk)
     real(kind=8), intent(in) :: pHbulk
     real(kind=8) :: Gvacio, Grel, Gporo,Gporopos, Gporoneg, GporoOHmin, gporoHplus
     integer :: iR
-
+    print*, "Calculating conductance"
     Gvacio = 0.0
     Grel = 0.0
     Gporo = 0.0

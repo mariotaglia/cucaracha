@@ -1,4 +1,6 @@
 subroutine open_files(m)
+#   include "control_run.h"
+!    use csys, only: no_chains
     integer, intent(in) :: m
     select case ( m)
         case (1)
@@ -11,18 +13,18 @@ subroutine open_files(m)
             open(unit=306, file='F_mixOH.dat')
             open(unit=307, file='F_conf.dat')
             open(unit=308, file='F_eq.dat')
+# ifdef VDW
             open(unit=309, file='F_vdW.dat')
+# endif
             open(unit=310, file='F_eps.dat')
             open(unit=311, file='F_electro.dat')
             open(unit=312, file='F_tot2.dat')
-        
         ! Mean values
             open(unit=313, file='fmedio.dat')
             write(313,*) '# pHbulk, fmedio, fmedio2, fdiswall'
+            open(unit=314, file='pKas')
             open(unit=318, file='Rmedio')
             write(318,*) '# pHbulk, Rmedio, sumcharge'
-            open(unit=314, file='pKas')
-        
         ! Conductance
             open(unit=315, file='Gporo')
             open(unit=316, file='Gvacio')
@@ -41,7 +43,9 @@ subroutine open_files(m)
             close(306)
             close(307)
             close(308)
+#       ifdef VDW
             close(309)
+#       endif
             close(310)
             close(311) 
             close(312)

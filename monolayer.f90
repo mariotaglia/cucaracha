@@ -5,7 +5,7 @@
 ! *****************************************************************************
 
 program nanochannel
-!    include"control_run.h"
+#   include "control_run.h"
     use globales
     use csys
     use pore 
@@ -37,10 +37,16 @@ program nanochannel
     call units_adaptation ! units and variables adaptation
 
     call allocating(1) ! Allocating memory
+
+! If chain ==1 then prepare the memory and variables
+#if CHAIN == 1  
     call creador ! Creating the chains
     call pxs ! Chequea que todos los segmentos esten dentro del slab.
-!    call kai ! Calcula los parametros de L-J Xu(i,j) Solo para fvdW
+#   if  VDW
+    call kai ! Calcula los parametros de L-J 
+#   endif
     call mpinit(15) ! Initial working precision, number of digits
+#endif
     call open_files(1) ! Open files to save data? how to do that?
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -52,6 +58,7 @@ program nanochannel
 ! IMPORTAN: DEFINE INITIAL GUESS -> SUBROUTINE!
 
     call set_bulk_properties(pHs(1)) ! Setup bulk properties before setup initial guess ocurre en fkfun! (?)
+                                     ! bulk properties without polymer
     call set_initial_guess(0) ! 0 - bulk solution
 !    call set_pore_distrib Not necesarry this function is inside fkfun
 
@@ -79,6 +86,7 @@ program nanochannel
         if ( check_run(ipH,ier) ) then
 !       Si hubo un error entonces imprimir alguna informacion y terminar
             print*, "funcion check run: Mal run!"
+            stop
         ! Mean value between the last good value and the actual wrong value        
         !        goto 257 (abajo de 255(no calculapHbulk))
 !            aux_del = 2
@@ -89,7 +97,7 @@ program nanochannel
 !           Preparar el siguiente paso: infile = 2
 ! Se escribe el output 
             call save_data(ipH) ! Saving data
-            call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS! 
+            call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
             call calc_mean_values(pHs(ipH)) ! Rmedio 
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
             call calc_conductance(pHs(ipH))
@@ -103,7 +111,5 @@ program nanochannel
    enddo  ! End principal Loop 
 
     call open_files(0) ! Closing all files
-
-    !DeAllocating
-    call allocating(0)
+    call allocating(0) !DeAllocating
 end program nanochannel

@@ -28,7 +28,7 @@ module pore
     real(KIND=8), dimension(:), allocatable :: qtot        ! Carga total
     real(kind=8), dimension(:), allocatable :: psi         ! psi se define asi por la discretizacion de Poisson y las boundary conditions 
     real(KIND=8), dimension(:), allocatable :: xpos        ! pos ion
-    real(KIND=8), dimension(:), allocatable :: xpos2       ! pos ion
+!    real(KIND=8), dimension(:), allocatable :: xpos2       ! pos ion
     real(KIND=8), dimension(:), allocatable :: xneg        ! neg ioni
     real(KIND=8), dimension(:), allocatable :: xHplus      ! H+
     real(KIND=8), dimension(:), allocatable :: xOHmin      ! OH-

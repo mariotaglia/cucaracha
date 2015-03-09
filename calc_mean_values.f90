@@ -2,6 +2,7 @@
 !-----------------------------------------------------------------
 
 subroutine calc_mean_values(pHbulk)
+#   include "control_run.h"
     use globales, only: delta, vpol, zpos, pi, lb
     use csys, only: sigmaq
     use pore
@@ -10,10 +11,12 @@ subroutine calc_mean_values(pHbulk)
     integer :: iR
     real(kind=8) :: sumpol, fmedio, fmedio2, fdisw, Rmedio, sumcharge
 
-       sumpol = 0.0
-       fmedio = 0.0
-      fmedio2 = 0.0
+    print*, "Calculating mean values... "
         fdisw = 0.0
+#if CHAIN == 1
+       fmedio = 0.0
+       sumpol = 0.0
+      fmedio2 = 0.0
        Rmedio = 0.0
     sumcharge = 0.0
 
@@ -34,17 +37,20 @@ subroutine calc_mean_values(pHbulk)
         sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpol(iR)/vpol)*zpos *(fdis(iR)+2*fdis2(iR))
 !       sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpoln(iR)/vpol)*fdis(iR)*zneg
 !     & + (dfloat(iR)-0.5)*avpolp(iR)*fdis2(iR)*zpos ! para switterion
-       enddo
-
+    enddo
+! the idea is to calculate the net charge in the wall?
 !        fdisw = (sigmaq /(4.0*pi*lb*delta) ) *fdiswall ! ??
+!        fdisw = sigmaq*2*pi*radio*longporo /(4.0*pi*lb*delta) ) *fdiswall ! ??
 
        fmedio = fmedio/sumpol    ! fraccion desprotonada media por monomero
       fmedio2 = fmedio2/sumpol    ! fraccion desprotonada media por monomero
        Rmedio = Rmedio/sumpol
     sumcharge = sumcharge/sumpol ! carga total por unidad de monomero
-
-    write(313,*) pHbulk, fmedio, fdiswall!, fmedio2, fdiswall !, fdisw <- cual es el sentido de fdisw?
     write(318,*) pHbulk, Rmedio, sumcharge
-
+! NOTE: fdiswall was calculated in set_pore_distrib be carefull! ;)
+    write(313,*) pHbulk, fmedio, fdiswall!, fmedio2, fdiswall !, fdisw <- cual es el sentido de fdisw?
+#else
+    write(313,*) pHbulk, fdiswall
+#endif
 
 end subroutine calc_mean_values

@@ -51,4 +51,12 @@ subroutine read_input
       read(8, *), movpos, movneg, movHplus, movOHmin, longporo
     close(unit=8)
 
+# if CHAIN == 1
+    print*, "Program compiled to include chains in the system!"
+    if (cuantas*sigma*long <= 0.0 ) then
+        print*, "No polymer chains in this run."
+        chainpol = .False.
+    endif
+#endif
+
 end subroutine 

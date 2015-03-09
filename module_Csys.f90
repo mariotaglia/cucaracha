@@ -8,6 +8,7 @@
 
 module csys
   use mpmodule
+    logical :: chainpol
     integer, parameter :: sp = kind(1.0),    &
                           dp = selected_real_kind(2*sp),   &
                           qp = selected_real_kind(2*dp)   

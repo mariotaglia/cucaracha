@@ -1,5 +1,5 @@
 subroutine set_pore_distrib
-!    include 'control_run.h' ! To control the code to be included in the compilation
+#   include "control_run.h" ! To control the code to be included in the compilation
     use mpmodule
     use globales
     use csys
@@ -48,15 +48,16 @@ subroutine set_pore_distrib
 !          denon = ( expmuOHmin*dexp(psi(iR)*zpos) )**2
 !     &          + expmuOHmin*dexp(psi(iR)*zpos)*Ka0
 !     &          + Ka0*Kb0 ! Kb0 = Ka20 for dobule protonation
-
+#   if CHAIN == 1
 !         fdis(iR) = expmuOHmin*dexp(psi(iR)*zpos)*Ka0 / denon 
 !         fdis2(iR) = Ka0*Kb0 / denon ! Kb0 = Ka20 for dobule protonation
         fdis(iR) = 1.0d0/(1.0d0 + (Ka0*dexp(psi(iR)*zpos)/expmuHplus) )
 !       fdis2(iR) = 1.0d0/(1.0d0 + (dexp(psi(iR)*zpos)*expmuOHmin/Kb0) )
         fdis2(iR) = 0.0
+#   endif
     end do
 
-!    call printstate("L51 set_pore_distrib")
+# if CHAIN == 1
 !!!!!! AQUI FALTA ACTUALIZAR xH! debe tomar el valor de  x1
 !----------------------------------------------------------------------------- 
 ! To calculate VdW force coefficient
@@ -65,15 +66,14 @@ subroutine set_pore_distrib
 ! El termino: (xh(iR)**vpol) , viene de reemplazar 
 ! la presion osmotica por la expresion para el solvente
         xpot(iR) = (xh(iR)**vpol) /(1-fdis(iR)-fdis2(iR) )
-!! # if VDW==1
-!! ! Taking in to account the probability with the vdW force coefficient for every layer.
-!!         do j = 1, dimR
-!! !        xpot(iR) = xpot(iR) * dexp(vsol*vpol* Xu(iR,j)*xtotal(j+1)) ! Porque j+1 ??? (elefante)
-!!             xpot(iR) = xpot(iR) * dexp(vsol*vpol* Xu(iR,j)*xtotal(j))
-!!         end do
-!! # endif
+# ifdef VDW
+! Taking in to account the probability with the vdW force coefficient for every layer.
+        do j = 1, dimR
+!        xpot(iR) = xpot(iR) * dexp(vsol*vpol* Xu(iR,j)*xtotal(j+1)) ! Porque j+1 ??? (elefante)
+            xpot(iR) = xpot(iR) * dexp(vsol*vpol* Xu(iR,j)*xtotal(j))
+        end do
+# endif
     enddo
-
 !          q = 0.0 ! Normalization of P(alpha)
           q = '0.0' ! Normalization of P(alpha) remember that: type (mp_real) q !!
       shift = 1.0 ! (?)
@@ -105,7 +105,8 @@ subroutine set_pore_distrib
 !            avpolp(bR) = avpolp(bR) + pro(i)*sigma*vpol*Factorcurv(bR) ! cilindro, ver notas...
         end do
     enddo ! End loop over chains/configurations
-    
+!    write(10,*) "Imprimo desde set_pore_distrib: "
+!    call mpwrite(10,q) 
 !    call printstate("L105 set_pore_distrib")
     do iR=1, dimR            ! norma avpol
         aux_mp =  avpol(iR)/ q  ! q_mp_real
@@ -118,6 +119,7 @@ subroutine set_pore_distrib
 ! Chequeo q
 !    call checknum(q,'q en set_pore_distrib')
 !    call printstate("L115 set_pore_distrib")
+#endif
 
 ! Local charge
     do iR=1,dimR  
@@ -128,8 +130,10 @@ subroutine set_pore_distrib
 !     &   avpol(iR)*(zpol/vpol)*fdis(iR) + xHplus(iR)-xOHmin(iR) 
 
         qtot(iR) = (zpos*xpos(iR)+zneg*xneg(iR))/vsalt &
-            + xHplus(iR)-xOHmin(iR) & 
-            + (fdis(iR) + 2*fdis2(iR))*zpos*avpol(iR)/vpol 
+# if CHAIN == 1
+            + (fdis(iR) + 2*fdis2(iR))*zpos*avpol(iR)/vpol &
+# endif
+            + xHplus(iR)-xOHmin(iR) 
 !         + zpos2*xpos2(iR)/vsalt2 &
 !     &   + (avpolp(iR)*fdis2(iR)*zpos + avpoln(iR)*fdis(iR)*zneg)/vpol
     enddo

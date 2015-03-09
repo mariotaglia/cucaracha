@@ -2,9 +2,10 @@
 !
 !!!!!!!!!!!!!!!!! Guarda archivos !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine save_data(ipH)
+#   include "control_run.h"
     use globales, only: delta, dimR
     use csys, only: pHs!,x1
-    use pore, only: avpol, qtot, xh, xpos, xpos2, xneg, xHplus, xOHmin, fdis! psi, fdis!, fdis2
+    use pore, only: avpol, qtot, xh, xpos, xneg, xHplus, xOHmin, fdis! psi, fdis!, fdis2
     integer, intent(in) :: ipH
     real(kind=8) :: pH
     character(len=5) :: title
@@ -22,12 +23,22 @@ subroutine save_data(ipH)
 !            enddo
 !        close(92)
 
+    print*, "Saving data..."
 ! GUARDAR! usar savetodisk
         pH=pHs(ipH)
+#if CHAIN == 1
 ! Polimero
       title = 'avpol'
       call savetodisk(avpol, title, pH ,ipH)
+! fdis
+      title = 'fdis1'
+      call savetodisk(fdis, title, pH, ipH)
 
+!! ! fdis2
+!!       title = 'fdis2'
+!!       call savetodisk(fdis2, title, pH, ipH)
+
+#endif
 ! Polimero
       title = 'qtodo'
       call savetodisk(qtot, title, pH ,ipH)
@@ -41,8 +52,8 @@ subroutine save_data(ipH)
       call savetodisk(xpos, title, pH, ipH)
 
 ! Cationes2
-      title = 'avpo2'
-      call savetodisk(xpos2, title, pH, ipH)
+!      title = 'avpo2'
+!      call savetodisk(xpos2, title, pH, ipH)
 
 ! Aniones
       title = 'avneg'
@@ -56,17 +67,10 @@ subroutine save_data(ipH)
       title = 'avOHm'
       call savetodisk(xOHmin, title, pH,ipH)
 
-! fdis
-      title = 'fdis1'
-      call savetodisk(fdis, title, pH, ipH)
-
-!! ! fdis2
-!!       title = 'fdis2'
-!!       call savetodisk(fdis2, title, pH, ipH)
-
 ! Potencial electrostatico
       title = 'poten'
       call savetodisk(psi, title, pH, ipH)
+
 !!     format_string='(A5,A1,I2.2,F0.2,A1,I3.3,A4)'
 !!     ! Construye el array filename
 !!     write(filename,format_string) title,'_', int(pHs(ipH)) , pHs(ipH)-int(pHs(ipH)), '_', ipH, '.dat'

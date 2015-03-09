@@ -7,6 +7,7 @@ subroutine fkfun(x,f,ier)
 ! Esta funcion no deberia operar sobre los parametros del poro. 
 ! Su unica funcion deberia armar la funcion f = f(x) a minimizar por kinsol
 !
+#    include "control_run.h"
     use globales 
     use csys
     use pore
@@ -35,7 +36,8 @@ subroutine fkfun(x,f,ier)
 ! Calculo de xtotal para poor solvent en el lattice
 
     do iR=1,dimR
-        xtotal(iR) = 1.0 - xpos(iR) - xneg(iR) - xpos2(iR) - xh(iR) - xHplus(iR) - xOHmin(iR) ! xtotal es todo menos solvente e iones
+!        xtotal(iR) = 1.0 - xpos(iR) - xneg(iR) - xpos2(iR) - xh(iR) - xHplus(iR) - xOHmin(iR) ! xtotal es todo menos solvente e iones
+        xtotal(iR) = 1.0 - xpos(iR) - xneg(iR) - xh(iR) - xHplus(iR) - xOHmin(iR) ! xtotal es todo menos solvente e iones
     enddo
 
 !----------------------------------------------------------------------------------------------
@@ -43,8 +45,12 @@ subroutine fkfun(x,f,ier)
 !----------------------------------------------------------------------------------------------
 ! Volume fraction
     do iR=1,dimR
-        f(iR)= avpol(iR) + xh(iR) & 
-             + xneg(iR) + xpos(iR) + xpos2(iR) &
+        f(iR)= xh(iR) & 
+#if CHAIN == 1
+             + avpol(iR) & 
+#endif
+             + xneg(iR) + xpos(iR) &
+!             + xpos2(iR) &
              + xHplus(iR) + xOHmin(iR) - 1.000000d0
     enddo
 
@@ -80,7 +86,7 @@ subroutine fkfun(x,f,ier)
         call Rchecknumber(norma, 'norma en fkfun') ! if NaN or Infinity checknumber stops the program
     enddo
     print*, "fkfun67: iter, norma, q", iter, norma
-    call mpwrite(84,q)
+    call mpwrite(9,q)
     ier = 0
    
     return
@@ -92,13 +98,15 @@ subroutine fkfun(x,f,ier)
             ! Check if Not a Number
             if ( var /= var ) then
                 print*, arg, " real number is NaN"
-                call printstate('checknumber real NaN')
+                call printstate(arg)
+                !call printstate('checknumber real NaN')
                 stop
             endif
         
             if ( var-1 == var ) then
                 print*, arg, " real number is infinity"
-                call printstate('checknumber real infinity')
+                call printstate(arg)
+                !call printstate('checknumber real infinity')
                 stop
             endif
         

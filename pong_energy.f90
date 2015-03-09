@@ -1,5 +1,5 @@
 function pong_energy()
-    use globales, only: delta, radio, dimR, vsalt, vsol, vpol
+    use globales, only: delta, radio, dimR, vsalt, vsol
     use csys, only: sigmaq, xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk
     use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot
     implicit none

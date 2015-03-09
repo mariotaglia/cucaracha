@@ -145,25 +145,25 @@ $(EXE): $(OBJS) Makefile control_run.h
 	$(FC) $(FFLAGS) $(OBJS) $(objs_mpfun90) -o $(EXE) $(LDFLAGS) $(LFLAGS) 
 #	$(FF) $(FFLAGS) $(LFLAGS) $(LDFLAGS) $(OBJS) -o $(EXE) 
 
-monolayer: control_run.h Makefile
-module_globales.o: module_globales.f90
-module_Csys.o: module_Csys.f90
-fkfun.o: fkfun.f90
-fkpsol.o: fkpsol.f90
-fkpset.o: fkpset.f90
-factorcurv.o: factorcurv.f90
-set_bulk_properties.o : set_bulk_properties.f90 module_Csys.o
-kai.o : kai.f90 module_Csys.o
-cadenas72mr.o: cadenas72mr.f90 module_Csys.o
-creador.o: creador.f90 module_Csys.o
-mrrrr.o: mrrrr.f90 module_Csys.o
-pxs.o: pxs.f90 module_Csys.o
-rands.o: rands.f90 module_Csys.o
-read_input.o: read_input.f90 module_Csys.o
-rota36.o: rota36.f90 module_Csys.o
-units_adaptation.o: units_adaptation.f90
-monolayer.o: module_globales.o module_Csys.o control_run.h Makefile
-monolayer: module_globales.o module_Csys.o
+$(OBJS): control_run.h
+monolayer: control_run.h Makefile control_run.h module_globales.o module_Csys.o control_run.h
+module_globales.o: module_globales.f90 control_run.h
+module_Csys.o: module_Csys.f90 control_run.h
+fkfun.o: fkfun.f90 control_run.h
+fkpsol.o: fkpsol.f90 control_run.h
+fkpset.o: fkpset.f90 control_run.h
+factorcurv.o: factorcurv.f90 control_run.h
+set_bulk_properties.o : set_bulk_properties.f90 module_Csys.o control_run.h
+kai.o : kai.f90 module_Csys.o control_run.h
+cadenas72mr.o: cadenas72mr.f90 module_Csys.o control_run.h
+creador.o: creador.f90 module_Csys.o control_run.h
+mrrrr.o: mrrrr.f90 module_Csys.o control_run.h
+pxs.o: pxs.f90 module_Csys.o control_run.h
+rands.o: rands.f90 module_Csys.o control_run.h
+read_input.o: read_input.f90 module_Csys.o control_run.h
+rota36.o: rota36.f90 module_Csys.o control_run.h
+units_adaptation.o: units_adaptation.f90 control_run.h
+monolayer.o: module_globales.o module_Csys.o control_run.h Makefile control_run.h
 
 #install: all
 #	cp $(TARGET) ~/bin
