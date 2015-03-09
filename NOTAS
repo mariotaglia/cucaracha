@@ -1,0 +1,20 @@
+**********
+* Falta ver como cambiar el go to 555 cuando explota por algun motivo. 
+* Implementar las variables de preprocesamiento para filtrar fisica del programa. (control_run.h)
+  mpif90/gfortran no entiende los comentarios de C++. 
+2015-03-05
+* Incorpore la libreria MPFUN para calculo de multi-precission, 
+  es importante para calcular q (funcion de particion de las configuraciones
+  de polimero) y sus logaritmos.
+** NOTA: Hay que compilar el paquete completo y quedarse con los modulos:
+ 
+   mpfun90.o mpmod90.o mpmodm90.o mpmodx90.o  mpmodule.mod
+
+2015-03-04
+* Agregue rutinas de checkeo en cada F*.f90
+* Ahora se lee dimR, cuantas y long desde el fort.8
+* EL programa funciona para sistemas pequeños dimR~40 (R=20nm)
+
+20015-02-18 VERSION 4:
+* Agrege maxiter en call_kinsol. (maxiter=200 by default)
+* sigmaq ----> sigmaq*2*pi*radio, en boundary conditions and fdiswall
