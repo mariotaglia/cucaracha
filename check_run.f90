@@ -10,12 +10,13 @@ function check_run(j_pHbulk,ier)
     real(kind=8) :: mean_pH!, pHbulk
         
 !    pHbulk=pHs(j_pHbulk)
-    if( (ier < 0) .or. (norma > error) ) then ! exploto...
+!    if( (ier < 0) .or. (norma > error) ) then ! exploto...
+    if( (ier < 0) ) then ! exploto...
         call printstate('Check Run BUM!')
         print*, 'Check Run says: BUM! see: printstate.txt '
         print*, 'Error en solver: ', ier
-        print*, 'norma ', norma
-        print*, 'q ', q
+!        print*, 'norma ', norma
+!        print*, 'q ', q
         print*, 'st de error', st
         print*, 'pH de error', pHs(j_pHbulk)
        

@@ -1,16 +1,18 @@
 function fconf_pol()
     use mpmodule
     use globales, only: cuantas, delta, vsol
-    use csys, only: q, pro, sigma 
+    use csys, only: log_q, pro, sigma 
 !    use FreeEnergy, only: checknumber
     implicit none
     real(kind=8) :: fconf_pol, aux_mp
     integer :: i
     fconf_pol=0
-
+!    print*, "Fconf10: Valor log_q", log_q
     do i = 1, cuantas
-        aux_mp = log(pro(i)/q)
-        fconf_pol = fconf_pol + (pro(i)/q)*aux_mp /vsol*delta*sigma
+!        aux_mp = log(pro(i)/q)
+!        aux_mp = log(pro(i)) - log_q
+!        fconf_pol = fconf_pol + (pro(i)/q)*aux_mp /vsol*delta*sigma
+        fconf_pol = fconf_pol + (pro(i))*log(pro(i)) /vsol*delta*sigma
         !fconf_pol = fconf_pol + (pro(i)/q)*dlog((pro(i))/q)  /vsol*delta*sigma
     enddo
 

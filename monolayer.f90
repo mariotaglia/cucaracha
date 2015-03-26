@@ -45,9 +45,10 @@ program nanochannel
 #   if  VDW
     call kai ! Calcula los parametros de L-J 
 #   endif
-    call mpinit(15) ! Initial working precision, number of digits
 #endif
+    call mpinit(15) ! Initial working precision, number of digits
     call open_files(1) ! Open files to save data? how to do that?
+    write(11,*) "set_pore_distrib109: q "
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Falta una etapa donde se definir si se continua una corrida anterior
@@ -62,11 +63,11 @@ program nanochannel
     call set_initial_guess(0) ! 0 - bulk solution
 !    call set_pore_distrib Not necesarry this function is inside fkfun
 
-    call printstate("Aloop L57") ! Report of State
 ! *****************************************************************************
 ! Principal Loop loop
 ! *****************************************************************************
     ipH=1 
+    call printstate("Aloop L57") ! Report of State
     do while (ipH <= npH)  ! Start principal Loop
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
 !        print*, 'q', q
@@ -79,7 +80,7 @@ program nanochannel
 
         xh(:) = x1(:dimR)    ! Solvent volume fraction
         psi(1:dimR) = x1(dimR+1:) ! Electrostatic Potential
-
+!        call printstate('monolayer L83')
 ! FUNCION: check_run == true if error.
 !        if ( ipH == 4 .and. aux_del==0 ) aux_del = 1
 !        if ( aux_del == 1 ) ier = -1

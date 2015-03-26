@@ -13,6 +13,7 @@ subroutine set_pore_distrib
     end interface 
     integer :: iR, aR, i,j 
     real(kind=8) :: shift ! it is  multiplicative factor in probability pro(cuantas)
+    type (mp_real) q ! este valor puede ser MUY grande
     real(kind=8) :: aux_mp
 ! Dissociation in the inner wall of the pore 
 ! + interaction with the electrostatic Potential    
@@ -105,8 +106,13 @@ subroutine set_pore_distrib
 !            avpolp(bR) = avpolp(bR) + pro(i)*sigma*vpol*Factorcurv(bR) ! cilindro, ver notas...
         end do
     enddo ! End loop over chains/configurations
-!    write(10,*) "Imprimo desde set_pore_distrib: "
-!    call mpwrite(10,q) 
+    call mpwrite(11,q) 
+    log_q = log(q) ! Variable clave en el calculo de energias!
+    print*, "Se normalizan todas las probabilidades por q!"
+    do i=1,cuantas 
+        pro(i) = pro(i)/q
+    enddo
+    print*, "pro(:): ", pro(:)
 !    call printstate("L105 set_pore_distrib")
     do iR=1, dimR            ! norma avpol
         aux_mp =  avpol(iR)/ q  ! q_mp_real
@@ -119,7 +125,7 @@ subroutine set_pore_distrib
 ! Chequeo q
 !    call checknum(q,'q en set_pore_distrib')
 !    call printstate("L115 set_pore_distrib")
-#endif
+# endif
 
 ! Local charge
     do iR=1,dimR  

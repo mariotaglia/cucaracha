@@ -20,7 +20,7 @@ subroutine printstate(marca)
     write(1984,imprimo), ps_i, " Estado del programa en: ", marca  
     write(1984,*), "pH                 :", pHs(ipH)
 
-    write(1984,'(A29)'), "Variables in module globales: " 
+    write(1984,'(A29)'), "Variables in module globales:" 
                write(1984,*), "Na                 :", Na
                write(1984,*), "pi                 :", pi
     write(1984,'(A20,F7.3)'), "zpos               :", zpos ! No olvidar que el character '.' usa un espacio de la noteacion.
@@ -49,7 +49,7 @@ write(1984,'(A20,I4,I4,I7)'), "long, dimR, cuantas:", long, dimR, cuantas ! nume
     write(1984,imprimo), "x1                 :", x1     ! fraccion de volumen solvente
     write(imprimo,'(A5,I4,A7)'), "(A20,",dimR,"G12.4)"
     write(1984,imprimo), "xh                 :", xh     ! fraccion de volumen solvente
-    write(1984,imprimo), "xpot               :", xpot!, xpot_neg(dimR), xpot_pos(dimR)
+!    write(1984,imprimo), "xpot               :", xpot!, xpot_neg(dimR), xpot_pos(dimR)
     write(1984,imprimo), "qtot               :", qtot ! Carga total
     write(1984,imprimo), "xpos               :", xpos ! pos ion
 !    write(1984,imprimo), "xpos2              :", xpos2 ! pos ion
@@ -66,10 +66,10 @@ write(1984,'(A20,I4,I4,I7)'), "long, dimR, cuantas:", long, dimR, cuantas ! nume
     ! This are singlevalue variables    
            write(1984,imprimo), "fdiswall           :", fdiswall
       write(1984,'(A20,F7.3)'), "zpos               :", zwall ! No olvidar que el character '.' usa un espacio de la noteacion.
-    write(1984,*), "kwall      :", kwall , "Kwall0  :", Kwall0, xsalt2, "pKawall :", pKawall
+    write(1984,*), "kwall      :", kwall, "pKawall :", pKawall , "Kwall0  :", Kwall0
     write(1984,*), "constq     :", constq, "csalt   :", csalt
     write(1984,*), "csalt2     :", csalt2, "xsalt   :", xsalt
-    write(1984,*), "xsalt2     :"
+    write(1984,*), "xsalt2     :", xsalt2
     write(1984,*), "Ka         :", Ka    , "Ka0     :", Ka0
     write(1984,*), "Kb         :", Kb    , "Kb0     :", Kb0
     write(1984,*), "pKa        :", pKa   , "pKb     :", pKb

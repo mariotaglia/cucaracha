@@ -6,12 +6,12 @@ subroutine calc_energy(pHbulk)
 #   include "control_run.h"
     use globales, only: delta, vsol, vsalt, radio, dimR , pi, lb, zwall
     use pore, only: qtot, psi, fdiswall
-    use csys, only: eps1, q, sigma, sigmaq
+    use csys, only: eps1, log_q, sigma, sigmaq
     use FreeEnergy
     use mpmodule
     implicit none
     real(kind=8), intent(in) :: pHbulk
-    real(kind=8) :: suma_pong, aux_mp
+    real(kind=8) :: suma_pong!, aux_mp
     real(kind=8) :: Free_Energy, Free_Energy2, F_Mix_s
 !    real(kind=8) :: F_Mix_pos, F_Mix_neg, F_Mix_Hplus, F_Mix_OHmin, &
 !                    F_Conf, F_Eq, F_Eq_wall, F_vdW, F_electro, F_eps
@@ -117,11 +117,11 @@ subroutine calc_energy(pHbulk)
     Free_Energy2 = 0.0
     suma_pong = pong_energy()
     
-    aux_mp = 0.0
-# if CHAIN == 1
-    aux_mp = log(q)
-# endif
-    Free_Energy2 = suma_pong - (delta/vsol)*sigma*aux_mp !&- F_vdW !&
+!    aux_mp = 0.0
+!# if CHAIN == 1
+!    aux_mp = log(q)
+!# endif
+    Free_Energy2 = suma_pong - (delta/vsol)*sigma*log_q!aux_mp !&- F_vdW !&
    !                 + (delta/vsol)*zwall*sigmaq*fdiswall/(4*pi*lb) * psi(dimR+1)/2  
 
 !*******************************************************************

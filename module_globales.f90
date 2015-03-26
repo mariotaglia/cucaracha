@@ -8,7 +8,6 @@ module globales
         Na=6.02d23, & ! Avogadro Number
         pi=3.14159265359, &
 !        infinity = HUGE(dbl_prec_var), & ! computer infinity
-
 ! Charges        
         zpos=1.0, zpos2=3.0, zneg=-1.0, &
         zwall=-1, zpol=1, &
@@ -30,7 +29,7 @@ module globales
        
         error = 1e-6, &  ! para comparar con la norma...
         betae = 38.94, & ! beta * e
-        errel=1d-6, itmax=200
+        errel=1d-6
 !                                                        vsol,   vH+,  vOH-,    vK+,   vCl-,  vPol
 !    real(KIND=8), dimension(6), parameter :: v_all = (/ 0.030, 0.030, 0.030, 0.0824, 0.0824, 0.095 /)
         
@@ -38,6 +37,7 @@ module globales
 !    real(KIND=8) :: radio=dimR*delta
     real(KIND=8) :: radio
 
+    integer, parameter :: itmax=200
 ! System parameter (INPUTS)
     integer :: long, cuantas ! numero de layers del radio del poro  (tiene que ser par?)
 !    integer, parameter :: long=14, dimR=20, cuantas=100 ! numero de layers del radio del poro  (tiene que ser par?)

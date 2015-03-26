@@ -5,7 +5,7 @@ subroutine save_data(ipH)
 #   include "control_run.h"
     use globales, only: delta, dimR
     use csys, only: pHs!,x1
-    use pore, only: avpol, qtot, xh, xpos, xneg, xHplus, xOHmin, fdis! psi, fdis!, fdis2
+    use pore, only: avpol, qtot, xh, xpos, xneg, xHplus, xOHmin, fdis, psi!, fdis!, fdis2
     integer, intent(in) :: ipH
     real(kind=8) :: pH
     character(len=5) :: title
@@ -68,6 +68,7 @@ subroutine save_data(ipH)
       call savetodisk(xOHmin, title, pH,ipH)
 
 ! Potencial electrostatico
+!        call printstate('save_data L71')
       title = 'poten'
       call savetodisk(psi, title, pH, ipH)
 

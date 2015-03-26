@@ -1,3 +1,6 @@
+![KINSOL ERROR]  KINSetMaxSetupCalls
+!  Illegal msbset < 0.
+!
 ! ******************************************************
 !
 ! Subrutina que llama a kinsol
@@ -39,8 +42,8 @@ subroutine call_kinsol(x1, ier)
 !    print*, "call_kinsol: Variable neq desde call_kinsol: ", neq    
 ! INICIA KINSOL
 ! msbpre:  Cuantas iteraciones pasan antes de actualizar la matriz del precondicionador (operacion expensive operation) 
-    msbpre  = 5 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56)
-!    msbpre  = 10 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56) ! Default value:
+!    msbpre  = 5 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56)
+    msbpre  = 10 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56) ! Default value:
     maxiter = 300 ! Maximum number of non-linear iterations (Default=200)
 
     fnormtol = 1.0d-8 ! Function-norm stopping tolerance
