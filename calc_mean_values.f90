@@ -3,7 +3,7 @@
 
 subroutine calc_mean_values(pHbulk)
 #   include "control_run.h"
-    use globales, only: delta, vpol, zpos, pi, lb, radio
+    use globales, only: delta, vpol, zpos, pi, lb, radio, zwall
     use csys, only: sigmaq
     use pore
     implicit none
@@ -48,9 +48,9 @@ subroutine calc_mean_values(pHbulk)
     sumcharge = sumcharge/sumpol ! carga total por unidad de monomero
     write(318,*) pHbulk, Rmedio, sumcharge
 ! NOTE: fdiswall was calculated in set_pore_distrib be carefull! ;)
-    write(313,*) pHbulk, fmedio, fdiswall, sigmaq*fdiswall*2*pi*radio*delta !, fmedio2, fdiswall !, fdisw <- cual es el sentido de fdisw?
+    write(313,*) pHbulk, fmedio, fdiswall, sigmaq*zwall*fdiswall !, fmedio2, fdiswall !, fdisw <- cual es el sentido de fdisw?
 #else
-    write(313,*) pHbulk, fdiswall, sigmaq*fdiswall*2*pi*radio*delta
+    write(313,*) pHbulk, fdiswall, sigmaq*fdiswall*zwall
 #endif
 
 end subroutine calc_mean_values

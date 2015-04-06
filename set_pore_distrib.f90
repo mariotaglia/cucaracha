@@ -19,7 +19,7 @@ subroutine set_pore_distrib
 ! + interaction with the electrostatic Potential    
 !    fdiswall = Kwall0 / (expmuHplus*dexp(psi(dimR+1)*sigmaq*zwall) + Kwall0) 
 !    fdiswall = Kwall0 / (expmuHplus*dexp(psi(dimR)*sigmaq*zwall*2*pi*radio) + Kwall0) 
-    fdiswall = Kwall0 / (expmuHplus*dexp(-psi(dimR)*zpos) + Kwall0) 
+    fdiswall = Kwall0 / (expmuHplus*dexp(psi(dimR)*zwall) + Kwall0) 
 
 ! Boundary Conditions: Electrical Potential
 !! Estas ecuaciones son suplementarias a la eq. de Poisson discretizada
@@ -41,9 +41,9 @@ subroutine set_pore_distrib
 
         xneg(iR) = expmuneg*(xh(iR)**vsalt) *dexp(-psi(iR)*zneg) ! ion neg volume fraction
      
-        xHplus(iR) = expmuHplus*(xh(iR)**vHplus) *dexp(-psi(iR)*zpos)           ! H+ volume fraction
+        xHplus(iR) = expmuHplus*(xh(iR)**vHplus) *dexp(-psi(iR)*zH)           ! H+ volume fraction
      
-        xOHmin(iR) = expmuOHmin*(xh(iR)**vOHmin) *dexp(-psi(iR)*zneg)           ! OH-  volume fraction
+        xOHmin(iR) = expmuOHmin*(xh(iR)**vOHmin) *dexp(-psi(iR)*zOH)           ! OH-  volume fraction
 !        fdis(iR) = dissos_degree(1,iR)
 ! Para estas expresiones es necesario definir las constantes K1 y K2
 !          denon = ( expmuOHmin*dexp(psi(iR)*zpos) )**2

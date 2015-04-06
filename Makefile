@@ -12,7 +12,7 @@ FC = mpif90 #${F90}
 
 # This flags are used in the compilation stage (name should be CFLAGS)
 # To debug:
-#FFLAGS= -g -p -fbacktrace -fcheck=all -Wall  
+#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall  
 ## -g produce debugging information in the operating system's native format.
 ## -pg generate extra code to write profile information suitable for the analysis program gprof
 # To run

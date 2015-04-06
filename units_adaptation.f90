@@ -5,8 +5,11 @@ subroutine units_adaptation
     use csys
     implicit none
 
+! there is many ways to define surface units
+! Here we use vsol/delta because this is size independent?
+! be carefull sigmaq is charge/surface as a function of solvent size and discretization size
     sigma = sigma *vsol/ delta
-    sigmaq = sigmaq ! chequear esto?!
+    sigmaq = sigmaq *vsol/delta ! Funciona!
     constq=delta*delta*4.0*pi*lb/vsol ! multiplicative factor in poisson eq units? without units
 
 ! Chemical Equilibrium
