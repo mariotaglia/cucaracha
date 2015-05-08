@@ -18,9 +18,12 @@ module globales
         lseg=0.5, & ! Largo del segmento (nm)
 
 ! Volumes        
-        vsol=0.030, &
-        vpol= 0.095/vsol, &  ! Polymer volume segment in units of vsol: ((4.0/3.0)*pi*(0.283)**3)/vsol
-        vHplus=0.030/vsol, vOHmin=0.030/vsol, & ! vHplus=1 ! vOHplus=1 
+        vsol=1.0, &
+        vpol=1.0, &
+!        vsol=0.030, &
+!        vpol= 0.095/vsol, &  ! Polymer volume segment in units of vsol: ((4.0/3.0)*pi*(0.283)**3)/vsol
+!        vHplus=0.030/vsol, vOHmin=0.030/vsol, & ! vHplus=1 ! vOHplus=1 
+        vHplus=1.0, vOHmin=1.0, &
         vsalt=((4.0/3.0)*pi*(0.27)**3)/vsol, &  ! Salt volume in units of vsol 0.2nm=radius salt
 !        vsalt2=((4.0/3.0)*pi*(0.27)**3)/vsol, & ! vpol > vsalt > vsol
         vsalt2 = 0.0, &

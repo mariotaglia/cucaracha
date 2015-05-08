@@ -7,14 +7,18 @@ function fconf_pol()
     real(kind=8) :: fconf_pol, aux_mp
     integer :: i
     fconf_pol=0
+! Siempre se calcula la energia respecto de la de bulk!
 !    print*, "Fconf10: Valor log_q", log_q
     do i = 1, cuantas
 !        aux_mp = log(pro(i)/q)
 !        aux_mp = log(pro(i)) - log_q
 !        fconf_pol = fconf_pol + (pro(i)/q)*aux_mp /vsol*delta*sigma
-        fconf_pol = fconf_pol + (pro(i))*log(pro(i)) /vsol*delta*sigma
+!        fconf_pol = fconf_pol + sigma*delta*pro(i)*log(pro(i))/vsol
+        fconf_pol = fconf_pol + (pro(i))*log(pro(i)) 
         !fconf_pol = fconf_pol + (pro(i)/q)*dlog((pro(i))/q)  /vsol*delta*sigma
     enddo
+! Aca mp deneroa janer ima coreccion? elefante
+        fconf_pol = (sigma*delta/vsol)*fconf_pol  
 
 !    print*, "fconf_pol llama checknumber: fconf_pol", fconf_pol
     call checknumber(fconf_pol,'fconf_pol')

@@ -3,6 +3,7 @@
 !    
 
 subroutine creador ! crea cadenas
+#   include "control_run.h"
 ! Las cadenas se colocan cerca de la posicion
 ! (x,y) = (0, -radio)
     use globales

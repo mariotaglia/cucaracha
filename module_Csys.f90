@@ -22,7 +22,7 @@ module csys
         eps1, & ! Electrostatic potential
         longporo, &
         movpos, movneg, movHplus, movOHmin,&  ! Mobilities
-        sigmadelta, st
+        st
 
 ! Bulk values
     real(kind=8) :: cHplus, cOHmin, &

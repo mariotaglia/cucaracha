@@ -1,6 +1,6 @@
 /* esto es un comentario */
 
-# define CHAIN 0  /* 0 - Without polymer chains
+# define CHAIN 1 /* 0 - Without polymer chains
                     1 - With polymer chains (monolayers)
                     2 - Grafted polymer chains
                     

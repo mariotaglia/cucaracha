@@ -1,6 +1,7 @@
 ! Here all variables related with bulk
 
 subroutine set_bulk_properties(pHbulk)
+#   include "control_run.h"
     use globales
     use csys
     implicit none
@@ -17,10 +18,12 @@ subroutine set_bulk_properties(pHbulk)
 
         if(pHbulk.le.7) then  ! pH<= 7
             xposbulk= xsalt/zpos
-            xnegbulk=-xsalt/zneg -xsalt2/zneg +(xHplusbulk -xOHminbulk)*vsalt ! NaCl+ HCl
+            !xnegbulk=-xsalt/zneg -xsalt2/zneg +(xHplusbulk -xOHminbulk)*vsalt ! NaCl+ HCl
+            xnegbulk=-xsalt/zneg +(xHplusbulk -xOHminbulk)*vsalt ! NaCl+ HCl
         else                  ! pH >7
             xposbulk= xsalt/zpos +(xOHminbulk -xHplusbulk)*vsalt ! NaCl+ NaOH
-            xnegbulk=-xsalt/zneg -xsalt2/zneg
+            !xnegbulk=-xsalt/zneg -xsalt2/zneg
+            xnegbulk=-xsalt/zneg
         endif
 
 ! En bulk no hay polimero.
@@ -29,8 +32,8 @@ subroutine set_bulk_properties(pHbulk)
 ! 1.0d24 factor de conversion de volumen de litro a nm3  1nm3 = 10^-24 l = 10^-24 dm3
 
 ! remember that vsalt, vHplus and vOHmin are in vsol unit!
-           expmupos = xposbulk   / xsolbulk**vsalt
-           expmuneg = xnegbulk   / xsolbulk**vsalt
+           expmupos = xposbulk/vsalt / xsolbulk**vsalt 
+           expmuneg = xnegbulk/vsalt / xsolbulk**vsalt 
 !ojo! expmuHplus ya tiene el signo menos!!
          expmuHplus = xHplusbulk / xsolbulk**vHplus   ! vsol = vHplus
          expmuOHmin = xOHminbulk / xsolbulk**vOHmin  ! vsol = vOHmin
@@ -40,6 +43,4 @@ subroutine set_bulk_properties(pHbulk)
             Kb0 = (Kb*vsol/xsolbulk)*(Na/1.0d24)
          Kwall0 = (Kwall*vsol/xsolbulk)*(Na/1.0d24)
 
-
 end subroutine set_bulk_properties
-

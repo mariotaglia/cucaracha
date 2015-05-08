@@ -13,15 +13,21 @@ subroutine open_files(m)
             open(unit=306, file='F_mixOH.dat')
             open(unit=307, file='F_conf.dat')
             open(unit=308, file='F_eq.dat')
+            open(unit=319, file='F_eqwall.dat')
 # ifdef VDW
             open(unit=309, file='F_vdW.dat')
 # endif
+            open(unit=201, file='F_ospi.dat')
             open(unit=310, file='F_eps.dat')
             open(unit=311, file='F_electro.dat')
             open(unit=312, file='F_tot2.dat')
         ! Mean values
             open(unit=313, file='fmedio.dat')
-            write(313,*) '# pHbulk, fmedio, fmedio2, fdiswall'
+#if CHAIN == 1
+            write(313,*) '# pHbulk, fmedio, fdiswall, qwall'
+#else            
+            write(313,*) '# pHbulk, fdiswall, qwall'
+#endif
             open(unit=314, file='pKas')
             open(unit=318, file='Rmedio')
             write(318,*) '# pHbulk, Rmedio, sumcharge'
@@ -34,7 +40,8 @@ subroutine open_files(m)
             open(unit=322, file='GHplus')
             open(unit=323, file='GOHmin')
         case ( 0 )
-        ! Energy 
+        ! Energy
+            close(201) 
             close(301)
             close(302)
             close(303)
@@ -50,13 +57,14 @@ subroutine open_files(m)
             close(311) 
             close(312)
 
-        ! Conductance and mean values
+        ! Conductance and mean values (313 - 323)
             close(313) 
             close(314)
             close(315)
             close(316)
             close(317)
             close(318)
+            close(319) ! F_eqwall
             close(320)
             close(321)
             close(322)

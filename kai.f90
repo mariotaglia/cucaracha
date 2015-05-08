@@ -5,12 +5,13 @@
 !#####################################################################
 
 subroutine kai
+#   include "control_run.h"
     use globales
     use csys, only: Xu
     implicit none
 
     real(kind=8), dimension(:,:), allocatable :: suma
-    real(kind=8) :: x1,x2,y1, y2, z1, z2, vect
+    real(kind=8) :: x_1,x_2,y_1, y_2, z1, z2, vect
     real(kind=8) ::  R,  z,  theta
     integer :: ii,j,iR, iz, itheta
     integer :: MCstepsR, MCstepsz, MCstepstheta ! numero de steps de MC
@@ -28,8 +29,8 @@ subroutine kai
       !*********************************
     do ii = 1, dimR ! loop sobre cada posicion del segmento
 !    ii=dimR
-        x1 = (dfloat(ii) - 0.5)*delta ! asume theta segmento = 0, z segmento = 0 y segmento en el centro de la layer
-        y1 = 0.0
+        x_1 = (dfloat(ii) - 0.5)*delta ! asume theta segmento = 0, z segmento = 0 y segmento en el centro de la layer
+        y_1 = 0.0
         z1 = 0.0
 
 !        write(811,*) '      ii       iz      z       itheta      theta: '
@@ -44,16 +45,16 @@ subroutine kai
                     theta = 2*pi*dfloat(itheta - 1)/dfloat(MCstepstheta)    ! numero 0 y 2pi
                     z = 3.0*(dfloat(iz - 1)/dfloat(MCstepsz)-0.5)*delta ! numero entre -1.5*delta y 1.5*delta
                     R = radio*(dfloat(iR-1)/dfloat(MCstepsR))         ! numero 0 y radio
-! coordenadas del segmento (x1,y1,z1) y del punto a integrar (x2,y2,z2)
-      !             x1 = (dfloat(ii) - 0.5)*delta ! asume theta segmento = 0, z segmento = 0 y segmento en el centro de la layer
-      !             y1 = 0.0
+! coordenadas del segmento (x_1,y_1,z1) y del punto a integrar (x_2,y_2,z2)
+      !             x_1 = (dfloat(ii) - 0.5)*delta ! asume theta segmento = 0, z segmento = 0 y segmento en el centro de la layer
+      !             y_1 = 0.0
       !             z1 = 0.0
 !            write(811,*) 'inicio', ii, iz, z, itheta, theta 
 
-                    x2 = R*cos(theta)
-                    y2 = R*sin(theta)
+                    x_2 = R*cos(theta)
+                    y_2 = R*sin(theta)
                     z2 = z
-                    vect = sqrt((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2) ! vector diferencia
+                    vect = sqrt((x_1-x_2)**2 + (y_1-y_2)**2 + (z1-z2)**2) ! vector diferencia
 !********************************
       !OJO! R=radio=dimR*delta --> j=21. por que +1?
 !********************************

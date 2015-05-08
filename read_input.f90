@@ -1,4 +1,5 @@
 subroutine read_input
+#   include "control_run.h"
     use globales, only: cuantas, dimR, long, radio, delta, neq
     use csys
     implicit none

@@ -28,20 +28,22 @@ subroutine fkfun(x,f,ier)
         xh(iR)=x(iR) ! Solvent volume fraction
         psi(iR)=x(iR+dimR) ! Electrical potential
     enddo
-
+!print*, xh(:)
+!print*, psi(:)
 !    call printstate('fkfun 32')
 !**********************************
 ! Boundary conditions are inside the function set_pore_distrib
     call set_pore_distrib ! Esto debe hacerse aca porque fkfun recibe el input!
 !**********************************
-
-! Para que xtotal?
-! Calculo de xtotal para poor solvent en el lattice
-
+        
+!**********************************
+! Calculo de xtotal 
+! PARA poor solvent en el lattice
     do iR=1,dimR
 !        xtotal(iR) = 1.0 - xpos(iR) - xneg(iR) - xpos2(iR) - xh(iR) - xHplus(iR) - xOHmin(iR) ! xtotal es todo menos solvente e iones
-        xtotal(iR) = 1.0 - xpos(iR) - xneg(iR) - xh(iR) - xHplus(iR) - xOHmin(iR) ! xtotal es todo menos solvente e iones
+        xtotal(iR) = 1.0 - xh(iR) - xpos(iR) - xneg(iR) - xHplus(iR) - xOHmin(iR) ! xtotal es todo menos solvente e iones (polimero?)
     enddo
+!**********************************
 
 !----------------------------------------------------------------------------------------------
 !   Construye Ecuaciones a resolver 
@@ -90,7 +92,7 @@ subroutine fkfun(x,f,ier)
 !        call Rchecknumber(norma, 'norma en fkfun') ! if NaN or Infinity checknumber stops the program
     enddo
 !    print*, "fkfun67: iter, norma, q", iter, norma
-    write(10,*) "fkfun92: iter, norma: ", iter
+    write(10,'(A14,I4,A8)', advance='no') "fkfun95: iter ", iter, " norma: "
     call mpwrite(10,norma)
     ier = 0
    

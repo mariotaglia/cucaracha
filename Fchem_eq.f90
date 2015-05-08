@@ -1,6 +1,6 @@
 function fchem_eq()
-    use globales, only: dimR, delta, vpol, radio
-    use csys, only: expmuHplus, Ka0 
+    use globales, only: dimR, delta, vpol, vsol, radio
+    use csys, only: expmuHplus, expmuOHmin, Ka0 
 !    use FreeEnergy, only: checknumber
     use pore, only: avpol, fdis!, fdis2
     implicit none
@@ -14,11 +14,18 @@ function fchem_eq()
     fchem_eq = 0.0
     
     do i = 1, dimR
-      
-      fchem_eq = fchem_eq +    fdis(i)  *dlog(fdis(i)*Ka0)  *avpol(i)/vpol*(dfloat(i)-0.5)*delta/Radio
-      fchem_eq = fchem_eq + (1-fdis(i)) *dlog(1.0-fdis(i))  *avpol(i)/vpol*(dfloat(i)-0.5)*delta/Radio
-      fchem_eq = fchem_eq - fdis(i)*(dlog(expmuHplus)) *avpol(i)/vpol*(dfloat(i)-0.5)*delta/Radio ! ojo! expmuHplus ya tiene el signo menos!!
-                  ! Falta el potencial quimico standard del polimero en el estado 0!!! (?)
+! Nueva expresion para el equilibrio quimico
+      fchem_eq = fchem_eq + ( fdis(i) *dlog( fdis(i)/Ka0 ) &
+                         + (1-fdis(i))*dlog( (1-fdis(i)) ) )  *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio
+      fchem_eq = fchem_eq + fdis(i)*dlog(expmuOHmin) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio ! ojo! expmuHplus ya tiene el signo menos!!
+
+! Original Mario
+!      fchem_eq = fchem_eq + fdis(i)*dlog(fdis(i))            *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
+!      fchem_eq = fchem_eq + (1.0-fdis(i))*dlog(1.0-fdis(i))  *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
+!                   
+!      fchem_eq = fchem_eq + (1.0-fdis(i))*dlog(Ka0)            *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
+!      fchem_eq = fchem_eq + (1.0-fdis(i))*(-dlog(expmuOHmin)) *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
+
     enddo
 
 !    print*, "fchem_eq llama checknumber: fchem_eq", fchem_eq
@@ -26,21 +33,39 @@ function fchem_eq()
     
     return
     contains 
-        subroutine checknumber(var, arg)
-            implicit none
-            real(kind=8), intent(in) :: var
-            character(len=*), intent(in) :: arg
-            ! Check if Not a Number
-            if ( var /= var ) then
-                print*, arg, " real number is NaN"
-                call printstate('checknumber real NaN')
-                stop
-            endif
-        
-            if ( var-1 == var ) then
-                print*, arg, " real number is infinity"
-                call printstate('checknumber real infinity')
-                stop
-            endif
-        endsubroutine checknumber
+!        function checknumber(var, arg) result(bool)
+!            implicit none
+!            real(kind=8), intent(in) :: var
+!            character(len=*), intent(in) :: arg
+!            logical :: bool 
+!            ! Check if Not a Number
+!            if ( var /= var ) then
+!                print*, arg, " real number is NaN"
+!                call printstate('checknumber real NaN')
+!                bool=.true. 
+!            endif
+!        
+!            if ( var-1 == var ) then
+!                print*, arg, " real number is infinity"
+!                call printstate('checknumber real infinity')
+!                bool=.true.
+!            endif
+!        end function checknumber
+!        subroutine checknumber(var, arg)
+!            implicit none
+!            real(kind=8), intent(in) :: var
+!            character(len=*), intent(in) :: arg
+!            ! Check if Not a Number
+!            if ( var /= var ) then
+!                print*, arg, " real number is NaN"
+!                call printstate('checknumber real NaN')
+!                stop
+!            endif
+!        
+!            if ( var-1 == var ) then
+!                print*, arg, " real number is infinity"
+!                call printstate('checknumber real infinity')
+!                stop
+!            endif
+!        endsubroutine checknumber
 end function 

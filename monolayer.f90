@@ -1,7 +1,7 @@
 ! *****************************************************************************
 ! 
 ! Este es la version f90 del programa de nanocanales
-! 
+!  
 ! *****************************************************************************
 
 program nanochannel
@@ -46,9 +46,9 @@ program nanochannel
     call kai ! Calcula los parametros de L-J 
 #   endif
 #endif
-    call mpinit(15) ! Initial working precision, number of digits
+    call mpinit(15) ! Initial working precision, number of digits =15
     call open_files(1) ! Open files to save data? how to do that?
-    write(11,*) "set_pore_distrib109: q "
+!    write(11,*) "set_pore_distrib109: q "
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Falta una etapa donde se definir si se continua una corrida anterior
@@ -56,34 +56,58 @@ program nanochannel
 ! VER
 !         if (ipH.eq.1) then 
 !         endif
-! IMPORTAN: DEFINE INITIAL GUESS -> SUBROUTINE!
+! IMPORTANT: DEFINE INITIAL GUESS -> SUBROUTINE!
 
     call set_bulk_properties(pHs(1)) ! Setup bulk properties before setup initial guess ocurre en fkfun! (?)
                                      ! bulk properties without polymer
-    call set_initial_guess(0) ! 0 - bulk solution
-!    call set_pore_distrib Not necesarry this function is inside fkfun
+! Inside nanochannel set x1
+    call set_initial_guess(0) ! 0 - bulk solution as initial guess
 
+! *****************************************************************************
+! Un ciclo del loop pre-condicionador (para no poner los resultados de bulk)
+! *****************************************************************************
+!!     ipH=1  ! Selecting pH=2.0 the first value
+!!     call printstate("Aloop L67") ! Report of State
+!!         print*, 'Pre-corrida para determinar el primer estado'
+!!         print*, '********************************************'
+!!         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
+!!         call call_kinsol(x1, ier)
+!!         write(10,*), " " ! para formatear fort.10
+!!         write(11,*), " " ! para formatear fort.11
+!!         xh(:) = x1(:dimR)    ! Solvent volume fraction
+!!         psi(1:dimR) = x1(dimR+1:) ! Electrostatic Potential
+!! ! Se escribe el output 
+!!             call save_data(ipH) ! Saving data
+!!             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
+!!             call calc_mean_values(pHs(ipH)) ! Rmedio 
+!! ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
+!!             call calc_conductance(pHs(ipH))
+
+    print*, '********************************************'
+    print*, '*** Comienza el loop principal ***'
 ! *****************************************************************************
 ! Principal Loop loop
 ! *****************************************************************************
     ipH=1 
-    call printstate("Aloop L57") ! Report of State
+    call printstate("Aloop L71") ! Report of State
     do while (ipH <= npH)  ! Start principal Loop
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
-!        print*, 'q', q
-! Actualizo las condiciones de bulk se repite solo para ipH=1
-        call set_bulk_properties(pHs(ipH))
+
+        call set_bulk_properties(pHs(ipH)) ! Actualizo las condiciones de bulk se repite solo para ipH=1
+!        call set_pore_distrib !Not necesarry this function is inside fkfun
+
 ! Resolution of the equations
         ier=0
 !        print*, "Solucion inicial x1: ", x1(:)
-        call call_kinsol(x1, ier) 
+        call call_kinsol(x1, ier)
+ 
+        write(10,*), " " ! para formatear fort.10
+        write(11,*), " " ! para formatear fort.11
 
         xh(:) = x1(:dimR)    ! Solvent volume fraction
         psi(1:dimR) = x1(dimR+1:) ! Electrostatic Potential
-!        call printstate('monolayer L83')
+
 ! FUNCION: check_run == true if error.
-!        if ( ipH == 4 .and. aux_del==0 ) aux_del = 1
-!        if ( aux_del == 1 ) ier = -1
         if ( check_run(ipH,ier) ) then
 !       Si hubo un error entonces imprimir alguna informacion y terminar
             print*, "funcion check run: Mal run!"
@@ -93,9 +117,9 @@ program nanochannel
 !            aux_del = 2
         else
 !            print*, " funcion check run: " // "RUN OK!"
-!           Si no exploto guardar xflag! (input para la proxima iteracion)
+!  Si no exploto guardar xflag! (input para la proxima iteracion)
 !            xflag(:) = x1(:) ! xflag sirve como input para la proxima iteracion
-!           Preparar el siguiente paso: infile = 2
+!  Preparar el siguiente paso: infile = 2
 ! Se escribe el output 
             call save_data(ipH) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
@@ -104,11 +128,7 @@ program nanochannel
             call calc_conductance(pHs(ipH))
         endif
 
-!        call printstate("main_L99") ! Report of State
-
         ipH=ipH+1
-!        call set_pore_distrib() ! pore properties not necessary occur inside fkfun
-
    enddo  ! End principal Loop 
 
     call open_files(0) ! Closing all files

@@ -9,6 +9,7 @@
 
 subroutine call_kinsol(x1, ier)
 !subroutine call_kinsol(x1, xg1, ier)
+#   include "control_run.h"
     use globales
     implicit none
     
@@ -42,22 +43,23 @@ subroutine call_kinsol(x1, ier)
 !    print*, "call_kinsol: Variable neq desde call_kinsol: ", neq    
 ! INICIA KINSOL
 ! msbpre:  Cuantas iteraciones pasan antes de actualizar la matriz del precondicionador (operacion expensive operation) 
-!    msbpre  = 5 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56)
-    msbpre  = 10 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56) ! Default value:
-    maxiter = 300 ! Maximum number of non-linear iterations (Default=200)
+    msbpre  = 5 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56) (MARIO)
+!    msbpre  = 10 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56) ! Default value:
+!    maxiter = 300 ! Maximum number of non-linear iterations (Default=200)
+    maxiter = 200 ! Maximum number of non-linear iterations (Default=200)
 
     fnormtol = 1.0d-8 ! Function-norm stopping tolerance
     scsteptol = 1.0d-8 ! Scaled-step stopping tolerance
-!    maxl = 10 ! maximum Krylov subspace dimesion (?!?!?!) ! Esto se usa para el preconditioner
-    maxl = neq ! Rikkert Comment
+    maxl = 10 ! maximum Krylov subspace dimesion (?!?!?!) ! Esto se usa para el preconditioner
+!    maxl = neq ! Rikkert Comment
     maxlrst = 2 ! maximum number of restarts
     globalstrat = 0 ! this should be 1 for Inexact Newton or 2 for line search.
 ! Paso 2 - Inicializa the serial nvector module fnvinits(key,neq,ier); (key=3 for kinsol solver)
 ! neq variable defined in module_globales, is the size of the vectors x1 and xg1
 ! **********
-    call fnvinits(3, neq, ier) ! fnvinits inits NVECTOR module. 3 - for kinsol
-! EXISTE la version en paralelo fnvinitp
-    if (ier .ne. 0) then       ! 3 for Kinsol, neq equation number, ier error flag (0 is OK)
+    call fnvinits(3, neq, ier) ! fnvinits inits NVECTOR module. 3 - for kinsol, neq equation number,
+                               ! EXISTE la version en paralelo fnvinitp
+    if (ier .ne. 0) then       !  ier error flag (0 is OK)
         print*, 'SUNDIALS_ERROR: FNVINITS returned IER = ', ier
         stop
     endif
@@ -92,6 +94,8 @@ subroutine call_kinsol(x1, ier)
     do i = 1, neq/2  !constraint vector
 ! The solvent volume fraction should be positive.
         constr(i) = 2.0  ! this part of the solution vector (x1) will be constrained to be ui > 0.0.
+! PROBAR ESTA MODIFICACION PARA EVITAR DOS CICLOS!
+!        constr(neq/2 + i) = 2.0  ! this part of the solution vector (x1) will be constrained to be ui > 0.0.
     enddo
 
     call fkinsetvin('CONSTR_VEC', constr, ier) ! constraint vector

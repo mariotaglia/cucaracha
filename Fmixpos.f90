@@ -1,14 +1,23 @@
 real(kind=8) function fmixpos()
-    use globales, only: dimR, Radio, delta, vsalt
+    use globales, only: dimR, Radio, delta, vsalt, vsol
     use csys, only: expmupos, xposbulk
     use pore, only: xpos 
 !    use FreeEnergy, only: checknumber
     implicit none
     integer :: iR
     fmixpos=0
+! Siempre se calcula la energia respecto de la de bulk!
     do iR = 1, dimR
-        fmixpos = fmixpos + xpos(iR)*(dlog(xpos(iR)/vsalt)-1.0 - dlog(expmupos) + dlog(vsalt))*(dfloat(iR)-0.5)*delta/Radio
-        fmixpos = fmixpos - xposbulk*(dlog(xposbulk/vsalt)-1.0 - dlog(expmupos) + dlog(vsalt))*(dfloat(iR)-0.5)*delta/Radio
+! Con los volumenes camibados (MARIO~)
+        fmixpos = fmixpos + (xpos(iR)/(vsalt*vsol)) &
+                  *(dlog(xpos(iR)/vsalt) -1.0 - dlog(expmupos/vsalt) ) *delta*(dfloat(iR)-0.5)*delta/Radio
+        fmixpos = fmixpos - (xposbulk/(vsalt*vsol)) &
+                  *(dlog(xposbulk/vsalt) -1.0 - dlog(expmupos/vsalt) ) *delta*(dfloat(iR)-0.5)*delta/Radio
+!        fmixpos = fmixpos + (xpos(iR)/(vsalt*vsol))*(dlog(xpos(iR)) -1.0 - dlog(expmupos) ) *delta*(dfloat(iR)-0.5)*delta/Radio
+!        fmixpos = fmixpos - (xposbulk/(vsalt*vsol))*(dlog(xposbulk) -1.0 - dlog(expmupos) ) *delta*(dfloat(iR)-0.5)*delta/Radio
+! MI version 
+!        fmixpos = fmixpos + (xpos(iR)/vsalt)*(dlog(xpos(iR)) -1.0 - dlog(expmupos) ) *(dfloat(iR)-0.5)*delta/Radio
+!        fmixpos = fmixpos - (xposbulk/vsalt)*(dlog(xposbulk) -1.0 - dlog(expmupos) ) *(dfloat(iR)-0.5)*delta/Radio
     enddo
 
 !    print*, "fmixpos llama checknumber: fmixpos = ", fmixpos

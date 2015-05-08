@@ -1,3 +1,4 @@
+* Cambie el fdis por una constate 0 en set_pore_dritrib
 **********
 * Falta ver como cambiar el go to 555 cuando explota por algun motivo. 
 * Implementar las variables de preprocesamiento para filtrar fisica del programa. (control_run.h)

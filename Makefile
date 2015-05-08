@@ -46,9 +46,9 @@ SRC = module_globales.f90 \
       calc_conductance.f90 \
       calc_mean_values.f90 \
       calc_energy.f90 \
-      Fmixs.f90 Fconf.f90 \
+      Fmix.f90 Fmixs.f90 Fconf.f90 \
       Fmixpos.f90 Fmixneg.f90 F_vdW.f90\
-      Fpol_sup.f90 \
+      Fospi.f90 Fpol_sup.f90 \
       FmixHplus.f90 FmixOHmin.f90 \
       Fchem_eq.f90 \
       Fchem_eq_wall.f90 \

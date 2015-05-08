@@ -1,5 +1,6 @@
 function fchem_eq_wall()
-    use csys, only: expmuHplus, Kwall0 
+    use globales, only: delta, vsol
+    use csys, only: expmuHplus, Kwall0, sigmaq 
 !    use FreeEnergy, only: checknumber
     use pore, only: fdiswall
     implicit none
@@ -7,11 +8,23 @@ function fchem_eq_wall()
     
     fchem_eq_wall = 0.0
     
-    fchem_eq_wall = fchem_eq_wall + fdiswall  *dlog(fdiswall/Kwall0)
-    fchem_eq_wall = fchem_eq_wall + (1-fdiswall) *dlog(1.0-fdiswall)
-    fchem_eq_wall = fchem_eq_wall + fdiswall*(dlog(expmuHplus))
+    if ( fdiswall  == 0.0 ) then 
+        print*, "**********************************************************************************************"
+        print*, "WARNING! fdiswall could not be zero! see chemical equilibrium in the wall: Fchem_eq_wall.f90"
+        print*, "**********************************************************************************************"
+    else 
+        fchem_eq_wall = fchem_eq_wall + fdiswall  *(dlog(fdiswall/Kwall0)+dlog(expmuHplus))
+    endif 
+    if ( (1-fdiswall) == 0.0 ) then 
+        print*, "**********************************************************************************************"
+        print*, "WARNING! fdiswall could not be one! see chemical equilibrium in the wall: Fchem_eq_wall.f90"
+        print*, "**********************************************************************************************"
+    else 
+        fchem_eq_wall = fchem_eq_wall + (1- fdiswall) * dlog(1-fdiswall)
+    endif 
+    fchem_eq_wall = fchem_eq_wall * sigmaq*(delta/vsol)
 ! *************************
-!  Falta el potencial quimico standard del estado cero minos el por chem del prontoN! (? que onda?)
+!  Falta el potencial quimico standard del estado cero menos el pot.chem. del prontoN! (? que onda?)
 ! *************************
 
 !    print*, "fchem_eq_wall llama checknumber: fchem_eq_wall", fchem_eq_wall

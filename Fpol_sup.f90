@@ -6,14 +6,14 @@ function fpol_sup()
     implicit none
     real(kind=8) :: fpol_sup
     integer :: iR
-    
+!  2015-04-20 Interaccion polimero superficie (electrostatica(?))
     fpol_sup=0.0
 
     do iR = dimR-1, dimR
 !    iR=dimR
             fpol_sup = fpol_sup - eps1*avpol(iR)*delta*(dfloat(iR)-0.5)*delta/radio
     enddo
-
+    print*, "fpol_sup L16: " , fpol_sup 
 !    print*, "f_vdW llama checknumber: f_vdW", f_vdW
     call checknumber(fpol_sup,'fpol_sup')
     

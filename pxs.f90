@@ -2,6 +2,7 @@
 !
 
 subroutine pxs
+#   include "control_run.h"
 !  Esta subrutina se encarga de chequear que  todos los segmentos esten dentro del slab
     use globales
     use csys

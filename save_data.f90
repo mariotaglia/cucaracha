@@ -1,16 +1,14 @@
-!
-!
 !!!!!!!!!!!!!!!!! Guarda archivos !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine save_data(ipH)
 #   include "control_run.h"
     use globales, only: delta, dimR
-    use csys, only: pHs!,x1
+    use csys, only: pHs, expmuHplus, expmuOHmin, expmupos, expmuneg!,x1
     use pore, only: avpol, qtot, xh, xpos, xneg, xHplus, xOHmin, fdis, psi!, fdis!, fdis2
     integer, intent(in) :: ipH
     real(kind=8) :: pH
     character(len=5) :: title
 !    character(len=17) :: outfile
-!    character(len=30) :: format_string, filename
+    character(len=30) :: format_string, filename
 
 !    integer :: i
     
@@ -39,7 +37,7 @@ subroutine save_data(ipH)
 !!       call savetodisk(fdis2, title, pH, ipH)
 
 #endif
-! Polimero
+! Total Charge
       title = 'qtodo'
       call savetodisk(qtot, title, pH ,ipH)
 
@@ -72,18 +70,20 @@ subroutine save_data(ipH)
       title = 'poten'
       call savetodisk(psi, title, pH, ipH)
 
-!!     format_string='(A5,A1,I2.2,F0.2,A1,I3.3,A4)'
-!!     ! Construye el array filename
-!!     write(filename,format_string) title,'_', int(pHs(ipH)) , pHs(ipH)-int(pHs(ipH)), '_', ipH, '.dat'
-!!     ! Abre el archivo y guarda la informacion 
-!!     open(unit=45, file=filename)
-!! !        do iR=1, dimR
-!! !            write(45,*)(-dimR + iR - 0.5)*delta,array(dimR-iR+1)
-!! !        enddo
-!!         do i=0,dimR+1
-!!             write(45,*)(i-0.5)*delta,psi(i)
-!!         enddo
-!!     close(45)
+    format_string = '(A5,A1,I2.2,F0.2,A1,I3.3,A4)'
+    ! Construye el array filename
+    title='b_mus'
+    !write(filename,format_string) title,'_', int(pHs(ipH)) , pHs(ipH)-int(pHs(ipH)), '_', ipH, '.dat'
+    write(filename,format_string) title,'_', int(pH) , pH-int(pH), '_', ipH, '.dat'
+    ! Abre el archivo y guarda la informacion 
+    open(unit=45, file=filename)
+        do iR=1, dimR
+            write(45,*) (iR - 0.5)*delta, dlog(expmupos), dlog(expmuneg), dlog(expmuHplus), dlog(expmuOHmin) !array(dimR-iR+1)
+        enddo
+!        do i=0,dimR+1
+!            write(45,*)(i-0.5)*delta,psi(i)
+!        enddo
+    close(45)
 
 
 end subroutine save_data

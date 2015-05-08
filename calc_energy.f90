@@ -1,5 +1,6 @@
 !--------------------------------------------------------------------
 !        Calcula Energia libre
+! 2015-04-20 F.M.G. : Energía de Pong super chequeada!
 !--------------------------------------------------------------------
 
 subroutine calc_energy(pHbulk)
@@ -12,46 +13,49 @@ subroutine calc_energy(pHbulk)
     implicit none
     real(kind=8), intent(in) :: pHbulk
     real(kind=8) :: suma_pong!, aux_mp
-    real(kind=8) :: Free_Energy, Free_Energy2, F_Mix_s
-!    real(kind=8) :: F_Mix_pos, F_Mix_neg, F_Mix_Hplus, F_Mix_OHmin, &
-!                    F_Conf, F_Eq, F_Eq_wall, F_vdW, F_electro, F_eps
+!    real(kind=8) :: F_Mix_pos, F_Mix_neg, F_Mix_Hplus, F_Mix_OHmin, F_Conf, F_Eq, F_Eq_wall, F_vdW, F_electro, F_eps
     integer :: iR,j
 
     print*, "Calculating energies..." 
     Free_Energy = 0.0
     Free_Energy2 = 0.0
 
-! 1. Mezcla solvente
-    F_Mix_s = 0.0 
-    F_Mix_s = fmixs() ! 1. Mezcla solvente
-    F_Mix_s = F_Mix_s * delta/vsol
-    Free_Energy = Free_Energy + F_Mix_s
+! ******************************************************************
+! ENTROPIAS DE MEZCLA (independiente de la presencia del polimero!)
+! ******************************************************************
+    F_Mix = 0.0
+    F_Mix = fmix() ! Calcula las entropías de mezcla por separado y de vuelve el total.
+! (cada contribucion es guardada en una variable individual)
+    Free_Energy =  Free_Energy + F_Mix
+!! ! 1. Mezclas: solvente, H, OH, +ion, -ion (cambiar)
+!!     F_Mix_s = 0.0 
+!!     F_Mix_s = fmixs() ! 1. Mezcla solvente
+!!     Free_Energy = Free_Energy + F_Mix_s
+!! 
+!! ! 2. Mezcla ion positivo
+!!     F_Mix_pos = 0.0 
+!!     F_Mix_pos = fmixpos() ! 2. Mezcla ion positivo
+!!     Free_Energy = Free_Energy + F_Mix_pos
+!! 
+!! ! 3. Mezcla ion negativo
+!!     F_Mix_neg = 0.0
+!!     F_Mix_neg = fmixneg()
+!!     Free_Energy = Free_Energy + F_Mix_neg
+!! 
+!! ! 4. Mezcla protones
+!!     F_Mix_Hplus = 0.0
+!!     F_Mix_Hplus = fmixHplus()
+!!     Free_Energy = Free_Energy + F_Mix_Hplus
+!! 
+!! ! 5. Mezcla hidroxilos
+!!     F_Mix_OHmin = 0.0
+!!     F_Mix_OHmin = fmixOHmin()
+!!     Free_Energy = Free_Energy + F_Mix_OHmin
+! ******************************************************************
 
-! 2. Mezcla ion positivo
-    F_Mix_pos = 0.0 
-    F_Mix_pos = fmixpos() ! 2. Mezcla ion positivo
-    F_Mix_pos = F_Mix_pos * delta/vsol/vsalt
-    Free_Energy = Free_Energy + F_Mix_pos
-
-! 3. Mezcla ion negativo
-    F_Mix_neg = 0.0
-    F_Mix_neg = fmixneg()
-    F_Mix_neg = F_Mix_neg * delta/vsol/vsalt
-    Free_Energy = Free_Energy + F_Mix_neg
-
-! 4. Mezcla protones
-    F_Mix_Hplus = 0.0
-    F_Mix_Hplus = fmixHplus()
-    F_Mix_Hplus = F_Mix_Hplus * delta/vsol
-    Free_Energy = Free_Energy + F_Mix_Hplus
-
-! 5. Mezcla hidroxilos
-    F_Mix_OHmin = 0.0
-    F_Mix_OHmin = fmixOHmin()
-    F_Mix_OHmin = F_Mix_OHmin * delta/vsol
-    Free_Energy = Free_Energy + F_Mix_OHmin
-
-! 6. Entropia interna polimero
+! ********************* POLYMER ************************************
+! 6. Entropia interna polimero + Eq. Quimico (cambiar?)
+! ******************************************************************
     F_Conf = 0.0
 # if CHAIN == 1 
     F_Conf = fconf_pol()
@@ -59,19 +63,15 @@ subroutine calc_energy(pHbulk)
     Free_Energy = Free_Energy + F_Conf
 !    print*, "E + F_Fconf" , Free_energy
 
-! 7. Chemical Equilibrium
+! 7. Chemical Equilibria
+! ******************************************************************
     F_Eq = 0.0 
     F_Eq_wall = 0.0
 # if CHAIN == 1 
-      F_Eq = fchem_eq()
-
-      if ( sigmaq /= 0.0 ) then 
-            print*, "sigmaq es distinto de cero!", sigmaq 
-   !     F_Eq_wall = fchem_eq_wall()* sigmaq
-      end if 
-      F_Eq = F_Eq *delta/vsol
+! Funciona bien
+      F_Eq = fchem_eq() ! Solo calcula el ChemEq. en el polimero
 # endif
-      F_Eq_wall = F_Eq_wall *delta/vsol
+      F_Eq_wall = fchem_eq_wall()
       Free_Energy = Free_Energy + F_Eq + F_Eq_wall
 !    print*, "E + F_Eq" , Free_energy
 
@@ -81,67 +81,79 @@ subroutine calc_energy(pHbulk)
     F_vdW = fvdW()
     Free_Energy = Free_Energy + F_vdW
     print*, "E + F_vdW" , Free_energy
+#else
+    print*, "F_vdW = 0.0 "
 #endif
 
-! 9. Electrostatic ! VER ESTO...
+! 9. Electrostatic - Esta calculada en las unidades correctas
     F_electro = 0.0    
     do iR  = 1, dimR
-        F_electro = F_electro + delta*psi(iR)*qtot(iR)/2.0/vsol * (dfloat(iR)-0.5)*delta/Radio
+        F_electro = F_electro + psi(iR)*(qtot(iR))/2.0 *(delta)*(dfloat(iR)-0.5)*delta/Radio
     enddo
-       ! F_electro = F_electro + psi(dimR+1)*sigmaq*zwall
+        F_electro = F_electro + sigmaq*(delta/vsol)*zwall*fdiswall*psi(dimR)/2.0 
+    
     Free_Energy = Free_Energy + F_electro
 !    print*, "E + F_electro" , Free_energy
 !*******************************************************************
 ! Observacion:
 ! La energia correspondiente a la distribucion de carga superficial 
-! sigmaq NO es tenida en cuenta. Esto es por que la integral corespondiente
-! a la energia electrostatica en Free_energy llega hasta R-delta/2
+! sigmaq es tenida en cuenta en ambas energias Pong y acá.
+! (ver pong_energy.f90) 
 !*******************************************************************
 
 ! 10. Pol-Sup
     F_eps = 0.0
 #if CHAIN == 1
-    F_eps = fpol_sup() 
+!    F_eps = fpol_sup() 
 !    if(eps1.ne.0.0) then
 !        print*, 'EPS should be 0 or correct free energy!'
 !        stop
 !    endif
-    Free_Energy = Free_Energy + F_eps
 #endif
-    print*, "E " , Free_energy
- 
-! Segun Pong -  Estas son las condiciones de contorno del sistema?
-! sumpi - 
-! sumrho - 
-! sumel :: No considered superficial charge distributio
-    Free_Energy2 = 0.0
-    suma_pong = pong_energy()
-    
-!    aux_mp = 0.0
-!# if CHAIN == 1
-!    aux_mp = log(q)
-!# endif
-    Free_Energy2 = suma_pong - (delta/vsol)*sigma*log_q!aux_mp !&- F_vdW !&
-   !                 + (delta/vsol)*zwall*sigmaq*fdiswall/(4*pi*lb) * psi(dimR+1)/2  
+    Free_Energy = Free_Energy + F_eps
+ ! 11. Osmotic-Pressure!? should be zero. this is a check of the packing constraint
+    F_ospi =0.0 
+!    F_ospi = fospi()
+!    F_ospi = F_ospi * delta
+!    Free_Energy = Free_Energy - F_ospi
+!    print*, "Energia osmotic pressure: " , F_ospi 
 
+    print*, "E " , Free_energy
 !*******************************************************************
 ! Observacion:
 ! La energia correspondiente a la distribucion de carga superficial 
-! sigmaq NO es tenida en cuenta. Esto es por que la integral corespondiente
+! sigmaq es tenida en cuenta dentro de pong_energy. Esto es por que la integral corespondiente
 ! a la energia electrostatica en Free_energy llega hasta R-delta/2
 !*******************************************************************
+    Free_Energy2 = 0.0
+    suma_pong = pong_energy() ! pong_energy(): considera la carga superficial sigmaq
+    Free_Energy2 = suma_pong - (delta/vsol)*sigma*log_q - F_vdW !&
+!*********************************************************************************
+    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 &
+                                + F_Eq_wall
+!
+! Aunque la expresion para la carga superficial aparece en todas mis deducciones 
+! aparentemente no hace falta. Es un termino constante. 
+! Si se considera, debe ser considerada en las dos energias al mismo tiempo.
+! (ver 9. Electrostatic en calc_energy)
+! Expresion para la energia en la superficie:
+!*********************************************************************************
 
+! Printing output
     Print*, "E2 ", Free_Energy2
     Print*, "diff", Free_Energy -  Free_Energy2
 
 ! Guarda energia libre
+         write(311,*) pHbulk, F_electro
+         write(312,*) pHbulk, Free_energy2
          write(301,*) pHbulk, Free_energy
          write(302,*) pHbulk, F_Mix_s 
          write(303,*) pHbulk, F_Mix_pos
          write(304,*) pHbulk, F_Mix_neg
          write(305,*) pHbulk, F_Mix_Hplus
          write(306,*) pHbulk, F_Mix_OHmin
-         write(308,*) pHbulk, F_Eq, F_Eq_wall
+         write(308,*) pHbulk, F_Eq
+         write(319,*) pHbulk, F_Eq_wall
 #ifdef VDW
          write(309,*) pHbulk, F_vdW
 #endif
@@ -149,8 +161,7 @@ subroutine calc_energy(pHbulk)
          write(307,*) pHbulk, F_Conf
          write(310,*) pHbulk, F_eps
 # endif
-         write(311,*) pHbulk, F_electro
-         write(312,*) pHbulk, Free_energy2
+         write(201,*) pHbulk, F_ospi
 
 !c--------------------------- FIN DE ENERGIA LIBRE -----------------
 
