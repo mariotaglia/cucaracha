@@ -1,7 +1,7 @@
 !!!!!!!!!!!!!!!!! Guarda archivos !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 subroutine save_data(ipH)
 #   include "control_run.h"
-    use globales, only: delta, dimR
+    use globales, only: delta, dimR, vsalt
     use csys, only: pHs, expmuHplus, expmuOHmin, expmupos, expmuneg!,x1
     use pore, only: avpol, qtot, xh, xpos, xneg, xHplus, xOHmin, fdis, psi!, fdis!, fdis2
     integer, intent(in) :: ipH
@@ -84,7 +84,25 @@ subroutine save_data(ipH)
 !            write(45,*)(i-0.5)*delta,psi(i)
 !        enddo
     close(45)
-
+!******************************************************************
+    format_string = '(A5,A1,I2.2,F0.2,A1,I3.3,A4)'
+    ! Construye el array filename
+    title='p_mus' ! en el poro
+    !write(filename,format_string) title,'_', int(pHs(ipH)) , pHs(ipH)-int(pHs(ipH)), '_', ipH, '.dat'
+    write(filename,format_string) title,'_', int(pH) , pH-int(pH), '_', ipH, '.dat'
+    ! Abre el archivo y guarda la informacion 
+    open(unit=45, file=filename)
+        do iR=1, dimR
+            write(45,*) (iR - 0.5)*delta, dlog( xpos(iR)/ vsalt / (xh(iR)**vsalt) ) + psi(iR), &!array(dimR-iR+1)
+                                          dlog( xneg(iR)/ vsalt / (xh(iR)**vsalt) ) - psi(iR), &
+                                          dlog( xHplus(iR) / xh(iR) ) + psi(iR), &
+                                          dlog( xOHmin(iR) / xh(iR) ) - psi(iR)
+        enddo
+!        do i=0,dimR+1
+!            write(45,*)(i-0.5)*delta,psi(i)
+!        enddo
+!******************************************************************
+    close(45)
 
 end subroutine save_data
 
