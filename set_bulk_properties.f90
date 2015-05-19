@@ -15,7 +15,6 @@ subroutine set_bulk_properties(pHbulk)
 !------- Volume fractions
         cOHmin = 10**(-pOHbulk)   ! concentration OH- in bulk
         xOHminbulk = (cOHmin*Na/(1.0d24))*(vsol)  ! volume fraction H+ in bulk vH+=vsol
-
         if(pHbulk.le.7) then  ! pH<= 7
             xposbulk= xsalt/zpos
             !xnegbulk=-xsalt/zneg -xsalt2/zneg +(xHplusbulk -xOHminbulk)*vsalt ! NaCl+ HCl
@@ -25,9 +24,13 @@ subroutine set_bulk_properties(pHbulk)
             !xnegbulk=-xsalt/zneg -xsalt2/zneg
             xnegbulk=-xsalt/zneg
         endif
-
 ! En bulk no hay polimero.
          xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk !- xposbulk2
+#if pol == 1
+         xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk -xpolbulk !- xposbulk2
+! Polymer chemical potential!
+           expmupol = xpolbulk/vpol / xsolbulk**(vpol*long)
+#endif
 ! Ojo Kw y Ka estan en mol/l mientras que vsol y xsolbulk estan en nm3
 ! 1.0d24 factor de conversion de volumen de litro a nm3  1nm3 = 10^-24 l = 10^-24 dm3
 
@@ -37,7 +40,6 @@ subroutine set_bulk_properties(pHbulk)
 !ojo! expmuHplus ya tiene el signo menos!!
          expmuHplus = xHplusbulk / xsolbulk**vHplus   ! vsol = vHplus
          expmuOHmin = xOHminbulk / xsolbulk**vOHmin  ! vsol = vOHmin
-
 ! intrinstic equilibruim constants in mol/nm3
             Ka0 = (Ka*vsol/xsolbulk)*(Na/1.0d24)
             Kb0 = (Kb*vsol/xsolbulk)*(Na/1.0d24)

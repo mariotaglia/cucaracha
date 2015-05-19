@@ -17,6 +17,7 @@ module csys
 
 ! System Variables inputs
     real(KIND=8) :: sigma, sigmaq, constq, &
+        cpol, xpolbulk, &
         csalt, csalt2=0.0, xsalt, xsalt2,& ! Salt concentration
         pKawall, kwall, Kwall0, pKa, Ka, Ka0, pKb, Kb, Kb0, & ! chemical equilibrium
         eps1, & ! Electrostatic potential
@@ -27,7 +28,8 @@ module csys
 ! Bulk values
     real(kind=8) :: cHplus, cOHmin, &
                     pOHbulk, xposbulk, xnegbulk, xsolbulk, &
-                    xHplusbulk, xOHminbulk, expmupos, expmuneg, expmuHplus, expmuOHmin
+                    xHplusbulk, xOHminbulk, &
+                    expmupol, expmupos, expmuneg, expmuHplus, expmuOHmin
     real(kind=8), dimension(:), allocatable :: pHs, pro ! list of bulk pHs, list of probability 
     real(kind=8), dimension(:,:), allocatable :: Xu
     real(kind=8), dimension(:,:,:), allocatable :: in1 ! guarda las configuraciones de cadena 

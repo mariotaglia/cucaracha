@@ -22,7 +22,7 @@ subroutine read_input
       read(8, *), eps1     ! Interaccion Pol-Sup 
 ! Salt concentration
       read(8, *), basura
-      read(8, *), csalt   ! Bulk Salt concentration
+      read(8, *), csalt, cpol  ! Bulk Salt concentration
 
       read(8, *), basura
       read(8, *), pKawall ! Eq. Const. wall charge

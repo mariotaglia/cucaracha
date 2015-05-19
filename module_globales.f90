@@ -9,9 +9,9 @@ module globales
         pi=3.14159265359, &
 !        infinity = HUGE(dbl_prec_var), & ! computer infinity
 ! Charges        
-        zpos=1.0, zpos2=3.0, zneg=-1.0, &
+        zpos=1.0, zH=1.0, zpos2=3.0, &
+        zneg=-1.0, zOH=-1.0, &
         zwall=-1.0, zpol=1.0, &
-        zH=1.0, zOH=-1.0, &
 ! Lengths
         lb=0.714, & !Bjerrum Length (nm)
         delta=0.5, & ! Layer width (nm)

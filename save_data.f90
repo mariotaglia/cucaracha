@@ -70,6 +70,7 @@ subroutine save_data(ipH)
       title = 'poten'
       call savetodisk(psi, title, pH, ipH)
 
+# ifdef debug
     format_string = '(A5,A1,I2.2,F0.2,A1,I3.3,A4)'
     ! Construye el array filename
     title='b_mus'
@@ -103,6 +104,6 @@ subroutine save_data(ipH)
 !        enddo
 !******************************************************************
     close(45)
-
+#endif 
 end subroutine save_data
 

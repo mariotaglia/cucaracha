@@ -15,23 +15,6 @@ subroutine set_pore_distrib
     real(kind=8) :: shift ! it is  multiplicative factor in probability pro(cuantas)
     type (mp_real) q ! este valor puede ser MUY grande
 
-!**************************************************************
-! Dissociation in the inner wall of the pore 
-! + interaction with the electrostatic Potential    
-    fdiswall = Kwall0 / (expmuHplus*dexp(psi(dimR)*zwall) + Kwall0) 
-    fdiswall = 1.0 / (expmuHplus*dexp(psi(dimR)*zwall)/Kwall0 + 1.0 ) 
-!     fdiswall = 0.0
-!**************************************************************
-
-!**************************************************************
-! Boundary Conditions: Electrical Potential
-!! Estas ecuaciones son suplementarias a la eq. de Poisson discretizada
-!   *   La derivada en r=0 tiene que ser cero. Se utiliza orden uno en la derivada en r=0.
-!   *   La derivada en r=R considera la carga superficial sigmaq. Se utiliza orden 2 en la derivada.
-    psi(0) = psi(1) ! La derivada en r = 0 es igual a cero
-!   psi(dimR+1) = psi(dimR) + (4*pi*lb*delta)*sigmaq*zwall*fdiswall ! La derivada en r=R es el salto de la carga superficial, ver notas
-    psi(dimR+1) = psi(dimR) + (lb*delta)*(sigmaq*delta/vsol)*zwall*fdiswall ! La derivada en r=R es el salto de la carga superficial, ver notas
-!**************************************************************
     
 !    call printstate("set_pore_distrib L23")
 
@@ -61,8 +44,9 @@ subroutine set_pore_distrib
 ! New symmetric equations!
 !        fdis(iR) = 1.0d0/(1.0d0 + (Ka0*dexp(psi(iR)*zpos)/expmuHplus) )! Derived from the theory
         !fdis(iR) =    Ka0 / (expmuOHmin*dexp(  psi(iR)*zpos ) + Ka0   ) ! using fdiswall symmetry 
+        fdis(iR) =    Ka0 / ( xOHmin(iR)/xh(iR)  + Ka0   ) ! using fdiswall symmetry 
 ! Facundo like expression
-        fdis(iR) = 1.0 / (1.0 + expmuOHmin*dexp(psi(iR)*zpol)/Ka0 ) ! FACUNDO LIKE EXPRESSION ! funciona(!)
+        !fdis(iR) = 1.0 / (1.0 + expmuOHmin*dexp(psi(iR)*zpol)/Ka0 ) ! FACUNDO LIKE EXPRESSION ! funciona(!)
 !        fdis(iR) = 0.9
         fdis2(iR) = 0.0
 
@@ -71,6 +55,23 @@ subroutine set_pore_distrib
 !       fdis2(iR) = 1.0d0/(1.0d0 + (dexp(psi(iR)*zpos)*expmuOHmin/Kb0) )
 #   endif
     end do
+!**************************************************************
+! Dissociation in the inner wall of the pore 
+! + interaction with the electrostatic Potential    
+!    fdiswall = Kwall0 / (expmuHplus*dexp(psi(dimR)*zwall) + Kwall0) 
+!    fdiswall = 1.0 / (expmuHplus*dexp(psi(dimR)*zwall)/Kwall0 + 1.0 ) 
+    fdiswall = 1.0 / ( xHplus(dimR)/xh(dimR) /Kwall0 + 1.0 ) 
+!**************************************************************
+
+!**************************************************************
+! Boundary Conditions: Electrical Potential
+!! Estas ecuaciones son suplementarias a la eq. de Poisson discretizada
+!   *   La derivada en r=0 tiene que ser cero. Se utiliza orden uno en la derivada en r=0.
+!   *   La derivada en r=R considera la carga superficial sigmaq. Se utiliza orden 2 en la derivada.
+    psi(0) = psi(1) ! La derivada en r = 0 es igual a cero
+!   psi(dimR+1) = psi(dimR) + (4*pi*lb*delta)*sigmaq*zwall*fdiswall ! La derivada en r=R es el salto de la carga superficial, ver notas
+    psi(dimR+1) = psi(dimR) + (lb*delta)*(sigmaq*delta/vsol)*zwall*fdiswall ! La derivada en r=R es el salto de la carga superficial, ver notas
+!**************************************************************
 
 # if CHAIN == 1
 !!!!!! AQUI FALTA ACTUALIZAR xH! debe tomar el valor de  x1

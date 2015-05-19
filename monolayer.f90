@@ -82,18 +82,18 @@ program nanochannel
 !!             call calc_mean_values(pHs(ipH)) ! Rmedio 
 !! ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
 !!             call calc_conductance(pHs(ipH))
-
+        call printstate("Aloop L71") ! Report of State
+    
     print*, '********************************************'
     print*, '*** Comienza el loop principal ***'
 ! *****************************************************************************
 ! Principal Loop loop
 ! *****************************************************************************
     ipH=1 
-    call printstate("Aloop L71") ! Report of State
     do while (ipH <= npH)  ! Start principal Loop
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
-
         call set_bulk_properties(pHs(ipH)) ! Actualizo las condiciones de bulk se repite solo para ipH=1
+        call printstate("Aloop L71") ! Report of State
 !        call set_pore_distrib !Not necesarry this function is inside fkfun
 
 ! Resolution of the equations

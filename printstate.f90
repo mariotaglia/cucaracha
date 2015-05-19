@@ -76,6 +76,7 @@ subroutine printstate(marca)
     write(1984,'(3(A10,F7.3))'), "Kb       :", Kb," pKb     :", pKb, " Kb0     :", Kb0
 ! BULK
     write(1984,*), "*** BULK ***" 
+    write(1984,*), "cpol      :", cpol, "xpolbulk   :", xpolbulk
     write(1984,*), "csalt      :", csalt, "xsalt   :", xsalt
     write(1984,*), "csalt2     :", csalt2, "xsalt2   :", xsalt2
     write(1984,*), "cHplus     :", cHplus
@@ -85,6 +86,7 @@ subroutine printstate(marca)
     write(1984,*), " xnegbulk   :", xnegbulk
     write(1984,*), " xHplusbulk :", xHplusbulk
     write(1984,*), " xOHminbulk :", xOHminbulk
+    write(1984,*), "expmupol   :", expmupol
     write(1984,*), "expmupos   :", expmupos
     write(1984,*), "expmuneg   :", expmuneg
     write(1984,*), "expmuHplus :", expmuHplus
