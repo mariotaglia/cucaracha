@@ -23,7 +23,7 @@ subroutine open_files(m)
             open(unit=312, file='F_tot2.dat')
         ! Mean values
             open(unit=313, file='fmedio.dat')
-#if CHAIN == 1
+#if CHAIN != 0
             write(313,*) '# pHbulk, fmedio, fdiswall, qwall'
 #else            
             write(313,*) '# pHbulk, fdiswall, qwall'

@@ -28,7 +28,6 @@ subroutine kai
       ! NOTA: Dar vuelta los indices ii,j en Xu y suma, porque fortran guarda en memoria las cosas al reves! 
       !*********************************
     do ii = 1, dimR ! loop sobre cada posicion del segmento
-!    ii=dimR
         x_1 = (dfloat(ii) - 0.5)*delta ! asume theta segmento = 0, z segmento = 0 y segmento en el centro de la layer
         y_1 = 0.0
         z1 = 0.0
@@ -36,9 +35,7 @@ subroutine kai
 !        write(811,*) '      ii       iz      z       itheta      theta: '
         MCstepstheta = ii*100
         do itheta = 1, MCstepstheta 
-!            itheta = 1
             do iz = 1, MCstepsz + 1
-!                iz = 1
 !                do iR = 1, MCstepsR + 1 ! Esta es la linea que genera error PREGUNTAR A MARIO!!
                 do iR = 1, MCstepsR  ! Con esta linea funciona! El tema es que j vale dimR+1 cuando iR=MCstepsR
                    ! iR = 1

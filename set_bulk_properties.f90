@@ -30,6 +30,7 @@ subroutine set_bulk_properties(pHbulk)
          xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk -xpolbulk !- xposbulk2
 ! Polymer chemical potential!
            expmupol = xpolbulk/vpol / xsolbulk**(vpol*long)
+        print*, "expmupol ", pHbulk, expmupol
 #endif
 ! Ojo Kw y Ka estan en mol/l mientras que vsol y xsolbulk estan en nm3
 ! 1.0d24 factor de conversion de volumen de litro a nm3  1nm3 = 10^-24 l = 10^-24 dm3
@@ -44,5 +45,4 @@ subroutine set_bulk_properties(pHbulk)
             Ka0 = (Ka*vsol/xsolbulk)*(Na/1.0d24)
             Kb0 = (Kb*vsol/xsolbulk)*(Na/1.0d24)
          Kwall0 = (Kwall*vsol/xsolbulk)*(Na/1.0d24)
-
 end subroutine set_bulk_properties

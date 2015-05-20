@@ -57,7 +57,7 @@ subroutine calc_energy(pHbulk)
 ! 6. Entropia interna polimero + Eq. Quimico (cambiar?)
 ! ******************************************************************
     F_Conf = 0.0
-# if CHAIN == 1 
+# if CHAIN != 0 
     F_Conf = fconf_pol()
 # endif
     Free_Energy = Free_Energy + F_Conf
@@ -67,7 +67,7 @@ subroutine calc_energy(pHbulk)
 ! ******************************************************************
     F_Eq = 0.0 
     F_Eq_wall = 0.0
-# if CHAIN == 1 
+# if CHAIN != 0 
 ! Funciona bien
       F_Eq = fchem_eq() ! Solo calcula el ChemEq. en el polimero
 # endif
@@ -103,7 +103,7 @@ subroutine calc_energy(pHbulk)
 
 ! 10. Pol-Sup
     F_eps = 0.0
-#if CHAIN == 1
+#if CHAIN != 0
 !    F_eps = fpol_sup() 
 !    if(eps1.ne.0.0) then
 !        print*, 'EPS should be 0 or correct free energy!'
@@ -157,7 +157,7 @@ subroutine calc_energy(pHbulk)
 #ifdef VDW
          write(309,*) pHbulk, F_vdW
 #endif
-# if CHAIN == 1
+# if CHAIN != 0
          write(307,*) pHbulk, F_Conf
          write(310,*) pHbulk, F_eps
 # endif

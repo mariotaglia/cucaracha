@@ -39,7 +39,7 @@ program nanochannel
     call allocating(1) ! Allocating memory
 
 ! If chain ==1 then prepare the memory and variables
-#if CHAIN == 1  
+#if CHAIN !=0   
     call creador ! Creating the chains
     call pxs ! Chequea que todos los segmentos esten dentro del slab.
 #   if  VDW
@@ -63,25 +63,6 @@ program nanochannel
 ! Inside nanochannel set x1
     call set_initial_guess(0) ! 0 - bulk solution as initial guess
 
-! *****************************************************************************
-! Un ciclo del loop pre-condicionador (para no poner los resultados de bulk)
-! *****************************************************************************
-!!     ipH=1  ! Selecting pH=2.0 the first value
-!!     call printstate("Aloop L67") ! Report of State
-!!         print*, 'Pre-corrida para determinar el primer estado'
-!!         print*, '********************************************'
-!!         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
-!!         call call_kinsol(x1, ier)
-!!         write(10,*), " " ! para formatear fort.10
-!!         write(11,*), " " ! para formatear fort.11
-!!         xh(:) = x1(:dimR)    ! Solvent volume fraction
-!!         psi(1:dimR) = x1(dimR+1:) ! Electrostatic Potential
-!! ! Se escribe el output 
-!!             call save_data(ipH) ! Saving data
-!!             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
-!!             call calc_mean_values(pHs(ipH)) ! Rmedio 
-!! ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
-!!             call calc_conductance(pHs(ipH))
         call printstate("Aloop L71") ! Report of State
     
     print*, '********************************************'

@@ -15,10 +15,11 @@ subroutine creador ! crea cadenas
             integer :: ncha
             real(kind=8), dimension(3,200,100), intent(out) :: cha
         endsubroutine
+        subroutine imprimir_cadenas()
+        endsubroutine
     endinterface
 !    REAL(KIND=8)  indax, inday, indaz, rands
     REAL(KIND=8), dimension(3,200,100) :: chains ! en un modulo especial?
-
     INTEGER :: i, il, j, ncha=0
 
     il=0
@@ -27,7 +28,8 @@ subroutine creador ! crea cadenas
         call cadenas72mr(chains,ncha)
         do i=1,ncha
             il = il + 1
-            if(il.gt.cuantas) goto 100
+            !if(il.gt.cuantas) goto 100
+            if(il.gt.cuantas) exit
             do j=1,long         
                 in1(il,j,1)=chains(1,j,i)
                 in1(il,j,2)=chains(2,j,i)
@@ -36,7 +38,8 @@ subroutine creador ! crea cadenas
         end do
     end do
 
-!    call imprimir_cadenas
+    print*, " estoy dentro de imprimir_cadenas"
+    call imprimir_cadenas
 
  100  return
 end subroutine creador

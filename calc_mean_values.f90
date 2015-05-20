@@ -13,7 +13,7 @@ subroutine calc_mean_values(pHbulk)
 
     print*, "Calculating mean values... "
         fdisw = 0.0
-#if CHAIN == 1
+#if CHAIN != 0 
        fmedio = 0.0
        sumpol = 0.0
       fmedio2 = 0.0

@@ -37,7 +37,7 @@ subroutine set_pore_distrib
 !          denon = ( expmuOHmin*dexp(psi(iR)*zpos) )**2
 !     &          + expmuOHmin*dexp(psi(iR)*zpos)*Ka0
 !     &          + Ka0*Kb0 ! Kb0 = Ka20 for dobule protonation
-#   if CHAIN == 1
+#   if CHAIN != 0
 !         fdis(iR) = expmuOHmin*dexp(psi(iR)*zpos)*Ka0 / denon 
 !         fdis2(iR) = Ka0*Kb0 / denon ! Kb0 = Ka20 for dobule protonation
 !**************************************************************
@@ -73,7 +73,7 @@ subroutine set_pore_distrib
     psi(dimR+1) = psi(dimR) + (lb*delta)*(sigmaq*delta/vsol)*zwall*fdiswall ! La derivada en r=R es el salto de la carga superficial, ver notas
 !**************************************************************
 
-# if CHAIN == 1
+# if CHAIN != 0
 !!!!!! AQUI FALTA ACTUALIZAR xH! debe tomar el valor de  x1
     do iR = 1, dimR
 ! El termino: (xh(iR)**vpol) , viene de reemplazar la presion osmotica por la expresion para el solvent
@@ -165,7 +165,7 @@ subroutine set_pore_distrib
 !     &   avpol(iR)*(zpol/vpol)*fdis(iR) + xHplus(iR)-xOHmin(iR) 
 
         qtot(iR) = (zpos*xpos(iR)+zneg*xneg(iR))/(vsalt*vsol) &
-# if CHAIN == 1
+# if CHAIN != 0
             + (fdis(iR) + 2*fdis2(iR))*zpol*avpol(iR)/(vpol*vsol) &
 !         + zpos2*xpos2(iR)/vsalt2 &
 !     &   + (avpolp(iR)*fdis2(iR)*zpos + avpoln(iR)*fdis(iR)*zneg)/vpol

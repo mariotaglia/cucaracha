@@ -14,7 +14,7 @@ subroutine allocating(m)
     select case ( m ) 
         case ( 0 ) ! Deallocating 
             ! Declared in module csys
-#           if CHAIN == 1
+#           if CHAIN != 0
             deallocate( avpol, &
                         fdis, fdis2, &
                         pR, in1, Xu,pro,stat=var1 )
@@ -43,7 +43,7 @@ subroutine allocating(m)
             !allocate( x1(2*dimR), xg1(2*dimR), xflag(2*dimR) , stat=var1)
             if ( var1 /= 0 ) print*, "There is no sufficient memory for variables: x1, xg1, xflag" 
             var1=0
-#           if CHAIN == 1
+#           if CHAIN != 0
             allocate( avpol(dimR), &
                       fdis(dimR), fdis2(dimR),&
                       pR(cuantas,long), in1(cuantas,long,3),&
