@@ -1,4 +1,5 @@
 function fchem_eq()
+#   include "control_run.h"
     use globales, only: dimR, delta, vpol, vsol, radio
     use csys, only: expmuHplus, expmuOHmin, Ka0 
 !    use FreeEnergy, only: checknumber
@@ -14,17 +15,27 @@ function fchem_eq()
     fchem_eq = 0.0
     
     do i = 1, dimR
+# if POL == 0 
 ! Nueva expresion para el equilibrio quimico
       fchem_eq = fchem_eq + ( fdis(i) *dlog( fdis(i)/Ka0 ) &
                          + (1-fdis(i))*dlog( (1-fdis(i)) ) )  *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio
       fchem_eq = fchem_eq + fdis(i)*dlog(expmuOHmin) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio ! ojo! expmuHplus ya tiene el signo menos!!
-
 ! Original Mario
 !      fchem_eq = fchem_eq + fdis(i)*dlog(fdis(i))            *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
 !      fchem_eq = fchem_eq + (1.0-fdis(i))*dlog(1.0-fdis(i))  *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
 !                   
 !      fchem_eq = fchem_eq + (1.0-fdis(i))*dlog(Ka0)            *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
 !      fchem_eq = fchem_eq + (1.0-fdis(i))*(-dlog(expmuOHmin)) *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
+# elif POL == 1
+! Here PMEP - TO CHECK!
+      fchem_eq = fchem_eq + ( fdis(iR)*dlog(fdis(iR)/Ka0) &
+                            + fdis2(iR)*dlog(fdis2(iR)/(Ka0*Kb0)) &
+                            + (1.0-fdis(iR)-fdis2(iR))*dlog(1.0-fdis(iR)-fdis2(iR)) &
+                            ) *avpol(iR)/vpol*(dfloat(iR)-0.5)*delta/Radio
+
+      fchem_eq = fchem_eq + ( fdis(iR)*(dlog(expmuHplus)) & ! ojo! expmuHplus ya tiene el signo menos!!
+                            + 2*fdis2(iR)*(dlog(expmuHplus)) )*avpol(iR)/vpol*(dfloat(iR)-0.5)*delta/Radio
+# endif
 
     enddo
 

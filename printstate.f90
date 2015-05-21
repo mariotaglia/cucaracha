@@ -47,7 +47,9 @@ subroutine printstate(marca)
 #if CHAIN==1
     write(1984,imprimo), "avpol              :", avpol  ! fraccion de volumen del polimero 
     write(1984,imprimo), "fdis               :", fdis
+# if POL == 1 /* PMEP */
     write(1984,imprimo), "fdis2              :", fdis2
+# endif
 #endif
     !Energias!
     write(1984,*), "*** ENERGIAS ***" 

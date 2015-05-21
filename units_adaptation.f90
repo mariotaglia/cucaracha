@@ -22,7 +22,7 @@ subroutine units_adaptation
 ! Volume fraction second salt in mol/l, csalt2=0! Check!
     xsalt=(csalt*Na/(1.0d24))*(vsalt*vsol)   
 !      xsalt2=(csalt2*Na/(1.0d24))*(vsalt2*vsol)   
-# if pol == 1
+# if CHAIN == 1 && mupol == 1
     xpolbulk =(cpol*Na/(1.0d24))*(vpol*vsol)   
 #endif
     print*, 'Units adaptation OK!'

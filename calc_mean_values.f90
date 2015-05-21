@@ -22,30 +22,33 @@ subroutine calc_mean_values(pHbulk)
 
     do iR = 1, dimR
         sumpol = sumpol + avpol(iR)*(dfloat(iR)-0.5) ! suma de avpol*r (falta constante)
-!       sumpolp = sumpolp +
-!     & avpol(iR)*(dfloat(iR)-0.5) ! suma de avpol*r (falta constante)
-!       sumpoln = sumpoln +
-!     & avpol(iR)*(dfloat(iR)-0.5) ! suma de avpol*r (falta constante)
+!        sumpolp = sumpolp + avpolp(iR)*(dfloat(iR)-0.5) ! suma de avpolp*r (falta constante)
+!        sumpoln = sumpoln + avpoln(iR)*(dfloat(iR)-0.5) ! suma de avpoln*r (falta constante)
 
-         fmedio = fmedio + fdis(iR)*avpol(iR)*(dfloat(iR)-0.5) ! suma de frdis*avpol*r (falta constante)
+        Rmedio = Rmedio + avpol(iR)*(((dfloat(iR)-0.5)*delta)**2) ! suma de avpol*r^2 (falta constante)
+
+        fmedio = fmedio + fdis(iR)*avpol(iR)*(dfloat(iR)-0.5) ! suma de frdis*avpol*r (falta constante)
+!        fmedio = fmedio + fdis(iR)*avpoln(iR)*(dfloat(iR)-0.5) ! suma de frdis*avpoln*r (falta constante)
+# if POL == 0 /* PAH */
+        sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpol(iR)/(vpol*vsol))*zpos *(fdis(iR))
+# elif POL == 1 /* PMEP */
         fmedio2 = fmedio2 + fdis2(iR)*avpol(iR)*(dfloat(iR)-0.5) ! suma de frdis*avpol*r (falta constante)
-!       fmedio = fmedio +
-!     & fdis(iR)*avpoln(iR)*(dfloat(iR)-0.5) ! suma de frdis*avpol*r (falta constante)
-!       fmedio2 = fmedio2 +
-!     & fdis2(iR)*avpolp(iR)*(dfloat(iR)-0.5) ! suma de frdis*avpol*r (falta constante)
-          Rmedio = Rmedio + avpol(iR)*(((dfloat(iR)-0.5)*delta)**2) ! suma de avpol*r^2 (falta constante)
+!        fmedio2 = fmedio2 + fdis2(iR)*avpolp(iR)*(dfloat(iR)-0.5) ! suma de frdis*avpolp*r (falta constante)
         sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpol(iR)/(vpol*vsol))*zpos *(fdis(iR)+2*fdis2(iR))
+!        sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpoln(iR)/vpol)*fdis(iR)*zneg &
+!                            + (dfloat(iR)-0.5)*avpolp(iR)*fdis2(iR)*zpos ! para switterion
+# endif /* PMEP */
 ! Estaria faltando una constante porque se calcula el numero de cargas.
 ! Pero todas se normalizan por el numero de cargas totales (sumpol)
-!       sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpoln(iR)/vpol)*fdis(iR)*zneg
-!     & + (dfloat(iR)-0.5)*avpolp(iR)*fdis2(iR)*zpos ! para switterion
     enddo
 ! the idea is to calculate the net charge in the wall?
 !        fdisw = (sigmaq /(4.0*pi*lb*delta) ) *fdiswall ! ??
 !        fdisw = sigmaq*2*pi*radio*longporo /(4.0*pi*lb*delta) ) *fdiswall ! ??
     if ( sumpol /= 0.0 ) then ! si sumpol es distinto de cero
            fmedio = fmedio/sumpol    ! fraccion desprotonada media por monomero
+# if POL == 1
           fmedio2 = fmedio2/sumpol    ! fraccion desprotonada media por monomero
+# endif
            Rmedio = Rmedio/sumpol
         sumcharge = (delta/radio)*sumcharge ! carga polimerica total por unidad de superficie 
     end if

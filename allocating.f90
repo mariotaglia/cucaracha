@@ -16,7 +16,10 @@ subroutine allocating(m)
             ! Declared in module csys
 #           if CHAIN != 0
             deallocate( avpol, &
-                        fdis, fdis2, &
+                        fdis, &
+# if POL == 1 /* PMEP */ 
+                        fdis2, &
+# endif
                         pR, in1, Xu,pro,stat=var1 )
 #           endif                              
                 
@@ -45,7 +48,10 @@ subroutine allocating(m)
             var1=0
 #           if CHAIN != 0
             allocate( avpol(dimR), &
-                      fdis(dimR), fdis2(dimR),&
+                      fdis(dimR), & 
+# if POL == 1 /* PMEP */ 
+                      fdis2(dimR),&
+# endif
                       pR(cuantas,long), in1(cuantas,long,3),&
                       Xu(dimR,dimR),pro(cuantas) )
 #           endif
