@@ -40,7 +40,7 @@ subroutine call_kinsol(x1, ier)
     integer :: i
     integer :: globalstrat, maxl, maxlrst, maxiter
 
-!    print*, "call_kinsol: Variable neq desde call_kinsol: ", neq    
+    print*, "call_kinsol: Variable neq desde call_kinsol: ", neq    
 ! INICIA KINSOL
 ! msbpre:  Cuantas iteraciones pasan antes de actualizar la matriz del precondicionador (operacion expensive operation) 
     msbpre  = 5 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56) (MARIO)

@@ -4,7 +4,7 @@ subroutine imprimir_cadenas()
     
     integer  :: il,j
     il = 1  
-    print*, 'Se imprimen las conformaciones en conformations.xyx, use: vmd file.xyz '
+    print*, 'Se imprimen las conformaciones en conformations.xyz, use: vmd file.xyz '
 
     open(unit=678, file='conformations.xyz')
 ! Los comentarios en las primeras lineas no estan soportados en VMD

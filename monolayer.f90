@@ -62,8 +62,8 @@ program nanochannel
                                      ! bulk properties without polymer
 ! Inside nanochannel set x1
     call set_initial_guess(0) ! 0 - bulk solution as initial guess
-
-        call printstate("Aloop L71") ! Report of State
+    ipH=1
+    call printstate("Aloop L66") ! Report of State
     
     print*, '********************************************'
     print*, '*** Comienza el loop principal ***'
@@ -74,7 +74,7 @@ program nanochannel
     do while (ipH <= npH)  ! Start principal Loop
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
         call set_bulk_properties(pHs(ipH)) ! Actualizo las condiciones de bulk se repite solo para ipH=1
-        call printstate("Aloop L71") ! Report of State
+        call printstate("Aloop L77") ! Report of State
 !        call set_pore_distrib !Not necesarry this function is inside fkfun
 
 ! Resolution of the equations
