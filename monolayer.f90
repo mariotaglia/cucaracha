@@ -48,7 +48,7 @@ program nanochannel
 #endif
     call mpinit(15) ! Initial working precision, number of digits =15
     call open_files(1) ! Open files to save data? how to do that?
-!    write(11,*) "set_pore_distrib109: q "
+!    write(11,*) "set_pore_distrib 109: q "
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Falta una etapa donde se definir si se continua una corrida anterior
@@ -57,14 +57,14 @@ program nanochannel
 !         if (ipH.eq.1) then 
 !         endif
 ! IMPORTANT: DEFINE INITIAL GUESS -> SUBROUTINE!
-
-    call set_bulk_properties(pHs(1)) ! Setup bulk properties before setup initial guess ocurre en fkfun! (?)
+    ipH=1;
+    call set_bulk_properties(pHs(ipH)) ! Setup bulk properties before setup initial guess ocurre en fkfun! (?)
                                      ! bulk properties without polymer
 ! Inside nanochannel set x1
     call set_initial_guess(0) ! 0 - bulk solution as initial guess
-    ipH=1
-    call printstate("Aloop L66") ! Report of State
-    
+# ifdef fdebug
+    call printstate("fdebug Aloop L66") ! Report of State
+# endif
     print*, '********************************************'
     print*, '*** Comienza el loop principal ***'
 ! *****************************************************************************
@@ -104,7 +104,8 @@ program nanochannel
 ! Se escribe el output 
             call save_data(ipH) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
-            call calc_mean_values(pHs(ipH)) ! Rmedio 
+            call calc_mean_values(pHs(ipH)) ! Rmedio
+!            call calc_pkas() 
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
             call calc_conductance(pHs(ipH))
         endif

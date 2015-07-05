@@ -68,11 +68,11 @@ subroutine rota36(xend,xendr,n_in,test)
 !              dist_ymin = xendr(2,i) 
          endif
 #elif CRITERIO == 2
-        rmaxaux = xendr(1,i)
+        rmaxaux = xendr(1,i) ! Maxima coordenada X
          if ( rmaxaux > rmax ) then 
             rmax = rmaxaux     
             int_ymin = i   
-            dist_ymin = xendr(2,i) 
+            dist_ymin = xendr(2,i) ! Coordenada Y correspondiente a la maxima coordenada X 
          endif
 # endif
  1    continue
@@ -103,17 +103,18 @@ subroutine rota36(xend,xendr,n_in,test)
 # elif CRITERIO == 2 
          xendr(1, i) = xendr(1,i) + ( sqrt( radio**2 - dist_ymin **2) - rmax - 1e-5)  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
 # endif 
-
-
 # elif CHAIN == 2 /*Here I choose the system: brushes*/
 ! Si brushes entonces acerco el primer segmento.
          xendr(1, i) = radio - xendr(1, i) + 1e-5 ! cambia el origen del eje y, ahora el 0 esta en el centro del poro
                                                   ! sumo 1e-5 para evitar que el primer segmento quede exactamento sobre la pared del poro
 # endif /*Here I choose the system*/
+
          vect = (xendr(1, i))**2 + (xendr(2, i))**2 ! distancia desde el centro al segmento ^ 2
          
-         if (vect.gt.radio**2) test='N'  ! hay un segmento fuera del poro
-                  
+         if ( (abs(dist_ymin) .gt. radio) .or. (vect.gt.radio**2) ) test='N'  ! hay un segmento fuera del poro
+# ifdef fdebug_rota36
+         print*,"rota36: ", i, xendr(1,i), radio, dist_ymin, test 
+# endif
  2    continue
 
 !        write(22,*) " "

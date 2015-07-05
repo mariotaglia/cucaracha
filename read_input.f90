@@ -32,7 +32,8 @@ subroutine read_input
       read(8, *), pKa, pKb    ! Eq. Const. Polymer
      
       read(8, *), basura
-      read(8, *), pKb     ! Eq. Const. Polymer
+!      read(8, *), pKb     ! Eq. Const. Polymer
+      read(8, *), basura  ! Eq. Const. Polymer
  
       read(8, *), basura
       read(8, *), npH

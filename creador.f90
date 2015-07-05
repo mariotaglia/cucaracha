@@ -38,8 +38,9 @@ subroutine creador ! crea cadenas
         end do
     end do
 
-    print*, " estoy dentro de imprimir_cadenas"
+# ifdef fdebug
+    print*, "creador.f90 L42: imprimo cadenas"
     call imprimir_cadenas
-
+#endif
  100  return
 end subroutine creador

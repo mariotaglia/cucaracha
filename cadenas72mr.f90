@@ -169,6 +169,6 @@ subroutine cadenas72mr(chains,ncha)
          
  400  continue
  402  if (ncha.eq.0) goto 223
-    !    imprimir_cadenas
+!        call imprimir_cadenas
       return
 end subroutine cadenas72mr

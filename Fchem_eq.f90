@@ -1,9 +1,13 @@
 function fchem_eq()
 #   include "control_run.h"
     use globales, only: dimR, delta, vpol, vsol, radio
-    use csys, only: expmuHplus, expmuOHmin, Ka0 
+    use csys, only: expmuHplus, expmuOHmin, Ka0, Kb0
 !    use FreeEnergy, only: checknumber
-    use pore, only: avpol, fdis!, fdis2
+# if POL == 0 /* PAH */
+    use pore, only: avpol, fdis !, fdis2
+# elif POL == 1 /* PMEP */
+    use pore, only: avpol, fdis, fdis2
+# endif
     implicit none
     real(kind=8) :: fchem_eq
     integer :: i
@@ -18,7 +22,7 @@ function fchem_eq()
 # if POL == 0 
 ! Nueva expresion para el equilibrio quimico
       fchem_eq = fchem_eq + ( fdis(i) *dlog( fdis(i)/Ka0 ) &
-                         + (1-fdis(i))*dlog( (1-fdis(i)) ) )  *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio
+                          + (1-fdis(i))*dlog( (1-fdis(i)) ) )  *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio
       fchem_eq = fchem_eq + fdis(i)*dlog(expmuOHmin) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio ! ojo! expmuHplus ya tiene el signo menos!!
 ! Original Mario
 !      fchem_eq = fchem_eq + fdis(i)*dlog(fdis(i))            *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
@@ -28,13 +32,17 @@ function fchem_eq()
 !      fchem_eq = fchem_eq + (1.0-fdis(i))*(-dlog(expmuOHmin)) *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
 # elif POL == 1
 ! Here PMEP - TO CHECK!
-      fchem_eq = fchem_eq + ( fdis(iR)*dlog(fdis(iR)/Ka0) &
-                            + fdis2(iR)*dlog(fdis2(iR)/(Ka0*Kb0)) &
-                            + (1.0-fdis(iR)-fdis2(iR))*dlog(1.0-fdis(iR)-fdis2(iR)) &
-                            ) *avpol(iR)/vpol*(dfloat(iR)-0.5)*delta/Radio
+      fchem_eq = fchem_eq + ( fdis(i)*dlog(fdis(i)/Ka0) &
+                            + fdis2(i)*dlog(fdis2(i)/(Ka0*Kb0)) &
+                            + (1.0-fdis(i)-fdis2(i))*dlog(1.0-fdis(i)-fdis2(i)) &
+                            ) *(avpol(i)/(vpol*vsol)) *delta *(dfloat(i)-0.5)*delta/Radio
+!                            ) *avpol(i)/vpol*(dfloat(i)-0.5)*delta/Radio
 
-      fchem_eq = fchem_eq + ( fdis(iR)*(dlog(expmuHplus)) & ! ojo! expmuHplus ya tiene el signo menos!!
-                            + 2*fdis2(iR)*(dlog(expmuHplus)) )*avpol(iR)/vpol*(dfloat(iR)-0.5)*delta/Radio
+      fchem_eq = fchem_eq + ( fdis(i)*(dlog(expmuHplus)) & ! ojo! expmuHplus ya tiene el signo menos!!
+                            + 2*fdis2(i)*(dlog(expmuHplus)) &
+                            ) *(avpol(i)/(vpol*vsol)) *delta *(dfloat(i)-0.5)*delta/Radio
+!                            ) *avpol(i)/vpol*(dfloat(i)-0.5)*delta/Radio
+
 # endif
 
     enddo

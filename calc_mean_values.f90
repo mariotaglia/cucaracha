@@ -37,7 +37,7 @@ subroutine calc_mean_values(pHbulk)
         sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpol(iR)/(vpol*vsol))*zpos *(fdis(iR)+2*fdis2(iR))
 !        sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpoln(iR)/vpol)*fdis(iR)*zneg &
 !                            + (dfloat(iR)-0.5)*avpolp(iR)*fdis2(iR)*zpos ! para switterion
-# endif /* PMEP */
+# endif /* PAH || PMEP */
 ! Estaria faltando una constante porque se calcula el numero de cargas.
 ! Pero todas se normalizan por el numero de cargas totales (sumpol)
     enddo
@@ -46,17 +46,22 @@ subroutine calc_mean_values(pHbulk)
 !        fdisw = sigmaq*2*pi*radio*longporo /(4.0*pi*lb*delta) ) *fdiswall ! ??
     if ( sumpol /= 0.0 ) then ! si sumpol es distinto de cero
            fmedio = fmedio/sumpol    ! fraccion desprotonada media por monomero
+           Rmedio = Rmedio/sumpol
+        sumcharge = (delta/radio)*sumcharge ! carga polimerica total por unidad de superficie 
 # if POL == 1
           fmedio2 = fmedio2/sumpol    ! fraccion desprotonada media por monomero
 # endif
-           Rmedio = Rmedio/sumpol
-        sumcharge = (delta/radio)*sumcharge ! carga polimerica total por unidad de superficie 
     end if
 
     write(318,*) pHbulk, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, sumcharge, sigmaq*(delta/vsol)*zwall*fdiswall
 !    write(318,*) pHbulk, Rmedio, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, sumcharge, sigmaq*(delta/vsol)*zwall*fdiswall
 ! NOTE: fdiswall was calculated in set_pore_distrib be carefull! ;)
-    write(313,*) pHbulk, fmedio, fdiswall !, fmedio2, fdiswall !, fdisw <- cual es el sentido de fdisw?
+#   if POL == 0 /* PAH */
+        write(313,*) pHbulk, fmedio, fdiswall !, fmedio2, fdiswall !, fdisw <- cual es el sentido de fdisw?
+#   elif POL == 1 /* PMEP */
+        write(313,*) pHbulk, fmedio, fmedio2, fdiswall
+#   endif /* PAH || PMEP */
+
 #else
     write(313,*) pHbulk, fdiswall, sigmaq*fdiswall*zwall, sumcharge
 #endif

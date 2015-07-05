@@ -101,7 +101,7 @@ subroutine printstate(marca)
     write(1984,*), "infile     :", infile
 !    write(1984,'(A29)'), "Variables in module globales:" 
       write(1984,'(A10,F7.3)'), "error    :", error 
-      write(1984,'(A10,F7.3)'), "betae    :", betae 
+!      write(1984,'(A10,F7.3)'), "betae    :", betae 
       write(1984,'(A10,F7.3)'), "errel    :", errel
       write(1984,'(A10,I4)'), "neq      :", neq
     write(1984,'(A29)'), "*** Parametros físicos ***" 
