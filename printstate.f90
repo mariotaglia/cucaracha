@@ -47,7 +47,9 @@ subroutine printstate(marca)
 #if CHAIN==1
     write(1984,imprimo), "avpol              :", avpol  ! fraccion de volumen del polimero 
     write(1984,imprimo), "fdis               :", fdis
+# if POL == 1 /* PMEP */
     write(1984,imprimo), "fdis2              :", fdis2
+# endif
 #endif
     !Energias!
     write(1984,*), "*** ENERGIAS ***" 
@@ -99,7 +101,7 @@ subroutine printstate(marca)
     write(1984,*), "infile     :", infile
 !    write(1984,'(A29)'), "Variables in module globales:" 
       write(1984,'(A10,F7.3)'), "error    :", error 
-      write(1984,'(A10,F7.3)'), "betae    :", betae 
+!      write(1984,'(A10,F7.3)'), "betae    :", betae 
       write(1984,'(A10,F7.3)'), "errel    :", errel
       write(1984,'(A10,I4)'), "neq      :", neq
     write(1984,'(A29)'), "*** Parametros físicos ***" 

@@ -24,7 +24,7 @@ subroutine save_data(ipH)
     print*, "Saving data..."
 ! GUARDAR! usar savetodisk
         pH=pHs(ipH)
-#if CHAIN == 1
+# if CHAIN != 0
 ! Polimero
       title = 'avpol'
       call savetodisk(avpol, title, pH ,ipH)
@@ -36,7 +36,7 @@ subroutine save_data(ipH)
 !!       title = 'fdis2'
 !!       call savetodisk(fdis2, title, pH, ipH)
 
-#endif
+#endif /* CHAIN != 0 */
 ! Total Charge
       title = 'qtodo'
       call savetodisk(qtot, title, pH ,ipH)

@@ -18,7 +18,7 @@ function fconf_pol()
         !fconf_pol = fconf_pol + (pro(i)/q)*dlog((pro(i))/q)  /vsol*delta*sigma
     enddo
 ! Aca mp deneroa janer ima coreccion? elefante
-        fconf_pol = (sigma*delta/vsol)*fconf_pol  
+!        fconf_pol = (sigma*delta/vsol)*fconf_pol  
 
 !    print*, "fconf_pol llama checknumber: fconf_pol", fconf_pol
     call checknumber(fconf_pol,'fconf_pol')

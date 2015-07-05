@@ -51,7 +51,7 @@ subroutine fkfun(x,f,ier)
 ! Volume fraction
     do iR=1,dimR
         f(iR)= xh(iR) & 
-#if CHAIN == 1
+#if CHAIN != 0
              + avpol(iR) & 
 #endif
              + xneg(iR) + xpos(iR) &

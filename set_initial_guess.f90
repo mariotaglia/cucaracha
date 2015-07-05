@@ -36,5 +36,8 @@ subroutine set_initial_guess(m)
               !x1(:) = xg1(:)
     end select
 ! Por unica vez. Luego es llamada desde fkfun
+# ifdef fdebug
+    print*, "set_initial_guess.f90 L39: entro a set_poro_distrib"
+# endif
     call set_pore_distrib
 end subroutine set_initial_guess

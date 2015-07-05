@@ -1,4 +1,5 @@
 function fchem_eq_wall()
+#   include "control_run.h"
     use globales, only: delta, vsol
     use csys, only: expmuHplus, Kwall0, sigmaq 
 !    use FreeEnergy, only: checknumber
@@ -7,7 +8,7 @@ function fchem_eq_wall()
     real(kind=8) :: fchem_eq_wall
     
     fchem_eq_wall = 0.0
-    
+# if fsigmaq == 1    
     if ( fdiswall  == 0.0 ) then 
         print*, "**********************************************************************************************"
         print*, "WARNING! fdiswall could not be zero! see chemical equilibrium in the wall: Fchem_eq_wall.f90"
@@ -29,6 +30,7 @@ function fchem_eq_wall()
 
 !    print*, "fchem_eq_wall llama checknumber: fchem_eq_wall", fchem_eq_wall
 !    call checknumber(fchem_eq_wall)
+#endif
     
     return
     contains 

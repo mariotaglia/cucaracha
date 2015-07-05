@@ -39,7 +39,7 @@ program nanochannel
     call allocating(1) ! Allocating memory
 
 ! If chain ==1 then prepare the memory and variables
-#if CHAIN == 1  
+#if CHAIN !=0   
     call creador ! Creating the chains
     call pxs ! Chequea que todos los segmentos esten dentro del slab.
 #   if  VDW
@@ -48,7 +48,7 @@ program nanochannel
 #endif
     call mpinit(15) ! Initial working precision, number of digits =15
     call open_files(1) ! Open files to save data? how to do that?
-!    write(11,*) "set_pore_distrib109: q "
+!    write(11,*) "set_pore_distrib 109: q "
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Falta una etapa donde se definir si se continua una corrida anterior
@@ -57,33 +57,14 @@ program nanochannel
 !         if (ipH.eq.1) then 
 !         endif
 ! IMPORTANT: DEFINE INITIAL GUESS -> SUBROUTINE!
-
-    call set_bulk_properties(pHs(1)) ! Setup bulk properties before setup initial guess ocurre en fkfun! (?)
+    ipH=1;
+    call set_bulk_properties(pHs(ipH)) ! Setup bulk properties before setup initial guess ocurre en fkfun! (?)
                                      ! bulk properties without polymer
 ! Inside nanochannel set x1
     call set_initial_guess(0) ! 0 - bulk solution as initial guess
-
-! *****************************************************************************
-! Un ciclo del loop pre-condicionador (para no poner los resultados de bulk)
-! *****************************************************************************
-!!     ipH=1  ! Selecting pH=2.0 the first value
-!!     call printstate("Aloop L67") ! Report of State
-!!         print*, 'Pre-corrida para determinar el primer estado'
-!!         print*, '********************************************'
-!!         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
-!!         call call_kinsol(x1, ier)
-!!         write(10,*), " " ! para formatear fort.10
-!!         write(11,*), " " ! para formatear fort.11
-!!         xh(:) = x1(:dimR)    ! Solvent volume fraction
-!!         psi(1:dimR) = x1(dimR+1:) ! Electrostatic Potential
-!! ! Se escribe el output 
-!!             call save_data(ipH) ! Saving data
-!!             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
-!!             call calc_mean_values(pHs(ipH)) ! Rmedio 
-!! ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
-!!             call calc_conductance(pHs(ipH))
-        call printstate("Aloop L71") ! Report of State
-    
+# ifdef fdebug
+    call printstate("fdebug Aloop L66") ! Report of State
+# endif
     print*, '********************************************'
     print*, '*** Comienza el loop principal ***'
 ! *****************************************************************************
@@ -93,7 +74,7 @@ program nanochannel
     do while (ipH <= npH)  ! Start principal Loop
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
         call set_bulk_properties(pHs(ipH)) ! Actualizo las condiciones de bulk se repite solo para ipH=1
-        call printstate("Aloop L71") ! Report of State
+        call printstate("Aloop L77") ! Report of State
 !        call set_pore_distrib !Not necesarry this function is inside fkfun
 
 ! Resolution of the equations
@@ -123,7 +104,8 @@ program nanochannel
 ! Se escribe el output 
             call save_data(ipH) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
-            call calc_mean_values(pHs(ipH)) ! Rmedio 
+            call calc_mean_values(pHs(ipH)) ! Rmedio
+!            call calc_pkas() 
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
             call calc_conductance(pHs(ipH))
         endif

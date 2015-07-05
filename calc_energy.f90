@@ -12,13 +12,14 @@ subroutine calc_energy(pHbulk)
     use mpmodule
     implicit none
     real(kind=8), intent(in) :: pHbulk
-    real(kind=8) :: suma_pong!, aux_mp
+    real(kind=8) :: suma_pong, std_mupol!, aux_mp
 !    real(kind=8) :: F_Mix_pos, F_Mix_neg, F_Mix_Hplus, F_Mix_OHmin, F_Conf, F_Eq, F_Eq_wall, F_vdW, F_electro, F_eps
     integer :: iR,j
 
     print*, "Calculating energies..." 
     Free_Energy = 0.0
     Free_Energy2 = 0.0
+    std_mupol= 0.0
 
 ! ******************************************************************
 ! ENTROPIAS DE MEZCLA (independiente de la presencia del polimero!)
@@ -57,17 +58,19 @@ subroutine calc_energy(pHbulk)
 ! 6. Entropia interna polimero + Eq. Quimico (cambiar?)
 ! ******************************************************************
     F_Conf = 0.0
-# if CHAIN == 1 
-    F_Conf = fconf_pol()
+# if CHAIN != 0 
+    F_Conf = fconf_pol() *(sigma*delta/vsol)
 # endif
     Free_Energy = Free_Energy + F_Conf
 !    print*, "E + F_Fconf" , Free_energy
+ 
+    std_mupol = std_mupol + F_conf ! just the sum: P*log(P)
 
 ! 7. Chemical Equilibria
 ! ******************************************************************
     F_Eq = 0.0 
     F_Eq_wall = 0.0
-# if CHAIN == 1 
+# if CHAIN != 0 
 ! Funciona bien
       F_Eq = fchem_eq() ! Solo calcula el ChemEq. en el polimero
 # endif
@@ -103,7 +106,7 @@ subroutine calc_energy(pHbulk)
 
 ! 10. Pol-Sup
     F_eps = 0.0
-#if CHAIN == 1
+#if CHAIN != 0
 !    F_eps = fpol_sup() 
 !    if(eps1.ne.0.0) then
 !        print*, 'EPS should be 0 or correct free energy!'
@@ -154,10 +157,11 @@ subroutine calc_energy(pHbulk)
          write(306,*) pHbulk, F_Mix_OHmin
          write(308,*) pHbulk, F_Eq
          write(319,*) pHbulk, F_Eq_wall
+         write(202,*) pHbulk, std_mupol
 #ifdef VDW
          write(309,*) pHbulk, F_vdW
 #endif
-# if CHAIN == 1
+# if CHAIN != 0
          write(307,*) pHbulk, F_Conf
          write(310,*) pHbulk, F_eps
 # endif

@@ -1,7 +1,7 @@
 function pong_energy()
-    use globales, only: delta, radio, dimR, vsalt, vsol, pi, zwall
-    use csys, only: sigmaq, xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk
-    use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, fdiswall
+    use globales, only: delta, radio, dimR, vsalt, vsol, vpol, pi, zwall
+    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk!, sigmaq
+    use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot!, fdiswall
     implicit none
 
     real(kind=8) :: pong_energy, sumpi, sumrho, sumel!, sum_disos
@@ -33,7 +33,10 @@ function pong_energy()
 !                            - xposbulk2/vsalt2 & ! sum over  rho_i i=+,-,si
                           ) /vsol *delta*(dfloat(iR)-0.5)*delta/Radio
 ! electrostatic part free energy
-        sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5)*delta/Radio  
+        sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5)*delta/Radio 
+#if CHAIN != 0
+        write(202,*) iR, dlog(avpol(iR)/vpol)
+#endif
     enddo
 
 

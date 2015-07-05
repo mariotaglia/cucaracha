@@ -2,6 +2,7 @@
 ! constante y propiedades fisicas
 
 module globales
+#   include "control_run.h"
     implicit none
 ! System Parameters, constant, etc
     real(KIND=8), parameter :: &
@@ -11,7 +12,12 @@ module globales
 ! Charges        
         zpos=1.0, zH=1.0, zpos2=3.0, &
         zneg=-1.0, zOH=-1.0, &
-        zwall=-1.0, zpol=1.0, &
+        zwall=-1.0, &
+# if POL == 0 /* PAH */
+        zpol=1.0, &
+# elif POL ==1 /* PMEP */
+        zpol=-1.0, &
+# endif
 ! Lengths
         lb=0.714, & !Bjerrum Length (nm)
         delta=0.5, & ! Layer width (nm)
@@ -29,7 +35,7 @@ module globales
         pKw = 14, Kw = 1.0e-14, &
        
         error = 1e-6, &  ! para comparar con la norma...
-        betae = 38.94, & ! beta * e
+!        betae = 38.94, & ! beta * e
         errel=1d-6
 !                                                        vsol,   vH+,  vOH-,    vK+,   vCl-,  vPol
 !    real(KIND=8), dimension(6), parameter :: v_all = (/ 0.030, 0.030, 0.030, 0.0824, 0.0824, 0.095 /)
