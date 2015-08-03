@@ -19,7 +19,7 @@
                       1 -  con equilibrio quimico (regulacion de carga) en la pared del poro
                    */
 
-
+/*Not implemented yet*/
 #undef geometry  /* Select geometry 0 - Flat surface? 
 # define geometry 1 /* Select geometry 0 - Flat surface?
                                      1 - Long Cylinder (1D)
@@ -34,7 +34,7 @@
                */
 # undef VDW 
 /* Para debugging imprimo muchas cosas */
-# undef fdebug
-# undef fdebug_pxs
-# undef fdebug_rota36
-# undef fdebug_set_pore_distrib
+# define fdebug
+# define fdebug_pxs
+# define fdebug_rota36
+# define fdebug_set_pore_distrib
