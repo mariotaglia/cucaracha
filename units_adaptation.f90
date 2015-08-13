@@ -13,7 +13,8 @@ sigma = sigma *vsol/ delta ! La superficie de referencia es vsol/delta
 sigmaq = sigmaq *vsol/delta ! Funciona! ver energia pong o 9.0 Electrostatic
 
 ! Electrostatic
-constq=delta*delta*(4*pi*lb) ! multiplicative factor in poisson eq  ! SI UNITS
+constq=(4*pi*lb) ! multiplicative factor in poisson eq  ! SI UNITS
+!constq=delta*(4*pi*lb) ! multiplicative factor in poisson eq  ! SI UNITS
 
 ! Chemical Equilibrium
     Ka=10**(-pKa)

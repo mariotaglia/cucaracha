@@ -40,6 +40,8 @@ subroutine open_files(m)
             open(unit=321, file='Gneg')
             open(unit=322, file='GHplus')
             open(unit=323, file='GOHmin')
+! AUXILIAR FILES
+            open(unit=324, file='output.aux')
         case ( 0 )
         ! Energy
             close(201) 
@@ -65,12 +67,14 @@ subroutine open_files(m)
             close(315)
             close(316)
             close(317)
-            close(318)
+            close(318) ! Rmedio
             close(319) ! F_eqwall
             close(320)
             close(321)
             close(322)
             close(323)
+! AUXILIAR FILES
+            close(324) ! output.aux
     end select 
      
 end subroutine

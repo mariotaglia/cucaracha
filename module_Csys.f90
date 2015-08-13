@@ -38,7 +38,7 @@ module csys
 !    integer, dimension(:,:)dimension(cuantas,long)  :: pR ! pR stores the position of the segment j from conf. i . 
 !    real(kind=8), dimension(cuantas,long,3) :: in1 ! guarda las configuraciones de cadena 
 !    real(kind=8), dimension(dimR,dimR) :: Xu
-    real(kind=8) :: log_q
+    real(kind=8) :: log_q !
 !    real(kind=8) :: norma
     integer :: infile, iter, npH, npKa=2, seed=1010 ! ojo! seed cambia a lo largo del programa!
     integer :: ps_i, flag ! used in check_run subroutine

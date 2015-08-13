@@ -7,7 +7,7 @@ subroutine calc_energy(pHbulk)
 #   include "control_run.h"
     use globales, only: delta, vsol, vsalt, radio, dimR , pi, lb, zwall
     use pore, only: qtot, psi, fdiswall
-    use csys, only: eps1, log_q, sigma, sigmaq
+    use csys, only: eps1, log_q, sigma, sigmaq!, constq
     use FreeEnergy
     use mpmodule
     implicit none
@@ -74,7 +74,9 @@ subroutine calc_energy(pHbulk)
 ! Funciona bien
       F_Eq = fchem_eq() ! Solo calcula el ChemEq. en el polimero
 # endif
+# if fsigmaq == 1
       F_Eq_wall = fchem_eq_wall()
+# endif
       Free_Energy = Free_Energy + F_Eq + F_Eq_wall
 !    print*, "E + F_Eq" , Free_energy
 
@@ -93,7 +95,8 @@ subroutine calc_energy(pHbulk)
     do iR  = 1, dimR
         F_electro = F_electro + psi(iR)*(qtot(iR))/2.0 *(delta)*(dfloat(iR)-0.5)*delta/Radio
     enddo
-        F_electro = F_electro + sigmaq*(delta/vsol)*zwall*fdiswall*psi(dimR)/2.0 
+        F_electro = F_electro + sigmaq*(delta/vsol)*zwall*fdiswall*psi(dimR)/2.0 ! esta opcion no tiene el mismo sigmaq que esta en la condicion de borde de psi(dimR+1)
+!        F_electro = F_electro + sigmaq*(delta/vsol)*constq*zwall*fdiswall*psi(dimR)/2.0 ! esta opcion es coherente con la definicion de psi(dimR+1)
     
     Free_Energy = Free_Energy + F_electro
 !    print*, "E + F_electro" , Free_energy
@@ -132,6 +135,7 @@ subroutine calc_energy(pHbulk)
     suma_pong = pong_energy() ! pong_energy(): considera la carga superficial sigmaq
     Free_Energy2 = suma_pong - (delta/vsol)*sigma*log_q - F_vdW !&
 !*********************************************************************************
+!    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 & ! esta definicion no coincide con la condicion de contorno psi(dimR+1)
     Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 &
                                 + F_Eq_wall
 !
@@ -148,7 +152,7 @@ subroutine calc_energy(pHbulk)
 
 ! Guarda energia libre
          write(311,*) pHbulk, F_electro
-         write(312,*) pHbulk, Free_energy2
+         write(312,*) pHbulk, Free_energy2, suma_pong
          write(301,*) pHbulk, Free_energy
          write(302,*) pHbulk, F_Mix_s 
          write(303,*) pHbulk, F_Mix_pos
