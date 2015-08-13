@@ -2,7 +2,7 @@
 subroutine set_initial_guess(m)
 #   include "control_run.h"
     use globales, only: dimR
-    use csys, only: x1, xsolbulk, sigmaq
+    use csys, only: x1, xsolbulk
     use pore, only: xh, psi
     implicit none
     integer, intent(in) :: m
