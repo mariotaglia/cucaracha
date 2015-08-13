@@ -3,6 +3,10 @@
 * Falta ver como cambiar el go to 555 cuando explota por algun motivo. 
 * Implementar las variables de preprocesamiento para filtrar fisica del programa. (control_run.h)
   mpif90/gfortran no entiende los comentarios de C++. 
+2015-07-05
+- Se unifican los branches. Se incorporaron variables de prepro para seleccionar la fisica del sistema.
+- Se corrigieron unidades en Poisson. 
+- Se calcula el potencial quimico del polimero.
 2015-03-05
 * Incorpore la libreria MPFUN para calculo de multi-precission, 
   es importante para calcular q (funcion de particion de las configuraciones

@@ -79,8 +79,9 @@ subroutine set_pore_distrib
 !   *   La derivada en r=0 tiene que ser cero. Se utiliza orden uno en la derivada en r=0.
 !   *   La derivada en r=R considera la carga superficial sigmaq. Se utiliza orden 2 en la derivada.
     psi(0) = psi(1) ! La derivada en r = 0 es igual a cero
-    psi(dimR+1) = psi(dimR) + (constq)*(sigmaq/vsol)*zwall*fdiswall ! La derivada en r=R es el salto de la carga superficial, ver notas
-!                              constq=delta*delta*(4*pi*lb) ! multiplicative factor in poisson eq  ! SI UNITS
+    psi(dimR+1) = psi(dimR) + delta*(constq)*(sigmaq*delta/vsol)*zwall*fdiswall ! La derivada en r=R es el salto de la carga superficial, ver notas
+    !psi(dimR+1) = psi(dimR) + delta*(constq)*(sigmaq)*zwall*fdiswall ! La derivada en r=R es el salto de la carga superficial, ver notas
+!                              constq=(4*pi*lb) ! multiplicative factor in poisson eq  ! SI UNITS
 !**************************************************************
 
 # if CHAIN != 0
@@ -177,7 +178,7 @@ subroutine set_pore_distrib
 
         qtot(iR) = (zpos*xpos(iR)+zneg*xneg(iR))/(vsalt*vsol) &
 !                  + zpos2*xpos2(iR)/vsalt2 &
-# if CHAIN != 0
+# if CHAIN == 1
 #   if POL == 0 /* PAH */
             + (fdis(iR) )*zpol*avpol(iR)/(vpol*vsol) &
 #   elif POL == 1 /* PMEP */

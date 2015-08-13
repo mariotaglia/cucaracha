@@ -15,7 +15,7 @@
                             más cercana a la pared derecha del poro)
                El 2 es "más correcto"
                     */
-# define fsigmaq 0 /* 0 -  Sin regulacion de carga en la superficie
+# define fsigmaq 1 /* 0 -  Sin regulacion de carga en la superficie
                       1 -  con equilibrio quimico (regulacion de carga) en la pared del poro
                    */
 
