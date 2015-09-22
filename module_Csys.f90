@@ -30,10 +30,11 @@ module csys
                     pOHbulk, xposbulk, xnegbulk, xsolbulk, &
                     xHplusbulk, xOHminbulk, &
                     expmupol, expmupos, expmuneg, expmuHplus, expmuOHmin
-    real(kind=8), dimension(:), allocatable :: pHs, pro ! list of bulk pHs, list of probability 
+    real(kind=8), dimension(:), allocatable :: pHs ! list of bulk pHs
     real(kind=8), dimension(:,:), allocatable :: Xu
     real(kind=8), dimension(:,:,:), allocatable :: in1 ! guarda las configuraciones de cadena 
     real(KIND=8), dimension(:), allocatable :: x1, xg1, xflag
+    real(kind=8),dimension(:), allocatable ::  pro !  list of probability 
     integer, dimension(:,:), allocatable :: pR ! pR stores the position of the segment j from conf. i . 
 !    integer, dimension(:,:)dimension(cuantas,long)  :: pR ! pR stores the position of the segment j from conf. i . 
 !    real(kind=8), dimension(cuantas,long,3) :: in1 ! guarda las configuraciones de cadena 

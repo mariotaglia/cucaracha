@@ -1,7 +1,7 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-numv = 1.0.1
+numv = 1.0.1r
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
@@ -181,7 +181,7 @@ monolayer.o: module_globales.o module_Csys.o control_run.h Makefile control_run.
  depend dep:
 	@$(FF)  $(CFLAGS) -MM $(SRC) > .depend 
  package:
-	tar -czvf pore_progMP_${numv}.tar.gz Makefile* *.f* monolayer fort.8 control_run.h NOTAS mp*
+	tar -czvf pore_progMP_${numv}.tar.gz Makefile* *.f* monolayer${numv} fort.8 control_run.h NOTAS mp*
 	@echo "***** Program packaged in pore_progMP_${numv}.tar.gz  *****"
 
 ifeq (.depend, $(wildcard .depend))

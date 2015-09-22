@@ -58,8 +58,9 @@ program nanochannel
 !         endif
 ! IMPORTANT: DEFINE INITIAL GUESS -> SUBROUTINE!
     ipH=1;
-    call set_bulk_properties(pHs(ipH)) ! Setup bulk properties before setup initial guess ocurre en fkfun! (?)
-                                     ! bulk properties without polymer
+! Setup bulk properties before setup initial guess ocurre en fkfun! (?)
+! bulk properties without polymer
+    call set_bulk_properties(pHs(ipH)) 
 ! Inside nanochannel set x1
     call set_initial_guess(0) ! 0 - bulk solution as initial guess
 # ifdef fdebug
@@ -73,7 +74,8 @@ program nanochannel
     ipH=1 
     do while (ipH <= npH)  ! Start principal Loop
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
-        call set_bulk_properties(pHs(ipH)) ! Actualizo las condiciones de bulk se repite solo para ipH=1
+        call set_bulk_properties(pHs(ipH)) 
+!     ! Actualizo las condiciones de bulk se repite solo para ipH=1
         call printstate("Aloop L77") ! Report of State
 !        call set_pore_distrib !Not necesarry this function is inside fkfun
 
