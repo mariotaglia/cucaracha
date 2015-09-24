@@ -37,7 +37,9 @@ subroutine allocating(m)
                      xneg,  &
                      xHplus,&
                      xOHmin,&
+# ifdef VDW
                      xtotal,&
+#endif /* VDW */
                      pp, &
                      stat=var1)
             if ( var1 /= 0 ) print*, "allocating.f90: There is an erro while deallocating memory for variables: xh - fdis" 
@@ -66,7 +68,9 @@ subroutine allocating(m)
                      xneg(dimR),  &
                      xHplus(dimR),&
                      xOHmin(dimR),&
+# ifdef VDW
                      xtotal(dimR),&
+#endif /* VDW */
                      pp(2*dimR), &
                      stat=var1)
             if ( var1 /= 0 ) print*, "allocating.f90: There is no sufficient memory for variables: xh - fdis" 

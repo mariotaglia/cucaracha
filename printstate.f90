@@ -43,7 +43,9 @@ subroutine printstate(marca)
     write(1984,imprimo), "xneg               :", xneg ! neg ioni
     write(1984,imprimo), "xHplus             :", xHplus ! H+
     write(1984,imprimo), "xOHmin             :", xOHmin ! OH-
+# ifdef VDW
     write(1984,imprimo), "xtotal             :", xtotal ! xtotal para poor solvent
+#endif /* VDW */
 #if CHAIN==1
     write(1984,imprimo), "avpol              :", avpol  ! fraccion de volumen del polimero 
     write(1984,imprimo), "fdis               :", fdis

@@ -83,13 +83,13 @@ subroutine calc_energy(pHbulk)
 
 ! 8.vdW ! Ojo, los  son negativos => atraccion
     F_vdW = 0.0
-#ifdef VDW
+# ifdef VDW
     F_vdW = fvdW()
     Free_Energy = Free_Energy + F_vdW
     print*, "E + F_vdW" , Free_energy
-#else
+# else
     print*, "F_vdW = 0.0 "
-#endif
+# endif
 
 ! 9. Electrostatic - Esta calculada en las unidades correctas
 F_electro = 0.0    

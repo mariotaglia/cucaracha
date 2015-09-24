@@ -17,7 +17,9 @@ module pore
     real(KIND=8), dimension(:), allocatable :: xneg        ! neg ioni
     real(KIND=8), dimension(:), allocatable :: xHplus      ! H+
     real(KIND=8), dimension(:), allocatable :: xOHmin      ! OH-
+# ifdef VDW
     real(kind=8), dimension(:), allocatable :: xtotal      ! xtotal poor solvent
+#endif /* VDW */
 # if POL == 0
     real(kind=8), dimension(:), allocatable :: fdis ! PAH weakpol
 # elif POL == 1

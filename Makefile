@@ -13,13 +13,13 @@ FC = mpif90 #${F90}
 
 # This flags are used in the compilation stage (name should be CFLAGS)
 # To debug:
-FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall  
+#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall  
 ## -g produce debugging information in the operating system's native format.
 ## -pg generate extra code to write profile information suitable for the analysis program gprof
 # To run
 # -fpp: Calls first to the C Preprocessor
 #FFLAGS= -cpp -O2 -fno-toplevel-reorder
-#FFLAGS= -cpp -O3 -fno-toplevel-reorder
+FFLAGS= -cpp -O3 -fno-toplevel-reorder
 
 SRC = module_globales.f90 \
       module_Csys.f90 \
@@ -48,12 +48,13 @@ SRC = module_globales.f90 \
       calc_mean_values.f90 \
       calc_energy.f90 \
       Fmix.f90 Fmixs.f90 Fconf.f90 \
-      Fmixpos.f90 Fmixneg.f90 F_vdW.f90\
+      Fmixpos.f90 Fmixneg.f90 \
       Fospi.f90 Fpol_sup.f90 \
       FmixHplus.f90 FmixOHmin.f90 \
       Fchem_eq.f90 \
       Fchem_eq_wall.f90 \
       pong_energy.f90
+##      F_vdW.f90\
 
 OBJS = $(SRC:.f90=.o)
 ##  OBJS = module_globales.o \

@@ -114,7 +114,7 @@ do iR = 1, dimR
 # ifdef fdebug_set_pore_distrib
         print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
 #endif
-#   ifdef VDW
+# ifdef VDW
 !**************************************************************
 ! To calculate VdW force coefficient
 !**************************************************************
@@ -123,7 +123,7 @@ do iR = 1, dimR
 !   xpot(iR) = xpot(iR) * dexp(vsol*vpol*Xu(iR,j)*xtotal(j+1))!Porque j+1? (elefante)
        xpot(iR) = xpot(iR) * dexp(vsol*vpol* Xu(iR,j)*xtotal(j))
    end do
-#   endif /* VDW */
+#endif /* VDW */
 enddo
 # ifdef fdebug_set_pore_distrib
         print*, "set_pore_distrib L121: loop end"
