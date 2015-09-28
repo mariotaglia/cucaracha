@@ -14,9 +14,11 @@ module globales
         zneg=-1.0, zOH=-1.0, &
         zwall=-1.0, &
 # if POL == 0 /* PAH */
-        zpol=1.0, &
+        zpol=0.0, &
 # elif POL ==1 /* PMEP */
         zpol=-1.0, &
+# elif POL ==2 /* Neutral Polymer */
+        zpol=0.0, &
 # endif
 ! Lengths
         lb=0.714, & !Bjerrum Length (nm)

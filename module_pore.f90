@@ -17,11 +17,15 @@ module pore
     real(KIND=8), dimension(:), allocatable :: xneg        ! neg ioni
     real(KIND=8), dimension(:), allocatable :: xHplus      ! H+
     real(KIND=8), dimension(:), allocatable :: xOHmin      ! OH-
+# ifdef VDW
     real(kind=8), dimension(:), allocatable :: xtotal      ! xtotal poor solvent
+#endif /* VDW */
 # if POL == 0
     real(kind=8), dimension(:), allocatable :: fdis ! PAH weakpol
 # elif POL == 1
     real(kind=8), dimension(:), allocatable :: fdis, fdis2 ! PMEP weakpol
+# elif POL == 2
+    real(kind=8), dimension(:), allocatable :: fdis ! Neutral Polymer (elefante) Poco eficiente!
 # endif
     real(KIND=8), dimension(:), allocatable :: pp 
     real(kind=8) :: fdiswall 

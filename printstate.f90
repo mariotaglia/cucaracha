@@ -16,6 +16,45 @@ subroutine printstate(marca)
     ps_i=ps_i+1
      
     open(unit=1984,file=filename,position='append')
+# if CHAIN == 0 
+    write(1984,*) "Case 0 - Without polymer chains"
+# elif CHAIN == 1 
+    write(1984,*) "Case 1 - Monolayer of polymer chains "
+# elif CHAIN == 2 
+    write(1984,*) "Case 2 - Grafted polymer chains (brushes)"
+# else  
+    write(1984,*) " (CHAIN) New System in Code! Please Update prinstate.f90"
+# endif     
+
+# if POL == 0 
+    write(1984,*) "Case 0 - PAH"
+# elif POL == 1
+    write(1984,*) "Case 1 - PMEP"
+# else
+    write(1984,*) " (POL) New System in Code! Please update prinstate.f90" 
+#endif
+
+# if MUPOL == 0 
+    write(1984,*) "Case 0 - number of polymer is regulated with sigma (no polymer in bulk)"
+# elif MUPOL == 1 
+    write(1984,*) "Case 1 - indicating use of mupol polymer see units_adaptation.f90"
+# else
+    write(1984,*) " (MUPOL) New System in Code! Please update prinstate.f90" 
+#endif
+# if CRITERIO == 1 
+    write(1984,*) "Case 1 -  Acerco el monomero más cercano a la pared)"
+# elif CRITERIO == 2
+    write(1984,*) "Case 2 -  Acerco la coordenadas x al monomero con la coorenada x más cercana a la pared derecha del poro)"
+# else
+    write(1984,*) " (CRITERIO) New System in Code! Please update prinstate.f90" 
+#endif
+# if fsigmaq == 0
+    write(1984,*) "Case 0 - Sin regulacion de carga en la superficie"
+# elif fsigmaq == 1
+    write(1984,*) "Case 1 - Con equilibrio quimico (regulacion de carga) en la pared del poro"
+# else
+    write(1984,*) " (fsigmaq) New System in Code! Please update prinstate.f90" 
+#endif
 
     write(imprimo,'(A9,I2,A1)'), "(I5,A25,A",len(marca),")" ! Formato para imprimir lugar del llamado
     write(1984,imprimo), ps_i, " Estado del programa en: ", marca  
@@ -43,7 +82,9 @@ subroutine printstate(marca)
     write(1984,imprimo), "xneg               :", xneg ! neg ioni
     write(1984,imprimo), "xHplus             :", xHplus ! H+
     write(1984,imprimo), "xOHmin             :", xOHmin ! OH-
+# ifdef VDW
     write(1984,imprimo), "xtotal             :", xtotal ! xtotal para poor solvent
+#endif /* VDW */
 #if CHAIN==1
     write(1984,imprimo), "avpol              :", avpol  ! fraccion de volumen del polimero 
     write(1984,imprimo), "fdis               :", fdis
@@ -108,6 +149,8 @@ subroutine printstate(marca)
                write(1984,*), "Na                 :", Na
                write(1984,*), "pi                 :", pi
     write(1984,'(A20,F7.3)'), "zpos               :", zpos ! No olvidar que el character '.' usa un espacio de la noteacion.
+    write(1984,'(A20,F7.3)'), "zneg               :", zneg ! No olvidar que el character '.' usa un espacio de la noteacion.
+    write(1984,'(A20,F7.3)'), "zpol               :", zpol ! No olvidar que el character '.' usa un espacio de la noteacion.
     write(1984,'(A20,F7.3)'), "lb (Bjerrum length):", lb
     write(1984,'(A20,F7.3)'), "delta              :", delta
     write(1984,'(A20,F7.3)'), "lseg               :", lseg

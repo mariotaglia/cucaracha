@@ -13,7 +13,8 @@ subroutine calc_energy(pHbulk)
     implicit none
     real(kind=8), intent(in) :: pHbulk
     real(kind=8) :: suma_pong, std_mupol!, aux_mp
-!    real(kind=8) :: F_Mix_pos, F_Mix_neg, F_Mix_Hplus, F_Mix_OHmin, F_Conf, F_Eq, F_Eq_wall, F_vdW, F_electro, F_eps
+!    real(kind=8) :: F_Mix_pos, F_Mix_neg, F_Mix_Hplus, F_Mix_OHmin, &
+!                    F_Conf, F_Eq, F_Eq_wall, F_vdW, F_electro, F_eps
     integer :: iR,j
 
     print*, "Calculating energies..." 
@@ -25,7 +26,7 @@ subroutine calc_energy(pHbulk)
 ! ENTROPIAS DE MEZCLA (independiente de la presencia del polimero!)
 ! ******************************************************************
     F_Mix = 0.0
-    F_Mix = fmix() ! Calcula las entropías de mezcla por separado y de vuelve el total.
+    F_Mix = fmix() ! Calcula las entropías de mezcla por separado y devuelve el total
 ! (cada contribucion es guardada en una variable individual)
     Free_Energy =  Free_Energy + F_Mix
 !! ! 1. Mezclas: solvente, H, OH, +ion, -ion (cambiar)
@@ -82,21 +83,25 @@ subroutine calc_energy(pHbulk)
 
 ! 8.vdW ! Ojo, los  son negativos => atraccion
     F_vdW = 0.0
-#ifdef VDW
+# ifdef VDW
     F_vdW = fvdW()
     Free_Energy = Free_Energy + F_vdW
     print*, "E + F_vdW" , Free_energy
-#else
+# else
     print*, "F_vdW = 0.0 "
-#endif
+# endif
 
 ! 9. Electrostatic - Esta calculada en las unidades correctas
-    F_electro = 0.0    
-    do iR  = 1, dimR
-        F_electro = F_electro + psi(iR)*(qtot(iR))/2.0 *(delta)*(dfloat(iR)-0.5)*delta/Radio
-    enddo
-        F_electro = F_electro + sigmaq*(delta/vsol)*zwall*fdiswall*psi(dimR)/2.0 ! esta opcion no tiene el mismo sigmaq que esta en la condicion de borde de psi(dimR+1)
-!        F_electro = F_electro + sigmaq*(delta/vsol)*constq*zwall*fdiswall*psi(dimR)/2.0 ! esta opcion es coherente con la definicion de psi(dimR+1)
+F_electro = 0.0    
+do iR  = 1, dimR
+    F_electro = F_electro &
+                + psi(iR)*(qtot(iR))/2.0 *(delta)*(dfloat(iR)-0.5)*delta/Radio
+enddo
+! La siguiente opcion no tiene el mismo sigmaq 
+! que esta en la condicion de borde de psi(dimR+1)
+    F_electro = F_electro + sigmaq*(delta/vsol)*zwall*fdiswall*psi(dimR)/2.0 
+! La siguiente opcion es coherente con la definicion de psi(dimR+1)
+!    F_electro = F_electro + sigmaq*(delta/vsol)*constq*zwall*fdiswall*psi(dimR)/2.0 
     
     Free_Energy = Free_Energy + F_electro
 !    print*, "E + F_electro" , Free_energy
@@ -127,15 +132,18 @@ subroutine calc_energy(pHbulk)
     print*, "E " , Free_energy
 !*******************************************************************
 ! Observacion:
-! La energia correspondiente a la distribucion de carga superficial 
-! sigmaq es tenida en cuenta dentro de pong_energy. Esto es por que la integral corespondiente
-! a la energia electrostatica en Free_energy llega hasta R-delta/2
+! La energia correspondiente a la distribucion de carga superficial sigmaq 
+! es tenida en cuenta dentro de pong_energy. Esto es asi por que 
+! la integral corespondiente a la energia electrostatica en Free_energy 
+! llega hasta R-delta/2
 !*******************************************************************
     Free_Energy2 = 0.0
     suma_pong = pong_energy() ! pong_energy(): considera la carga superficial sigmaq
     Free_Energy2 = suma_pong - (delta/vsol)*sigma*log_q - F_vdW !&
 !*********************************************************************************
-!    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 & ! esta definicion no coincide con la condicion de contorno psi(dimR+1)
+! La siguiente definicion no coincide con la condicion de contorno psi(dimR+1)
+!    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 & 
+    
     Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 &
                                 + F_Eq_wall
 !

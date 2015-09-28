@@ -10,7 +10,9 @@ subroutine pxs
 
     REAL(KIND=8) :: vect
     INTEGER :: i,j
-!    print* , "long, cuantas: ", long, cuantas
+#ifdef fdebug_pxs
+    print* , "long, cuantas: ", long, cuantas
+#endif
     do j=1,long ! 1 = y, 2 = x, 3 = z... z no se usa...)
         do i=1,cuantas
             vect = sqrt((in1(i,j,1))**2 + in1(i,j,2)**2) ! distancia del centro al segmento
@@ -19,7 +21,7 @@ subroutine pxs
 !            pR(i,j)=int(vect/delta,1)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
             pR(i,j)=int(vect/delta)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
 #ifdef fdebug_pxs
-            print*, "pxs L22: i, j, pR(i,j), in1(i,j,1), in1(i,j,2) ", i, j, pR(i,j), in1(i,j,1), in1(i,j,2)
+            print*, "pxs L22: i, j, pR(i,j), vect, in1(i,j,1), in1(i,j,2) ", i, j, pR(i,j), vect, in1(i,j,1), in1(i,j,2)
 #endif
             if(pR(i, j).gt.dimR) then
                 Print*,'ERROR grave en pxs!!!!', pR(i, j)

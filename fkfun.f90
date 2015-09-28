@@ -36,6 +36,7 @@ subroutine fkfun(x,f,ier)
     call set_pore_distrib ! Esto debe hacerse aca porque fkfun recibe el input!
 !**********************************
         
+# ifdef VDW
 !**********************************
 ! Calculo de xtotal 
 ! PARA poor solvent en el lattice
@@ -44,6 +45,7 @@ subroutine fkfun(x,f,ier)
         xtotal(iR) = 1.0 - xh(iR) - xpos(iR) - xneg(iR) - xHplus(iR) - xOHmin(iR) ! xtotal es todo menos solvente e iones (polimero?)
     enddo
 !**********************************
+#endif /* VDW */
 
 !----------------------------------------------------------------------------------------------
 !   Construye Ecuaciones a resolver 

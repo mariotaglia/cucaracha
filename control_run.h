@@ -19,7 +19,7 @@
                       1 -  con equilibrio quimico (regulacion de carga) en la pared del poro
                    */
 
-
+/*Not implemented yet*/
 #undef geometry  /* Select geometry 0 - Flat surface? 
 # define geometry 1 /* Select geometry 0 - Flat surface?
                                      1 - Long Cylinder (1D)
@@ -27,14 +27,17 @@
                                      3 - Short 2D Cylinder 
                   */
 /* Second Details about the system and Interactions */
-# define POL 1 /* Defines the type of polymer:
+# define POL 0 /* Defines the type of polymer:
                       0 - PAH
                       1 - PMEP
-                      2 - 
+                      2 - neutral 
                */
 # undef VDW 
-/* Para debugging imprimo muchas cosas */
+/**** For debugging change undef by define **** */
+/* This lines prints information in standard output */
+
 # undef fdebug
+# undef fdebug_set_pore_distrib
+
 # undef fdebug_pxs
 # undef fdebug_rota36
-# undef fdebug_set_pore_distrib
