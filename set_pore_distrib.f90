@@ -66,6 +66,8 @@ fdis(iR) = Ka0 / ( xOHmin(iR)/xh(iR)  + Ka0   ) ! using fdiswall symmetry
 !!    fdis(iR) = expmuOHmin*dexp(psi(iR)*zneg)*Ka0 / denon 
 !!    fdis2(iR) = Ka0*Kb0 / denon ! Kb0 = Ka20 for dobule protonation
 !   fdis2(iR) = 1.0d0/(1.0d0 + (dexp(psi(iR)*zpos)*expmuOHmin/Kb0) )
+# elif POL == 2
+    fdis(iR) = 0.0 ! Neutral polimer
 #   endif /* PAH || PMEP */
 # endif /* CHAIN */
 end do
@@ -110,6 +112,8 @@ do iR = 1, dimR
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
 #   elif POL == 1 /* PMEP */
     xpot(iR) = (xh(iR)**vpol)/(1.0-fdis(iR)-fdis2(iR) ) ! Polimero neutro elefante
+#   elif POL == 2 /* Neutral Polymer */
+    xpot(iR) = (xh(iR)**vpol) ! Polimero neutro elefante
 #   endif /* PAH || PMEP */
 # ifdef fdebug_set_pore_distrib
         print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
@@ -126,11 +130,12 @@ do iR = 1, dimR
 #endif /* VDW */
 enddo
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L121: loop end"
+        print*, "set_pore_distrib L133: loop end"
 #endif
 
 !      q = 0.0 ! Normalization of P(alpha)
       q = '0.0' ! Normalization of P(alpha) remember that: type (mp_real) q !!
+  !shift = 1.0 ! (Should be "shift" an input parameter in fort.8?) 
   shift = 1.0d-250 ! (Should be "shift" an input parameter in fort.8?) 
 avpol(:)= 0.0 ! line important to probability calculus
 

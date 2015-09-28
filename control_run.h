@@ -1,7 +1,7 @@
 /* esto es un comentario */
 
 /* First Generalities about the system */
-# define CHAIN 2 /* 0 - Without polymer chains
+# define CHAIN 0 /* 0 - Without polymer chains
                     1 - Monolayer of polymer chains 
                         This use pol == 1 See below(?)
                     2 - Grafted polymer chains (brushes)
@@ -10,12 +10,12 @@
 # define MUPOL 0 /* 0 - number of polymer is regulated with sigma (no polymer in bulk)
                     1 - indicating use of mupol polymer see units_adaptation.f90 */
 
-# define CRITERIO 1 /* 1 -  Acerco el monomero más cercano a la pared)
+# define CRITERIO 2 /* 1 -  Acerco el monomero más cercano a la pared)
                        2 -  Acerco la coordenadas x al monomero con la coorenada x 
                             más cercana a la pared derecha del poro)
                El 2 es "más correcto"
                     */
-# define fsigmaq 0 /* 0 -  Sin regulacion de carga en la superficie
+# define fsigmaq 1 /* 0 -  Sin regulacion de carga en la superficie
                       1 -  con equilibrio quimico (regulacion de carga) en la pared del poro
                    */
 
@@ -27,16 +27,17 @@
                                      3 - Short 2D Cylinder 
                   */
 /* Second Details about the system and Interactions */
-# define POL 1 /* Defines the type of polymer:
+# define POL 0 /* Defines the type of polymer:
                       0 - PAH
                       1 - PMEP
-                      2 - 
+                      2 - neutral 
                */
 # undef VDW 
-/**** For debugging change undef by define ****
-This lines prints information in standard output
-*/
+/**** For debugging change undef by define **** */
+/* This lines prints information in standard output */
+
 # undef fdebug
+# undef fdebug_set_pore_distrib
+
 # undef fdebug_pxs
 # undef fdebug_rota36
-# undef fdebug_set_pore_distrib

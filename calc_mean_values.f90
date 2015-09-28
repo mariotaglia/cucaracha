@@ -32,7 +32,7 @@ do iR = 1, dimR
 
 ! suma de frdis*avpoln*r (falta constante)
 !    fmedio = fmedio + fdis(iR)*avpoln(iR)*(dfloat(iR)-0.5) 
-# if POL == 0 /* PAH */
+# if POL == 0 || POL == 2/* PAH */
     sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpol(iR)/(vpol*vsol))*zpos *(fdis(iR))
 # elif POL == 1 /* PMEP */
   ! suma de frdis*avpol*r (falta constante)
@@ -70,6 +70,8 @@ write(318,*) pHbulk, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
 #   elif POL == 1 /* PMEP */
 ! writing fmedio.dat:
     write(313,*) pHbulk, fmedio, fmedio2, fdiswall
+#   elif POL == 2 /* Neutral Polymer */
+    write(313,*) pHbulk, fdiswall !, fmedio2, fdiswall
 #   endif /* PAH || PMEP */
 
 #else

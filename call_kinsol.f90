@@ -53,8 +53,8 @@ integer :: globalstrat, maxl, maxlrst, maxiter
 !          del precondicionador (operacion expensive operation) 
 
 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56) 
-    msbpre  = 5 ! (MARIO)
-!    msbpre  = 10 ! Default value:
+!    msbpre  = 5 ! (MARIO)
+    msbpre  = 10 ! Default value:
 
 !    maxiter = 300 ! Maximum number of non-linear iterations (Default=200)
     maxiter = 200 ! Maximum number of non-linear iterations (Default=200)
