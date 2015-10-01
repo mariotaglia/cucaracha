@@ -71,7 +71,7 @@ subroutine calc_energy(pHbulk)
 ! ******************************************************************
     F_Eq = 0.0 
     F_Eq_wall = 0.0
-# if CHAIN != 0 
+# if CHAIN != 0 && POL != 2 
 ! Funciona bien
       F_Eq = fchem_eq() ! Solo calcula el ChemEq. en el polimero
 # endif

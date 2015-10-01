@@ -1,7 +1,7 @@
 /* esto es un comentario */
 
 /* First Generalities about the system */
-# define CHAIN 0 /* 0 - Without polymer chains
+# define CHAIN 1 /* 0 - Without polymer chains
                     1 - Monolayer of polymer chains 
                         This use pol == 1 See below(?)
                     2 - Grafted polymer chains (brushes)
@@ -27,12 +27,13 @@
                                      3 - Short 2D Cylinder 
                   */
 /* Second Details about the system and Interactions */
-# define POL 0 /* Defines the type of polymer:
+# define POL 2 /* Defines the type of polymer:
                       0 - PAH
                       1 - PMEP
                       2 - neutral 
                */
 # undef VDW 
+
 /**** For debugging change undef by define **** */
 /* This lines prints information in standard output */
 
