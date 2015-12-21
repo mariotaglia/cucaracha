@@ -1,7 +1,7 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-numv = 1.0.1r
+numv = 1.0.3
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
@@ -102,35 +102,24 @@ SHELL = /bin/bash
 # ***************
 # Next FLAGS cames from: sundials-config -m kinsol -t s -l f
 # FLAGS in Desktop ARG 
-#LDFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.9.1 -L/usr/lib/gcc/x86_64-linux-gnu/4.9.1/../../../x86_64-linux-gnu 
-#LDFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.9.1/../../../../lib  -L/usr/lib/gcc/x86_64-linux-gnu/4.9.1/../../..
-#LDFLAGS+= -lgfortran -lm -lgcc_s -lquadmath
- LDFLAGS= -L/usr/lib/gcc/x86_64-linux-gnu/4.8 -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu 
- LDFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/x86_64-linux-gnu -L/usr/lib/x86_64-linux-gnu
+ LDFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib 
  LDFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../.. -lgfortran -lm -lgcc_s -lquadmath
+ LDFLAGS+= -L/usr/lib/x86_64-linux-gnu
  LDFLAGS+= -L/usr/local/share/lib 
  LDFLAGS+= -L/usr/local/lib
- LDFLAGS+= -L/lib/../lib -L/usr/lib/../lib 
+ LDFLAGS+= -L/lib/x86_64-linux-gnu 
+ LDFLAGS+= -L/lib/../lib  
  LDFLAGS+= -lsundials_fkinsol -lsundials_fnvecserial -lsundials_kinsol -lsundials_nvecserial -lm
-# LDFLAGS+= -L/shared/software/sundials-2.5.0-openmpi/lib -lm 
-# LDFLAGS+= -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib 
+ 
+# LFLAGS=  -L/shared/software/sundials-2.5.0-openmpi/lib 
 
-# LFLAGS=  -L/shared/software/sundials-2.5.0-openmpi/lib -lsundials_fkinsol -lsundials_kinsol -lsundials_fnvecserial -lsundials_nvecserial -lm 
-# LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.9.1/../../../x86_64-linux-gnu 
-# LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.9.1/../../../../lib 
-# LFLAGS+= -L/lib/x86_64-linux-gnu 
-# LFLAGS+= -L/lib/../lib 
-# LFLAGS+= -L/usr/lib/x86_64-linux-gnu 
-# LFLAGS+= -L/usr/lib/../lib
-# LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.9.1/../../.. -lgfortran -lm -lgcc_s -lquadmath
- LFLAGS=  -L/shared/software/sundials-2.5.0-openmpi/lib 
- LFLAGS+= -lsundials_fkinsol -lsundials_fnvecserial -lsundials_kinsol -lsundials_nvecserial -lm 
- LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu 
- LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib 
- LFLAGS+= -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu 
- LFLAGS+= -L/usr/lib/../lib 
- LFLAGS+= -L/usr/local/share/lib 
- LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.6/../../.. -lgfortran -lm -lgcc_s -lquadmath
+# LFLAGS+= -lsundials_fkinsol -lsundials_fnvecserial -lsundials_kinsol -lsundials_nvecserial -lm 
+# LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu 
+# LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib 
+# LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.6/../../.. -lgfortran -lm -lgcc_s -lquadmath
+# LFLAGS+= -L/usr/lib/../lib 
+# LFLAGS+= -L/lib/x86_64-linux-gnu  
+# LFLAGS+= -L/usr/local/share/lib 
 
 
 # Actions

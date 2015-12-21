@@ -1,5 +1,6 @@
 subroutine set_pore_distrib
-#   include "control_run.h" ! To control the code to be included in the compilation
+! To control the code to be included in the compilation
+#   include "control_run.h" 
 use mpmodule
 use globales
 use csys
@@ -66,9 +67,9 @@ fdis(iR) = Ka0 / ( xOHmin(iR)/xh(iR)  + Ka0   ) ! using fdiswall symmetry
 !!    fdis(iR) = expmuOHmin*dexp(psi(iR)*zneg)*Ka0 / denon 
 !!    fdis2(iR) = Ka0*Kb0 / denon ! Kb0 = Ka20 for dobule protonation
 !   fdis2(iR) = 1.0d0/(1.0d0 + (dexp(psi(iR)*zpos)*expmuOHmin/Kb0) )
-# elif POL == 2
-    fdis(iR) = 0.0 ! Neutral polimer
-#   endif /* PAH || PMEP */
+# elif POL == 2 /*Neutral Polymer*/
+    fdis(iR) = 0.0 ! Neutral polymer
+#   endif /* POL */
 # endif /* CHAIN */
 end do
 !**************************************************************
@@ -78,7 +79,7 @@ end do
 !    fdiswall = 1.0 / (expmuHplus*dexp(psi(dimR)*zwall)/Kwall0 + 1.0 ) 
 # if fsigmaq == 1 /*  Si hay regulacion en la pared */
     fdiswall = 1.0 / ( xHplus(dimR)/xh(dimR) /Kwall0 + 1.0 ) 
-#else if fsigmaq == 0 /* No hay regulacion en la pared */
+# elif fsigmaq == 0 /* No hay regulacion en la pared */
     fdiswall = 1.0  
 # endif
 !**************************************************************
@@ -105,18 +106,17 @@ do iR = 1, dimR
 ! (xh(iR)**vpol): viene de reemplazar la presion osmotica por 
 !                 la expresion para el solvent
 #   if POL == 0 /* PAH */
-    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))
-    ! Para polimero neutro
     ! Para polimero con regulacion de carga (cargado positivamente) elefante mayor
+    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))
     !xpot(iR) = (xh(iR)**vpol)*exp(-psi(iR)*zpol) /(1-fdis(iR)-fdis2(iR) )
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
 #   elif POL == 1 /* PMEP */
-    xpot(iR) = (xh(iR)**vpol)/(1.0-fdis(iR)-fdis2(iR) ) ! Polimero neutro elefante
+    xpot(iR) = (xh(iR)**vpol)/(1.0-fdis(iR)-fdis2(iR) ) 
 #   elif POL == 2 /* Neutral Polymer */
-    xpot(iR) = (xh(iR)**vpol) ! Polimero neutro elefante
+    xpot(iR) = (xh(iR)**vpol) ! Polimero neutro ! For Neutral Polymers OK!
 #   endif /* PAH || PMEP */
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
+print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
 #endif
 # ifdef VDW
 !**************************************************************
@@ -135,8 +135,11 @@ enddo
 
 !      q = 0.0 ! Normalization of P(alpha)
       q = '0.0' ! Normalization of P(alpha) remember that: type (mp_real) q !!
-  !shift = 1.0 ! (Should be "shift" an input parameter in fort.8?) 
-  shift = 1.0d-250 ! (Should be "shift" an input parameter in fort.8?) 
+# if POL == 2 /* Neutral Polymers */
+  shift = 1.0 ! (Should be "shift" an input parameter in fort.8?) 
+# else
+  shift = 1.0d-150 ! (Should be "shift" an input parameter in fort.8?) 
+# endif
 avpol(:)= 0.0 ! line important to probability calculus
 
 !**************************************************************
@@ -183,7 +186,7 @@ enddo ! End loop over chains/configurations
 #endif
 
     call mpwrite(11,q/shift)
-    log_q = log(q/shift) ! Variable clave en el calculo de energias!
+    log_q = log(q/shift) ! Variable clave en el calculo de energias! MPLOG
 ! log(q) is nepperian log of q. has 15 digits of precision.
     
     do i=1,cuantas 
@@ -219,6 +222,8 @@ enddo ! End loop over chains/configurations
 #   elif POL == 1 /* PMEP */
             + (fdis(iR) + 2.0*fdis2(iR))*zpol*avpol(iR)/(vpol*vsol) &
 !            + (avpolp(iR)*fdis2(iR)*zpos + avpoln(iR)*fdis(iR)*zneg)/vpol
+#   elif POL == 2 /* Neutral Polymers */
+! Neutral Polymers do not add local charge!
 #   endif /* PAH || PMEP */
 # endif
             + xHplus(iR)/vsol -xOHmin(iR)/vsol 

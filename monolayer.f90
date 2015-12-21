@@ -42,9 +42,9 @@ program nanochannel
 #if CHAIN !=0   
     call creador ! Creating the chains
     call pxs ! Chequea que todos los segmentos esten dentro del slab.
-#   if  VDW
+#ifdef  VDW
     call kai ! Calcula los parametros de L-J 
-#   endif
+#endif
 #endif
     call mpinit(15) ! Initial working precision, number of digits =15
     call open_files(1) ! Open files to save data? how to do that?
@@ -63,9 +63,9 @@ program nanochannel
     call set_bulk_properties(pHs(ipH)) 
 ! Inside nanochannel set x1
     call set_initial_guess(0) ! 0 - bulk solution as initial guess
-# ifdef fdebug
+#ifdef fdebug
     call printstate("fdebug Aloop L66") ! Report of State
-# endif
+#endif
     print*, '********************************************'
     print*, '*** Comienza el loop principal ***'
 ! *****************************************************************************

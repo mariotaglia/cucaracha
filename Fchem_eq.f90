@@ -5,7 +5,7 @@ function fchem_eq()
 !    use FreeEnergy, only: checknumber
 # if POL == 0 /* PAH */
     use pore, only: avpol, fdis !, fdis2
-# elif POL == 2 /* PMEP */
+# elif POL == 2 /* Neutral Polymer */
     use pore, only: avpol, fdis !, fdis2
 # elif POL == 1 /* PMEP */
     use pore, only: avpol, fdis, fdis2
@@ -21,7 +21,7 @@ function fchem_eq()
     fchem_eq = 0.0
     
     do i = 1, dimR
-# if POL == 0 || POL == 2 
+# if POL == 0  
 ! Nueva expresion para el equilibrio quimico
       fchem_eq = fchem_eq + ( fdis(i) *dlog( fdis(i)/Ka0 ) &
                           + (1-fdis(i))*dlog( (1-fdis(i)) ) )  *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio
