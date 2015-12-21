@@ -135,10 +135,10 @@ enddo
 
 !      q = 0.0 ! Normalization of P(alpha)
       q = '0.0' ! Normalization of P(alpha) remember that: type (mp_real) q !!
-# if POL ==2 /* Neutral Polymers */
+# if POL == 2 /* Neutral Polymers */
   shift = 1.0 ! (Should be "shift" an input parameter in fort.8?) 
 # else
-  shift = 1.0d-250 ! (Should be "shift" an input parameter in fort.8?) 
+  shift = 1.0d-150 ! (Should be "shift" an input parameter in fort.8?) 
 # endif
 avpol(:)= 0.0 ! line important to probability calculus
 

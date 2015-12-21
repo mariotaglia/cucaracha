@@ -19,6 +19,12 @@
                       1 -  con equilibrio quimico (regulacion de carga) en la pared del poro
                    */
 
+/* Second Details about the system and Interactions */
+# define POL 2 /* Defines the type of polymer:
+                      0 - PAH
+                      1 - PMEP
+                      2 - neutral 
+               */
 /*Not implemented yet*/
 #undef geometry  /* Select geometry 0 - Flat surface? 
 # define geometry 1 /* Select geometry 0 - Flat surface?
@@ -26,19 +32,14 @@
                                      2 - Square section nanochannel 
                                      3 - Short 2D Cylinder 
                   */
-/* Second Details about the system and Interactions */
-# define POL 2 /* Defines the type of polymer:
-                      0 - PAH
-                      1 - PMEP
-                      2 - neutral 
-               */
+/* END Not implemented */
 # undef VDW 
 
 /**** For debugging change undef by define **** */
 /* This lines prints information in standard output */
 
-# undef fdebug
+# define fdebug
 # undef fdebug_set_pore_distrib
-
 # undef fdebug_pxs
+
 # undef fdebug_rota36

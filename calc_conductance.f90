@@ -12,7 +12,8 @@ use globales
 use pore
 use csys
 real(kind=8), intent(in) :: pHbulk
-real(kind=8) :: Gvacio, Grel, Gporo,Gporopos, Gporoneg, GporoOHmin, gporoHplus
+real(kind=8) :: Gvacio, Grel, Gporo, Gporopos, Gporoneg, GporoOHmin, GporoHplus
+real(kind=8) :: Grel_coefD, Gporo_coefD, Gporo_coefDpos, Gporo_coefDneg, Gporo_coefDOHmin, Gporo_coefDHplus
 integer :: iR
 print*, "Calculating conductance"
 Gvacio = 0.0
@@ -22,6 +23,13 @@ Gporopos = 0.0
 Gporoneg = 0.0
 GporoHplus = 0.0
 GporoOHmin = 0.0
+
+Grel_coefD = 0.0
+Gporo_coefD = 0.0
+Gporo_coefDpos = 0.0
+Gporo_coefDneg = 0.0
+Gporo_coefDHplus = 0.0
+Gporo_coefDOHmin = 0.0
 
 Gvacio = Gvacio + xposbulk/vsalt/vsol*movpos
 Gvacio = Gvacio + xnegbulk/vsalt/vsol*movneg
@@ -41,7 +49,6 @@ do iR = 1, dimR
          Gporo = Gporo     + xOHmin(iR) / vsol *movOHmin*(dfloat(iR)-0.5)
     GporoOHmin = GporoOHmin+ xOHmin(iR) / vsol *movOHmin*(dfloat(iR)-0.5)
 enddo
-
      Gporo = Gporo * 1e24/Na ! Corrige unidades concentracion
      Gporo = Gporo * 1.0d-18/1d-6 ! Corrige unidades
      Gporo = Gporo / longporo * 2*pi * delta**2
@@ -64,14 +71,49 @@ GporoOHmin = GporoOHmin / longporo * 2*pi * delta**2
 
 Grel = Gporo/Gvacio
 
-write(315,*) pHbulk, Gporo
-write(316,*) pHbulk, Gvacio
-write(317,*) pHbulk, Grel
+! Conductance calculus with mobilities dependent on polymer volume fraction 
+! ************************************************************************
+do iR = 1, dimR
+         Gporo_coefD = Gporo_coefD     +xpos(iR)/vsalt/vsol*( ((1-avpol(iR))/(1+avpol(iR)))**2)*movpos  *(dfloat(iR)-0.5)
+      Gporo_coefDpos = Gporo_coefDpos  +xpos(iR)/vsalt/vsol*( ((1-avpol(iR))/(1+avpol(iR)))**2)*movpos  *(dfloat(iR)-0.5)
+         Gporo_coefD = Gporo_coefD     +xneg(iR)/vsalt/vsol*( ((1-avpol(iR))/(1+avpol(iR)))**2)*movneg  *(dfloat(iR)-0.5)
+      Gporo_coefDneg = Gporo_coefDneg  +xneg(iR)/vsalt/vsol*( ((1-avpol(iR))/(1+avpol(iR)))**2)*movneg  *(dfloat(iR)-0.5)
+         Gporo_coefD = Gporo_coefD     + xHplus(iR) / vsol *( ((1-avpol(iR))/(1+avpol(iR)))**2)*movHplus*(dfloat(iR)-0.5)
+    Gporo_coefDHplus = Gporo_coefDHplus+ xHplus(iR) / vsol *( ((1-avpol(iR))/(1+avpol(iR)))**2)*movHplus*(dfloat(iR)-0.5)
+         Gporo_coefD = Gporo_coefD     + xOHmin(iR) / vsol *( ((1-avpol(iR))/(1+avpol(iR)))**2)*movOHmin*(dfloat(iR)-0.5)
+    Gporo_coefDOHmin = Gporo_coefDOHmin+ xOHmin(iR) / vsol *( ((1-avpol(iR))/(1+avpol(iR)))**2)*movOHmin*(dfloat(iR)-0.5)
+enddo
 
-write(320,*) pHbulk, Gporopos
-write(321,*) pHbulk, Gporoneg
-write(322,*) pHbulk, GporoHplus
-write(323,*) pHbulk, GporoOHmin
+     Gporo_coefD = Gporo_coefD * 1e24/Na ! Corrige unidades concentracion
+     Gporo_coefD = Gporo_coefD * 1.0d-18/1d-6 ! Corrige unidades
+     Gporo_coefD = Gporo_coefD / longporo * 2*pi * delta**2
+  
+  Gporo_coefDpos = Gporo_coefDpos * 1e24/Na ! Corrige unidades concentracion
+  Gporo_coefDpos = Gporo_coefDpos * 1.0d-18/1d-6 ! Corrige unidades
+  Gporo_coefDpos = Gporo_coefDpos / longporo * 2*pi * delta**2
+  
+  Gporo_coefDneg = Gporo_coefDneg * 1e24/Na ! Corrige unidades concentracion
+  Gporo_coefDneg = Gporo_coefDneg * 1.0d-18/1d-6 ! Corrige unidades
+  Gporo_coefDneg = Gporo_coefDneg / longporo * 2*pi * delta**2
+
+Gporo_coefDHplus = Gporo_coefDHplus * 1e24/Na ! Corrige unidades concentracion
+Gporo_coefDHplus = Gporo_coefDHplus * 1.0d-18/1d-6 ! Corrige unidades
+Gporo_coefDHplus = Gporo_coefDHplus / longporo * 2*pi * delta**2
+
+Gporo_coefDOHmin = Gporo_coefDOHmin * 1e24/Na ! Corrige unidades concentracion
+Gporo_coefDOHmin = Gporo_coefDOHmin * 1.0d-18/1d-6 ! Corrige unidades
+Gporo_coefDOHmin = Gporo_coefDOHmin / longporo * 2*pi * delta**2
+
+Grel_coefD = Gporo_coefD/Gvacio
+
+write(315,*) pHbulk, Gporo, Gporo_coefD
+write(316,*) pHbulk, Gvacio
+write(317,*) pHbulk, Grel, Grel_coefD
+
+write(320,*) pHbulk, Gporopos, Gporo_coefDpos
+write(321,*) pHbulk, Gporoneg, Gporo_coefDneg
+write(322,*) pHbulk, GporoHplus, Gporo_coefDplus
+write(323,*) pHbulk, GporoOHmin, Gporo_coefDOHmin
 ! output.aux
     write(324,*) pHbulk, (Gporo - Gvacio), 7.352*(sigmaq*delta/vsol)*(3.141592*dimR/12000)/(6.02*1.0d7)
 end subroutine calc_conductance
