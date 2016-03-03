@@ -1,7 +1,7 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-numv = 1.0.3
+numv = 1.0.3.1
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}

@@ -7,7 +7,7 @@ subroutine calc_conductance(pHbulk)
 #   include "control_run.h"
 !
 ! Calculo de conductancia !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!
+! 
 use globales
 use pore
 use csys
@@ -106,6 +106,9 @@ Gporo_coefDOHmin = Gporo_coefDOHmin / longporo * 2*pi * delta**2
 
 Grel_coefD = Gporo_coefD/Gvacio
 
+! ****************************************************************************
+! 2nd Column correspond to conductance corrected by difusion coeficient.
+!
 write(315,*) pHbulk, Gporo, Gporo_coefD
 write(316,*) pHbulk, Gvacio
 write(317,*) pHbulk, Grel, Grel_coefD

@@ -11,7 +11,7 @@
                     1 - indicating use of mupol polymer see units_adaptation.f90 */
 
 # define CRITERIO 2 /* 1 -  Acerco el monomero más cercano a la pared)
-                       2 -  Acerco la coordenadas x al monomero con la coorenada x 
+                       2 -  Acerco la coordenadas x al monomero con la coordenada x 
                             más cercana a la pared derecha del poro)
                El 2 es "más correcto"
                     */

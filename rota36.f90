@@ -38,13 +38,16 @@ subroutine rota36(xend,xendr,n_in,test)
       sga=sin(gama)
       
 ! Preparo los valores iniciales para buscar el maximo
-      dist_ymin=xend(1,2)*(cbe*cal*sga+sal*cga)+ xend(2,2)*(cbe*cal*cga-sal*sga)-xend(3,2)*sbe*cal
+      !dist_ymin=xend(1,2)*(cbe*cal*sga+sal*cga)+ xend(2,2)*(cbe*cal*cga-sal*sga)-xend(3,2)*sbe*cal
+      dist_ymin=xend(1,1)*(cbe*cal*sga+sal*cga)+ xend(2,1)*(cbe*cal*cga-sal*sga)-xend(3,1)*sbe*cal
 # if CRITERIO ==1
       rmax=0.1
 # elif CRITERIO ==2 
-      rmax = xend(1,1)
+      !rmax = xend(1,1)
+      rmax=xend(1,1)*(-cbe*sal*sga+cal*cga) -xend(2,1)*(cbe*sal*cga+cal*sga) +xend(3,1)*sbe*sal
 #endif
-      int_ymin = 2
+      !int_ymin = 2
+      int_ymin = 1
 
 !      dist_ymin = 0.0 ! seguro existe al menos 1 segmento con y_segmento menor que este valor
       do 1 i=1,n_in
