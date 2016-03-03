@@ -15,7 +15,7 @@
                             más cercana a la pared derecha del poro)
                El 2 es "más correcto"
                     */
-# define fsigmaq 1 /* 0 -  Sin regulacion de carga en la superficie
+# define fsigmaq 0 /* 0 -  Sin regulacion de carga en la superficie
                       1 -  con equilibrio quimico (regulacion de carga) en la pared del poro
                    */
 
@@ -39,7 +39,7 @@
 /* This lines prints information in standard output */
 
 # define fdebug
-# undef fdebug_set_pore_distrib
+# define fdebug_set_pore_distrib
 # undef fdebug_pxs
 
 # undef fdebug_rota36

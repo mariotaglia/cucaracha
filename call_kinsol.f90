@@ -54,21 +54,21 @@ integer :: globalstrat, maxl, maxlrst, maxiter
 
 ! maximum number of iterations without prec. setup (consultar kinsol_guide p.56) 
 !    msbpre  = 5 ! (MARIO)
-    msbpre  = 10 ! Default value:
+    msbpre  = 10 ! Default value: elefante
 
-!    maxiter = 300 ! Maximum number of non-linear iterations (Default=200)
-    maxiter = 200 ! Maximum number of non-linear iterations (Default=200)
+    maxiter = 300 ! Maximum number of non-linear iterations (Default=200)
+!    maxiter = 200 ! Maximum number of non-linear iterations (Default=200)
 
     fnormtol = 1.0d-8 ! Function-norm stopping tolerance
     scsteptol = 1.0d-8 ! Scaled-step stopping tolerance
 ! maximum Krylov subspace dimesion (?!?!?!) ! Esto se usa para el preconditioner
-    maxl = 10 
-!    maxl = neq ! Rikkert Comment
+!    maxl = 10 este estaba antes! elefante!
+    maxl = neq ! Rikkert Comment
     maxlrst = 2 ! maximum number of restarts
-    globalstrat = 0 ! this should be 1 for Inexact Newton or 2 for line search.
+    globalstrat = 0 ! this should be 1 for Inexact Newton or 2 for line search. elefante decia 0!
 ! Paso 2 - Inicializa the serial nvector module fnvinits(key,neq,ier); 
 !            (key=3 for kinsol solver)
-! neq variable defined in module_globales, is the size of the vectors x1 and xg1
+! neq=2*dimR  is declared in module_globales, is the size of the vectors x1 and xg1, defined in read_input.f90
 ! **********
 ! fnvinits inits NVECTOR module. 3 - for kinsol, neq equation number,
     call fnvinits(3, neq, ier) 
@@ -88,9 +88,9 @@ integer :: globalstrat, maxl, maxlrst, maxiter
 
 ! maximum number of iterations without prec. setup 
     call fkinsetiin('MAX_SETUPS', msbpre, ier)  
-
 ! maximum number of Nonlinear iterations (Default=200)
-    call fkinsetiin('MAX_NITER', maxiter, ier)  
+    call fkinsetiin('MAX_NITER', maxiter, ier) 
+
     call fkinsetrin('FNORM_TOL', fnormtol, ier) ! Function-norm stopping tolerance
     call fkinsetrin('SSTEP_TOL', scsteptol, ier)! Scaled-step stopping tolerance
     if (ier .ne. 0) then

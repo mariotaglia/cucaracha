@@ -6,8 +6,8 @@ numv = 1.0.3
 MAKEFILE = Makefile
 EXE = monolayer${numv}
 
-FC = mpif90 #${F90}
-#FC = gfortran
+#FC = mpif90 #${F90}
+FC = gfortran
 #FC = /shared/software/openmpi-1.6.1/bin/mpif77
 #FC = /shared/software/openmpi-1.6.1/bin/mpif90
 

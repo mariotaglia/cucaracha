@@ -86,9 +86,13 @@ program nanochannel
  
         write(10,*), " " ! para formatear fort.10
         write(11,*), " " ! para formatear fort.11
-
         xh(:) = x1(:dimR)    ! Solvent volume fraction
         psi(1:dimR) = x1(dimR+1:) ! Electrostatic Potential
+#ifdef fdebug
+        print*, 'monolayer L91,  xh(:)= ' , xh(:)
+        print*, 'monolayer L91, psi(:)= ' , psi(:)
+#endif 
+
 
 ! FUNCION: check_run == true if error.
         if ( check_run(ipH,ier) ) then
