@@ -24,15 +24,16 @@ else                  ! pH >7
     !xnegbulk=-xsalt/zneg -xsalt2/zneg
     xnegbulk=-xsalt/zneg
 endif
+
+! En bulk no hay polimero.
+         xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk !- xposbulk2
+
 ! Totalmente add-hoc y util solo para calcular mupol 11-6-2015
 xpolbulk = (cpol*Na/(1.0d24))*vpol ! mupol 11-6-2015
 !!#if MUPOL == 0
 ! Polymer Chemical potential in bulk
- xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk -xpolbulk ! mupol 11-6-2015
+! xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk -xpolbulk ! mupol 11-6-2015
 expmupol = ( cpol*0.602*vsol/( xsolbulk**(vpol*long) ) )            ! mupol 11-6-2015
-
-! En bulk no hay polimero.
-         xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk !- xposbulk2
 
 ! Ojo Kw y Ka estan en mol/l mientras que vsol y xsolbulk estan en nm3
 ! 1.0d24 factor de conversion de volumen de litro a nm3  1nm3 = 10^-24 l = 10^-24 dm3
