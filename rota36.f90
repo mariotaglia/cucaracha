@@ -8,7 +8,7 @@ subroutine rota36(xend,xendr,n_in,test)
 #   include "control_run.h"
 ! Se acomodan las cadenas cerca de la posicion
 ! (x,y) = (0,-radio)
-    use globales, only: pi, radio
+    use globales, only: pi, radio, delta
     use csys
       implicit none
       integer, intent(in) :: n_in ! long = #segments
@@ -21,7 +21,7 @@ subroutine rota36(xend,xendr,n_in,test)
       real*8 :: rands
       real*8 fac,fac1,fac2,sbe,cbe,sal,cal,sga
       real*8 vect, dist_ymin, rmax, tmax, rmaxaux, tmaxaux
-      real*8 alfa, gama, cga, a, b, c
+      real*8 alfa, gama, cga, a, b, c, xc, yc, zc
       integer :: i, int_ymin = 0
       
       fac=rands(seed)
@@ -46,9 +46,18 @@ subroutine rota36(xend,xendr,n_in,test)
 #endif
       int_ymin = 2
 
+! Calc Center of Mass
+         xc=0.0
+         yc=0.0
+         zc=0.0
 !      dist_ymin = 0.0 ! seguro existe al menos 1 segmento con y_segmento menor que este valor
       do 1 i=1,n_in
-
+# if CRITERIO == 3
+! Calc Center of Mass
+         xc=xc+xend(1,i)
+         yc=yc+xend(2,i)
+         zc=zc+xend(3,i)
+# endif
          a=xend(1,i)
          b=xend(2,i)
          c=xend(3,i)
@@ -76,6 +85,19 @@ subroutine rota36(xend,xendr,n_in,test)
          endif
 # endif
  1    continue
+
+# if CRITERIO == 3
+! Calc Center of Mass
+         xc=xc/n_in
+         yc=yc/n_in
+         zc=zc/n_in
+      do i=1,n_in
+         xendr(1,i)=xendr(1,i)-( xc*(-cbe*sal*sga+cal*cga)-yc*(cbe*sal*cga+cal*sga)+zc*sbe*sal )
+         xendr(2,i)=xendr(2,i)-( xc*(cbe*cal*sga+sal*cga)+ yc*(cbe*cal*cga-sal*sga)-zc*sbe*cal )
+         xendr(3,i)=xendr(3,i)-( xc*sbe*sga+yc*sbe*cga+zc*cbe )
+      enddo
+# endif
+
 
 ! Elijo el segmento medio 
 !        int_ymin = int(n_in/2.0)
@@ -109,9 +131,9 @@ subroutine rota36(xend,xendr,n_in,test)
                                                   ! sumo 1e-5 para evitar que el primer segmento quede exactamento sobre la pared del poro
 # endif /*Here I choose the system*/
 
-         vect = (xendr(1, i))**2 + (xendr(2, i))**2 ! distancia desde el centro al segmento ^ 2
-         
-         if ( (abs(dist_ymin) .gt. radio) .or. (vect.gt.radio**2) ) test='N'  ! hay un segmento fuera del poro
+          vect = (xendr(1, i))**2 + (xendr(2, i))**2 ! distancia desde el centro al segmento ^ 2
+          
+          if ( (abs(dist_ymin) .gt. radio) .or. (vect.gt.radio**2) ) test='N'  ! hay un segmento fuera del poro
 # ifdef fdebug_rota36
          print*,"rota36: ", i, xendr(1,i), radio, dist_ymin, test 
 # endif

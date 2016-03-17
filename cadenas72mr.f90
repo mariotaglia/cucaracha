@@ -5,18 +5,20 @@
 !
 
 subroutine cadenas72mr(chains,ncha)
-    use globales, only: lseg, long, pi
+#   include "control_run.h"
+    use globales, only: lseg, long, pi,dimR, delta, radio
     use csys
     implicit none
     integer :: ncha
-    REAL(KIND=8), intent(out) :: chains(3,200,100)
+!    REAL(KIND=8), intent(out) :: chains(3,200,100)
+    REAL(KIND=8), intent(out) :: chains(3,200,130)
     
-    real*8 rn,rands,state1,dista
+    real*8 rn,rands,state1,dista, vect
     real*8 sitheta,cotheta,siphip,cophip
     real*8 m(3,3),mm(3,3),tt(3,3),tp(3,3),tm(3,3)
     real*8 x(3),xend(3,200),xendr(3,200)
 
-    integer i,state,ii,j,ive,jve
+    integer i,state,ii,j,jj,ive,jve
     character*1 test
 
     sitheta=sin(68.0*pi/180.0)
@@ -154,21 +156,36 @@ subroutine cadenas72mr(chains,ncha)
 
       ncha=0
       do 400 i=1,300
-
          test='S'
          call rota36(xend,xendr,long,test)
          if (test.eq.'N') goto 400
-         ncha=ncha+1
+# if CRITERIO == 3 
+!Criterio 3 Le agrega un grado de libertad a las configuraciones de polimero
+! Mueve por layers tambien al azar.
+         do 403 jj=1,3000
+            test='S'
+            call transla(xendr,test)
+            if (test.eq.'N') go to 403
+# endif
+            ncha=ncha+1
 
-         do 401 j=1,long
-            chains(1,j,ncha)=xendr(1,j) ! y
-            chains(2,j,ncha)=xendr(2,j) ! x
-            chains(3,j,ncha)=xendr(3,j) ! z
- 401     continue
+            do j=1,long
+               chains(1,j,ncha)=xendr(1,j) ! y
+               chains(2,j,ncha)=xendr(2,j) ! x
+               chains(3,j,ncha)=xendr(3,j) ! z
+            enddo
+# if CRITERIO == 3 
+         !if (ncha.eq.25) goto 402
+         if (ncha.eq.125) goto 402
+         print*, " WARNING! (L180, cadenas72) Esto supone un sesgo en las configuraciones: if (ncha.eq.25) goto 402 "
+         print*, " WARNING! (L181, cadenas72) Para radios grandes hay que pensar otra cosa."
+403     continue
+# else
          if (ncha.eq.25) goto 402
-         
+# endif
  400  continue
  402  if (ncha.eq.0) goto 223
+
 !        call imprimir_cadenas
       return
 end subroutine cadenas72mr

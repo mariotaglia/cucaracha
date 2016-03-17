@@ -37,7 +37,7 @@ SRC = module_globales.f90 \
       printstate.f90\
       check_run.f90 \
       creador.f90 pxs.f90 kai.f90 \
-      cadenas72mr.f90 rota36.f90\
+      cadenas72mr.f90 rota36.f90 transla.f90\
       mrrrr.f90 rands.f90 \
       call_kinsol.f90 fkfun.f90 factorcurv.f90 \
       fkpset.f90 fkpsol.f90 \
@@ -153,6 +153,7 @@ pxs.o: pxs.f90 module_Csys.o control_run.h
 rands.o: rands.f90 module_Csys.o control_run.h
 read_input.o: read_input.f90 module_Csys.o control_run.h
 rota36.o: rota36.f90 module_Csys.o control_run.h
+transla.o: transla.f90 module_Csys.o control_run.h
 units_adaptation.o: units_adaptation.f90 control_run.h
 monolayer.o: module_globales.o module_Csys.o control_run.h Makefile control_run.h
 

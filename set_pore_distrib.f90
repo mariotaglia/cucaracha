@@ -138,7 +138,7 @@ enddo
 # if POL == 2 /* Neutral Polymers */
   shift = 1.0 ! (Should be "shift" an input parameter in fort.8?) 
 # else
-  shift = 1.0d-150 ! (Should be "shift" an input parameter in fort.8?) 
+  shift = 1.0d-50 ! (Should be "shift" an input parameter in fort.8?) 
 # endif
 avpol(:)= 0.0 ! line important to probability calculus
 
