@@ -170,10 +170,7 @@ subroutine cadenas72mr(chains,ncha)
           do jj=1,dimR ! Mueve por layers
             test='S'
             call transla(jj,xendr, xendt,test)
-            if (test.eq.'N') then
-                print*, "jj= ", jj
-                cycle ! Mueve por layers 
-            endif
+            if (test.eq.'N') cycle ! Mueve por layers
 # endif
             ncha=ncha+1
 

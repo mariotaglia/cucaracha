@@ -45,6 +45,7 @@ SRC = module_globales.f90 \
       set_initial_guess.f90 \
       set_pore_distrib.f90 \
       calc_conductance.f90 \
+      calc_adsorvedchains.f90 \
       calc_mean_values.f90 \
       calc_energy.f90 \
       Fmix.f90 Fmixs.f90 Fconf.f90 \

@@ -15,6 +15,7 @@ end interface
 integer :: iR, aR, i,j 
 real(kind=8) :: shift, denon ! it is  multiplicative factor in pro(cuantas)
 type (mp_real) q ! este valor puede ser MUY grande
+!real(kind=8) :: aux=0.0
 
 # ifdef fdebug    
     call printstate("set_pore_distrib L19")
