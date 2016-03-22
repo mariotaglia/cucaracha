@@ -37,7 +37,7 @@ program nanochannel
     call units_adaptation ! units and variables adaptation
 
     call allocating(1) ! Allocating memory
-
+    call printstate("Aloop L40") ! Report of State
 ! If chain ==1 then prepare the memory and variables
 #if CHAIN !=0   
     print*, " Entro a creador!"
@@ -65,11 +65,11 @@ program nanochannel
     call set_bulk_properties(pHs(ipH)) 
 ! Inside nanochannel set x1
     call set_initial_guess(0) ! 0 - bulk solution as initial guess
-#ifdef fdebug
-    call printstate("fdebug Aloop L66") ! Report of State
-#endif
+    
+    call printstate("Aloop L69") ! Report of State
+    
     print*, '********************************************'
-    print*, '*** Comienza el loop principal ***'
+    write(0,'(23a)'), '*** Comienza el loop principal ***' ! stderr
 ! *****************************************************************************
 ! Principal Loop loop
 ! *****************************************************************************
@@ -78,7 +78,9 @@ program nanochannel
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
         call set_bulk_properties(pHs(ipH)) 
 !     ! Actualizo las condiciones de bulk se repite solo para ipH=1
-        call printstate("Aloop L77") ! Report of State
+#ifdef fdebug
+        call printstate("fdebug Aloop L82") ! Report of State
+#endif
 !        call set_pore_distrib !Not necesarry this function is inside fkfun
 
 ! Resolution of the equations

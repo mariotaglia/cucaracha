@@ -30,7 +30,6 @@ subroutine creador ! crea cadenas
         call cadenas72mr(chains,ncha)
         do i=1,ncha
             il = il + 1
-            !if(il.gt.cuantas) goto 100
             if(il.gt.cuantas) exit
             do j=1,long         
                 in1(il,j,1)=chains(1,j,i)

@@ -40,7 +40,6 @@
 /* This lines prints information in standard output */
 
 # undef fdebug
-# define fdebug
 # undef fdebug_set_pore_distrib
 # undef fdebug_pxs
 

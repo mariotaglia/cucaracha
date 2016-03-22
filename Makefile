@@ -1,7 +1,7 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-numv = 1.0.3
+numv = 1.1
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
@@ -24,7 +24,7 @@ FFLAGS= -cpp -O3 -fno-toplevel-reorder
 SRC = module_globales.f90 \
       module_Csys.f90 \
       module_FreeEnergy.f90 \
-      module_pore.f90 \
+      module_pore.f90 module_translators.f90\
       set_bulk_properties.f90 \
       units_adaptation.f90 monolayer.f90 \
       read_input.f90 \
@@ -37,7 +37,7 @@ SRC = module_globales.f90 \
       printstate.f90\
       check_run.f90 \
       creador.f90 pxs.f90 kai.f90 \
-      cadenas72mr.f90 rota36.f90 transla.f90\
+      cadenas72mr.f90 rota36.f90 \
       mrrrr.f90 rands.f90 \
       call_kinsol.f90 fkfun.f90 factorcurv.f90 \
       fkpset.f90 fkpsol.f90 \
@@ -140,6 +140,7 @@ $(OBJS): control_run.h
 monolayer: control_run.h Makefile control_run.h module_globales.o module_Csys.o control_run.h
 module_globales.o: module_globales.f90 control_run.h
 module_Csys.o: module_Csys.f90 control_run.h
+module_translators.o: module_translators.f90 module_Csys.o control_run.h
 fkfun.o: fkfun.f90 control_run.h
 fkpsol.o: fkpsol.f90 control_run.h
 fkpset.o: fkpset.f90 control_run.h
@@ -153,7 +154,6 @@ pxs.o: pxs.f90 module_Csys.o control_run.h
 rands.o: rands.f90 module_Csys.o control_run.h
 read_input.o: read_input.f90 module_Csys.o control_run.h
 rota36.o: rota36.f90 module_Csys.o control_run.h
-transla.o: transla.f90 module_Csys.o control_run.h
 units_adaptation.o: units_adaptation.f90 control_run.h
 monolayer.o: module_globales.o module_Csys.o control_run.h Makefile control_run.h
 
