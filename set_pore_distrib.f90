@@ -48,8 +48,15 @@ do iR=1,dimR
  !fdis(iR) = 1.0 / (1.0 + expmuOHmin*dexp(psi(iR)*zpol)/Ka0 ) ! FACUNDO funciona(!)
  !fdis(iR) = Ka0 / (expmuOHmin*dexp( psi(iR)*zpos) + Ka0 ) ! using fdiswall symmetry 
 
+# ifdef PAHCL
+     denon = (xneg(iR)/( (xh(iR)**vsalt)*vsalt) *Ka0 + xOHmin(iR)/xh(iR) *K_Cl0) &
+             + Ka0*K_Cl0 ! Kb0 = Ka20 for dobule protonation
+    fdis(iR) = Ka0*K_Cl0 / denon ! Kb0 = Ka20 for dobule protonation
+    fdis2(iR) = (xOHmin(iR)/xh(iR))*K_Cl0 / denon 
+    
+# else 
 fdis(iR) = Ka0 / ( xOHmin(iR)/xh(iR)  + Ka0   ) ! using fdiswall symmetry 
-
+#endif 
 ! fdis(iR) = 1.0 / (1.0 + xOHmin(iR)/(xh(iR)*Ka0) ) ! MARIO EXPRESSION ! Funciona 
 ! fdis(iR) = 0.9
 ! fdis(iR) = 1.0d0/(1.0d0 + (Ka0*dexp(psi(iR)*zpos)/expmuHplus))! from the theory
@@ -107,10 +114,16 @@ do iR = 1, dimR
 ! (xh(iR)**vpol): viene de reemplazar la presion osmotica por 
 !                 la expresion para el solvent
 #   if POL == 0 /* PAH */
-    ! Para polimero con regulacion de carga (cargado positivamente) elefante mayor
+#ifdef PAHCL
+    ! Para polimero con regulacion de carga (cargado positivamente) 
+    xpot(iR) = (xh(iR)**vpol) /(1-fdis(iR)-fdis2(iR))
+!    xpot(iR) = (xh(iR)**vpol) !/ (1-fdis(iR))
+#else
+    ! Para polimero con regulacion de carga (cargado positivamente) 
     xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))
     !xpot(iR) = (xh(iR)**vpol)*exp(-psi(iR)*zpol) /(1-fdis(iR)-fdis2(iR) )
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
+#endif
 #   elif POL == 1 /* PMEP */
     xpot(iR) = (xh(iR)**vpol)/(1.0-fdis(iR)-fdis2(iR) ) 
 #   elif POL == 2 /* Neutral Polymer */
@@ -139,7 +152,7 @@ enddo
 # if POL == 2 /* Neutral Polymers */
   shift = 1.0 ! (Should be "shift" an input parameter in fort.8?) 
 # else
-  shift = 1.0d-50 ! (Should be "shift" an input parameter in fort.8?) 
+  shift = 1.0!d-50 ! (Should be "shift" an input parameter in fort.8?) 
 # endif
 avpol(:)= 0.0 ! line important to probability calculus
 

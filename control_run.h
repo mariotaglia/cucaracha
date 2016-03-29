@@ -10,7 +10,7 @@
 # define MUPOL 0 /* 0 - number of polymer is regulated with sigma (no polymer in bulk)
                     1 - indicating use of mupol polymer see units_adaptation.f90 */
 
-# define CRITERIO 3 /* 1 -  Acerco el monomero más cercano a la pared)
+# define CRITERIO 2 /* 1 -  Acerco el monomero más cercano a la pared)
                        2 -  Acerco la coordenadas x al monomero con la coorenada x 
                             más cercana a la pared derecha del poro) funciona para monolayers polimero adsorbido.
                        3 -  Cadenas con Centro de Masa en las distintas layers (1 grado de libertad mas para las cadenas).
@@ -26,6 +26,8 @@
                       1 - PMEP
                       2 - neutral 
                */
+# define PAHCL /* To use with POL == 0 (PAH), chemical eq. between PAH and Cl
+
 /*Not implemented yet*/
 #undef geometry  /* Select geometry 0 - Flat surface? 
 # define geometry 1 /* Select geometry 0 - Flat surface?

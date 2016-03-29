@@ -20,8 +20,11 @@ module pore
 # ifdef VDW
     real(kind=8), dimension(:), allocatable :: xtotal      ! xtotal poor solvent
 #endif /* VDW */
-# if POL == 0
+# if POL == 0 /* PAH */
     real(kind=8), dimension(:), allocatable :: fdis ! PAH weakpol
+#ifdef PAHCL
+    real(kind=8), dimension(:), allocatable :: fdis2 ! PAH + Cl Chem.Eq.
+#endif
 # elif POL == 1
     real(kind=8), dimension(:), allocatable :: fdis, fdis2 ! PMEP weakpol
 # elif POL == 2

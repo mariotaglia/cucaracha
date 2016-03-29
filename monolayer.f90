@@ -37,7 +37,7 @@ program nanochannel
     call units_adaptation ! units and variables adaptation
 
     call allocating(1) ! Allocating memory
-    call printstate("Aloop L40") ! Report of State
+
 ! If chain ==1 then prepare the memory and variables
 #if CHAIN !=0   
     print*, " Entro a creador!"

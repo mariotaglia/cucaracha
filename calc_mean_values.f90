@@ -32,6 +32,9 @@ do iR = 1, dimR
 
 ! suma de frdis*avpoln*r (falta constante)
 !    fmedio = fmedio + fdis(iR)*avpoln(iR)*(dfloat(iR)-0.5) 
+#ifdef PAHCL
+    fmedio2 = fmedio2 + fdis2(iR)*avpol(iR)*(dfloat(iR)-0.5) 
+#endif
 # if POL == 0 || POL == 2/* PAH */
     sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpol(iR)/(vpol*vsol))*zpos *(fdis(iR))
 # elif POL == 1 /* PMEP */
@@ -65,8 +68,13 @@ write(318,*) pHbulk, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
 !                                 sigmaq*(delta/vsol)*zwall*fdiswall, sumcharge
 ! NOTE: fdiswall was calculated in set_pore_distrib be carefull! ;)
 #   if POL == 0 /* PAH */
+#ifdef PAHCL
+! writing fmedio.dat:
+    write(313,*) pHbulk, fmedio, fmedio2, fdiswall !, fmedio2, fdiswall
+#else
 ! writing fmedio.dat:
     write(313,*) pHbulk, fmedio, fdiswall !, fmedio2, fdiswall
+#endif
 #   elif POL == 1 /* PMEP */
 ! writing fmedio.dat:
     write(313,*) pHbulk, fmedio, fmedio2, fdiswall

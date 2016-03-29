@@ -20,6 +20,9 @@ subroutine allocating(m)
 # if POL == 1 /* PMEP */ 
                         fdis2, &
 # endif
+# ifdef PAHCL /* used with PAH */ 
+                        fdis2, &
+# endif
                         pR, in1, Xu,pro,stat=var1 )
 #           endif                              
                 
@@ -52,6 +55,9 @@ subroutine allocating(m)
             allocate( avpol(dimR), &
                       fdis(dimR), & 
 # if POL == 1 /* PMEP */ 
+                      fdis2(dimR),&
+# endif
+# ifdef PAHCL /* used with PAH */ 
                       fdis2(dimR),&
 # endif
                       pR(cuantas,long), in1(cuantas,long,3),&

@@ -19,7 +19,7 @@ module csys
     real(KIND=8) :: sigma, sigmaq, constq, &
         cpol, xpolbulk, &
         csalt, csalt2=0.0, xsalt, xsalt2,& ! Salt concentration
-        pKawall, kwall, Kwall0, pKa, Ka, Ka0, pKb, Kb, Kb0, & ! chemical equilibrium
+        pKawall, kwall, Kwall0, pKa, Ka, Ka0, pKb, Kb, Kb0, pK_Cl, K_Cl, K_Cl0,& ! chemical equilibrium
         eps1, & ! Electrostatic potential
         longporo, &
         movpos, movneg, movHplus, movOHmin,&  ! Mobilities

@@ -118,9 +118,12 @@ subroutine printstate(marca)
     write(1984,*), "*** Eq. Quimico ***"
     write(1984,'(A10,F7.3)'), "fdiswall  :", fdiswall
     write(1984,'(A10,F7.3)'), "zwall     :", zwall ! No olvidar que el character '.' usa un espacio de la noteacion.
-    write(1984,'(3(A10,F7.3))'), "kwall    :", kwall," pKawall :", pKawall, " Kwall0  :", Kwall0
-    write(1984,'(3(A10,F7.3))'), "Ka       :", Ka," pKa     :", pKa, " Ka0     :", Ka0
-    write(1984,'(3(A10,F7.3))'), "Kb       :", Kb," pKb     :", pKb, " Kb0     :", Kb0
+    write(1984,'(3(A10,ES11.3E3))'), "kwall    :", kwall," pKawall :", pKawall, " Kwall0  :", Kwall0
+    write(1984,'(3(A10,ES11.3E3))'), "Ka       :", Ka," pKa     :", pKa, " Ka0     :", Ka0
+    write(1984,'(3(A10,ES11.3E3))'), "Kb       :", Kb," pKb     :", pKb, " Kb0     :", Kb0
+#ifdef PAHCL
+    write(1984,'(3(A10,ES11.3E3))'), "K_Cl     :", K_Cl," pK_Cl   :", pK_Cl, " K_Cl0   :", K_Cl0
+#endif 
 ! BULK
     write(1984,*), "*** BULK ***" 
     write(1984,*), "cpol      :", cpol, "xpolbulk   :", xpolbulk

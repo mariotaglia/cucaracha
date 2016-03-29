@@ -18,8 +18,10 @@ subroutine units_adaptation
 ! Chemical Equilibrium
     Ka=10**(-pKa)
     Kb=10**(-pKb)
-    Kwall=10**(-pKawall)
 
+    K_Cl=10**(-pK_Cl)
+    Kwall=10**(-pKawall)
+print*, "Kwall, K_Cl, Ka, Kb : " , Kwall, K_Cl, Ka, Kb
 ! Volume fraction second salt in mol/l, csalt2=0! Check!
     xsalt=(csalt*Na/(1.0d24))*(vsalt*vsol)   
 !      xsalt2=(csalt2*Na/(1.0d24))*(vsalt2*vsol)   
