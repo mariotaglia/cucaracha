@@ -50,9 +50,11 @@ do iR=1,dimR
 
 # ifdef PAHCL
      denon = (xneg(iR)/( (xh(iR)**vsalt)*vsalt) *Ka0 + xOHmin(iR)/xh(iR) *K_Cl0) &
+!     denon = expmuneg*dexp(psi(iR)) *Ka0 + expmuOHmin* dexp(psi(iR) *K_Cl0) &
              + Ka0*K_Cl0 ! Kb0 = Ka20 for dobule protonation
     fdis(iR) = Ka0*K_Cl0 / denon ! Kb0 = Ka20 for dobule protonation
     fdis2(iR) = (xOHmin(iR)/xh(iR))*K_Cl0 / denon 
+!    fdis2(iR) = expmuOHmin*dexp(psi(iR))*K_Cl0 / denon 
     
 # else 
 fdis(iR) = Ka0 / ( xOHmin(iR)/xh(iR)  + Ka0   ) ! using fdiswall symmetry 
@@ -116,7 +118,7 @@ do iR = 1, dimR
 #   if POL == 0 /* PAH */
 #ifdef PAHCL
     ! Para polimero con regulacion de carga (cargado positivamente) 
-    xpot(iR) = (xh(iR)**vpol) /(1-fdis(iR)-fdis2(iR))
+    xpot(iR) = (xh(iR)**vpol)*expmuneg / ( K_Cl0*(1-fdis(iR)-fdis2(iR)) )
 !    xpot(iR) = (xh(iR)**vpol) !/ (1-fdis(iR))
 #else
     ! Para polimero con regulacion de carga (cargado positivamente) 
@@ -196,7 +198,7 @@ do i=1,cuantas ! i enumerate configurations (configurations ensamble)
     end do
 enddo ! End loop over chains/configurations
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L177: End Loop"
+        print*, "set_pore_distrib L177: End Loop. "
 #endif
 
     call mpwrite(11,q/shift)

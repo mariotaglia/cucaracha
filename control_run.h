@@ -10,9 +10,10 @@
 # define MUPOL 0 /* 0 - number of polymer is regulated with sigma (no polymer in bulk)
                     1 - indicating use of mupol polymer see units_adaptation.f90 */
 
-# define CRITERIO 2 /* 1 -  Acerco el monomero más cercano a la pared)
-                       2 -  Acerco la coordenadas x al monomero con la coorenada x 
-                            más cercana a la pared derecha del poro) funciona para monolayers polimero adsorbido.
+# define CRITERIO 2 /* 1 -  Acerco el monomero más cercano a la pared. 
+                            Busca Rmax y acerca a la pared respetando el theta (bueno para armar las figuras).
+                       2 -  Acerco el monomero con la coordenada xmax 
+                            a la pared derecha del poro. El y se deja en y=0. ( todas las conf. superpuestas)
                        3 -  Cadenas con Centro de Masa en las distintas layers (1 grado de libertad mas para las cadenas).
                             Esta opcion se usa con CHAIN==1
                     */
@@ -41,8 +42,8 @@
 /**** For debugging change undef by define **** */
 /* This lines prints information in standard output */
 
-# undef fdebug
+# define fdebug
 # undef fdebug_set_pore_distrib
 # undef fdebug_pxs
 
-# undef fdebug_rota36
+# define fdebug_rota36

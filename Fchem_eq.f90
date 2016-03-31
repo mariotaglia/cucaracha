@@ -32,8 +32,10 @@ function fchem_eq()
                           +   fdis2(i) *dlog( fdis2(i)*Ka0  ) &
                           + (1-fdis(i)-fdis2(i))*dlog( (1-fdis(i)-fdis2(i) )*K_Cl0 ) )&
                           *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio
-      fchem_eq = fchem_eq + fdis(i)*dlog(expmuneg) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio ! ojo! expmuHplus ya tiene el signo menos!!
-      fchem_eq = fchem_eq + fdis2(i)*(dlog(expmuneg)-dlog(expmuOHmin)) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio ! ojo! expmuHplus ya tiene el signo menos!!
+      fchem_eq = fchem_eq + fdis(i)*dlog(expmuneg) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio ! ojo! 
+      fchem_eq = fchem_eq + fdis2(i)*(dlog(expmuneg)-dlog(expmuOHmin)) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio ! 
+!! Mantiene la coherencia, expmuneg cambia con el pH! por lo tanto es una constante valiosa.
+      fchem_eq = fchem_eq - dlog(expmuneg) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio !!
 #else
 ! Nueva expresion para el equilibrio quimico
       fchem_eq = fchem_eq + ( fdis(i) *dlog( fdis(i)/Ka0 ) &

@@ -174,12 +174,12 @@ subroutine cadenas72mr(chains,ncha)
 # endif
             ncha=ncha+1
 
+# if CRITERIO == 3 
             do j=1,long
                chains(1,j,ncha)=xendt(1,j) ! y
                chains(2,j,ncha)=xendt(2,j) ! x
                chains(3,j,ncha)=xendt(3,j) ! z
             enddo
-# if CRITERIO == 3 
          !if (ncha.eq.25) goto 402
          if (ncha.eq.125) goto 402
 # ifdef fdebug
@@ -189,6 +189,11 @@ subroutine cadenas72mr(chains,ncha)
 !403     continue
         enddo ! 403     continue
 # else
+            do j=1,long
+               chains(1,j,ncha)=xendr(1,j) ! y
+               chains(2,j,ncha)=xendr(2,j) ! x
+               chains(3,j,ncha)=xendr(3,j) ! z
+            enddo
          if (ncha.eq.25) goto 402
 # endif
  400  continue
