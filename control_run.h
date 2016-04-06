@@ -42,8 +42,8 @@
 /**** For debugging change undef by define **** */
 /* This lines prints information in standard output */
 
-# define fdebug
+# undef fdebug /*Imprime cadenas*/
 # undef fdebug_set_pore_distrib
 # undef fdebug_pxs
 
-# define fdebug_rota36
+# undef fdebug_rota36

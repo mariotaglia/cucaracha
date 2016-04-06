@@ -115,6 +115,7 @@ subroutine printstate(marca)
     write(1984,*), "Free_Energy2  :", Free_Energy2
     ! This are singlevalue variables    
     write(1984,*), "*** Variables escalares ***"
+    write(1984,'(A12,ES11.3E3)'), "shift_f     :", shift_f ! No olvidar que el character '.' usa un espacio de la noteacion.
     write(1984,*), "*** Eq. Quimico ***"
     write(1984,'(A10,F7.3)'), "fdiswall  :", fdiswall
     write(1984,'(A10,F7.3)'), "zwall     :", zwall ! No olvidar que el character '.' usa un espacio de la noteacion.

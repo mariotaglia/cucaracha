@@ -9,9 +9,9 @@ subroutine set_initial_guess(m)
 
 select case (m)
     case ( 0 )  ! Bulk solution
-         xh(:dimR) = xsolbulk
+         xh(:dimR) = xsolbulk*0.1
 !        xg1(:dimR) = xsolbulk
-         x1(:dimR) = xsolbulk
+         x1(:dimR) = xsolbulk*0.1
 ! Psi Initial values
 !          xg1(dimR+1:) = 0.0d0
 !         psi(0:dimR+1) = 0.0d0 ! No hacen falta los exremos

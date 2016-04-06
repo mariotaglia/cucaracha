@@ -14,6 +14,7 @@ subroutine calc_adsorvedchains(pHbulk)
     integer :: nro_conf,j, nro_mon=0 
     integer, dimension(5) :: nro_cadenas(0:4)
     real(kind=8), dimension(5) :: p(0:4)
+!    type(mp_real), dimension(5) :: p(0:4)
 
     print*, "Calculating adsorved chains..." 
 

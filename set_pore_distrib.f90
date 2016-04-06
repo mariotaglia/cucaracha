@@ -18,7 +18,7 @@ type (mp_real) q ! este valor puede ser MUY grande
 !real(kind=8) :: aux=0.0
 
 # ifdef fdebug    
-    call printstate("set_pore_distrib L19")
+    call printstate("set_pore_distrib L21")
 # endif
 !**************************************************************
 ! Volume fractions and degrees of dissociations: fdis
@@ -81,6 +81,9 @@ fdis(iR) = Ka0 / ( xOHmin(iR)/xh(iR)  + Ka0   ) ! using fdiswall symmetry
     fdis(iR) = 0.0 ! Neutral polymer
 #   endif /* POL */
 # endif /* CHAIN */
+# ifdef fdebug    
+    print*, "Adentro del loop para calcular fdis, xneg, xpos, xh, etc. iR=", iR
+# endif
 end do
 !**************************************************************
 ! Dissociation in the inner wall of the pore 
@@ -92,9 +95,14 @@ end do
 # elif fsigmaq == 0 /* No hay regulacion en la pared */
     fdiswall = 1.0  
 # endif
+# ifdef fdebug_set_pore_distrib
 !**************************************************************
+print*, "**************************************************************"
+print*, "Ya se calcularon las constantes de disociacion de la pared, y las distribuciones dentro del poro."
+print*, "set_pore_distrib L99 fdiswall, fdis(iR), xh(iR): ", fdiswall, fdis(:), xh(:)
+!**************************************************************
+#endif
 
-!**************************************************************
 ! Boundary Conditions: Electrical Potential
 !! Estas ecuaciones son suplementarias a la eq. de Poisson discretizada
 !   *   The derivate at r=0 should be zero. 
@@ -112,6 +120,9 @@ end do
 
 # if CHAIN != 0
 !!!!!! AQUI FALTA ACTUALIZAR xH! debe tomar el valor de  x1
+# ifdef fdebug_set_pore_distrib
+print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): "
+#endif
 do iR = 1, dimR
 ! (xh(iR)**vpol): viene de reemplazar la presion osmotica por 
 !                 la expresion para el solvent
@@ -132,7 +143,8 @@ do iR = 1, dimR
     xpot(iR) = (xh(iR)**vpol) ! Polimero neutro ! For Neutral Polymers OK!
 #   endif /* PAH || PMEP */
 # ifdef fdebug_set_pore_distrib
-print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
+print*, iR, xpot(iR), fdis(iR), xh(iR)
+!print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
 #endif
 # ifdef VDW
 !**************************************************************
@@ -146,7 +158,7 @@ print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), 
 #endif /* VDW */
 enddo
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L133: loop end"
+        print*, "set_pore_distrib L157: loop end"
 #endif
 
 !      q = 0.0 ! Normalization of P(alpha)
@@ -154,7 +166,13 @@ enddo
 # if POL == 2 /* Neutral Polymers */
   shift = 1.0 ! (Should be "shift" an input parameter in fort.8?) 
 # else
-  shift = 1.0!d-50 ! (Should be "shift" an input parameter in fort.8?) 
+! *****************
+! Para elegir el valor de shift es muy bueno tener en cuenta cual es la capa mas probable
+! y cual es la probabilidad de esa capa. Por ejemplo, si la mas probable es la dimR entonces:
+  shift = shift_f
+  if (xpot(dimR) > 200 ) shift = 1.0d-150
+  print*, " if (xpot(dimR) > 200 ) shift_n = 1.0d-150" 
+!  if ( long > 28  ) shift = 1.0d-50 ! (Should be "shift" an input parameter in fort.8?) 
 # endif
 avpol(:)= 0.0 ! line important to probability calculus
 
@@ -162,6 +180,9 @@ avpol(:)= 0.0 ! line important to probability calculus
 ! Calculo de la densidad de probabilidad de cada configuracion
 ! Estos Do's estan bien, siempre dejar la coma a la izquierda.
 do i=1,cuantas ! i enumerate configurations (configurations ensamble)
+# ifdef fdebug_set_pore_distrib
+        print*, "set_pore_distrib L186, i, j, aR=pR(i,j), xpot(ar), pro(i): "
+#endif
     pro(i)=1.0*shift
 !      do j=1,long, 2 ! (long=28) ! Here you choose the type of the first segment
     do j=1,long ! (long=28)
@@ -175,16 +196,24 @@ do i=1,cuantas ! i enumerate configurations (configurations ensamble)
 ! monomers, A - B - A - B - etc
 !            pro(i) = pro(i) * xpot_neg(aR) * xpot_pos(bR)
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L154, i, j, aR=pR(i,j), pro(i): ", i, j, aR, pro(i)
+        print*, i, j, aR, xpot(aR), pro(i)
+!        print*, "set_pore_distrib L186, i, j, aR=pR(i,j), xpot(ar), pro(i): ", i, j, aR, xpot(aR), pro(i)
 #endif
+    if (pro(i) > infinity) then 
+     write(0,'(63a)'), "pro(i) > infinity, Try increasing the value of shift in fort.8!!" ! stderr
+        stop 1 
+    endif
     enddo
 ! q es la suma de todas las probabilidades
     q=q+pro(i)
+!    q=q+pro(i)/shift ! Divido q por shift!
     do j = 1,long
         aR = pR(i, j) 
 ! pR devuelve en que layer se encuentra el monómero j del polímero i.
-     ! OJO aca no es sigma el factor multiplicativo! elefante!
+     ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
+
        avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR) ! cilindro, ver notas
+
 ! ver eq:factorcurv in mis_apuntes.lyx
 !       bR = pR(i, j+1)
 !       avpol(aR) = avpol(aR) + pro(i)*sigma*vpol ! plano
@@ -193,8 +222,12 @@ do i=1,cuantas ! i enumerate configurations (configurations ensamble)
 !      avpoln(aR) = avpoln(aR) + pro(i)*sigma*vpol*Factorcurv(aR) 
 !      avpolp(bR) = avpolp(bR) + pro(i)*sigma*vpol*Factorcurv(bR)
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L172, aR=pR(i,j), avpol(aR): ", aR, avpol(aR)
+        print*, "s_p_d L172, aR=pR(i,j), avpol(aR): ", aR, avpol(aR)
 #endif
+    if (avpol(j) > infinity) then 
+     write(0,'(65a)'), "avpol(j) > infinity, Try increasing the value of shift in fort.8!!" ! stderr
+        stop 1 
+    endif
     end do
 enddo ! End loop over chains/configurations
 # ifdef fdebug_set_pore_distrib
@@ -202,8 +235,12 @@ enddo ! End loop over chains/configurations
 #endif
 
     call mpwrite(11,q/shift)
+    !call mpwrite(11,q)
     log_q = log(q/shift) ! Variable clave en el calculo de energias! MPLOG
-! log(q) is nepperian log of q. has 15 digits of precision.
+    !log_q = log(q) ! Variable clave en el calculo de energias! MPLOG
+!    log_q = log(q)-log(shift) ! Variable clave en el calculo de energias! MPLOG
+
+! log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
     
     do i=1,cuantas 
         pro(i) = pro(i)/q

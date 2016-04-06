@@ -31,6 +31,6 @@ module pore
     real(kind=8), dimension(:), allocatable :: fdis ! Neutral Polymer (elefante) Poco eficiente!
 # endif
     real(KIND=8), dimension(:), allocatable :: pp 
-    real(kind=8) :: fdiswall 
+    real(kind=8) :: fdiswall, shift_f=1.0
 end module pore                                                                                             
                                                                                                             

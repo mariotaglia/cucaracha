@@ -2,6 +2,7 @@ subroutine read_input
 #   include "control_run.h"
     use globales, only: cuantas, dimR, long, radio, delta, neq
     use csys
+    use pore, only: shift_f
     implicit none
     integer :: i
     character :: basura
@@ -46,7 +47,7 @@ subroutine read_input
 ! st parameter is for vdW interaction on/off ?
       read(8, *), basura
 !      read(8, *), st
-      read(8, *), cuantas, dimR, long     ! radio size
+      read(8, *), cuantas, dimR, long, shift_f  ! radio size
         radio=dimR*delta
         neq=2*dimR
 
