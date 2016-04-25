@@ -24,8 +24,8 @@ program nanochannel
     end interface
 
     integer (KIND=1) :: ier = 0 ! kinsol error flag
-    
     print*, " This is the monolayer program: "
+    print*, 'GIT version = ', _VERSION 
 
 ! *****************************************************************************
 ! Estas subrutinas deberian estar declaradas en algun lugar en un contains o un 

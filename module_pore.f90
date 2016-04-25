@@ -9,7 +9,7 @@ module pore
 ! Volume fraction
     real(KIND=8), dimension(:), allocatable :: xh          ! fraccion de volumen solvente
     real(KIND=8), dimension(:), allocatable :: avpol       ! fraccion de volumen del polimero 
-    real(kind=8), dimension(:), allocatable :: xpot        !, xpot_neg(dimR), xpot_pos(dimR)
+    real(kind=16), dimension(:), allocatable :: xpot        !, xpot_neg(dimR), xpot_pos(dimR)
     real(KIND=8), dimension(:), allocatable :: qtot        ! Carga total
     real(kind=8), dimension(:), allocatable :: psi         ! psi se define asi por la discretizacion de Poisson y las boundary conditions 
     real(KIND=8), dimension(:), allocatable :: xpos        ! pos ion

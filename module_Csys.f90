@@ -34,7 +34,7 @@ module csys
     real(kind=8), dimension(:,:), allocatable :: Xu
     real(kind=8), dimension(:,:,:), allocatable :: in1 ! guarda las configuraciones de cadena 
     real(kind=8), dimension(:), allocatable :: x1, xg1, xflag
-    real(kind=8),dimension(:), allocatable ::  pro !  list of probability 
+    real(kind=16),dimension(:), allocatable ::  pro !  list of probability 
 !    type(mp_real),dimension(:), allocatable ::  pro !  list of probability 
     integer, dimension(:,:), allocatable :: pR ! pR stores the position of the segment j from conf. i . 
 !    integer, dimension(:,:)dimension(cuantas,long)  :: pR ! pR stores the position of the segment j from conf. i . 

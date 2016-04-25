@@ -1,10 +1,11 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-numv = 1.1
+numv = 1.2
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
+
 
 #FC = mpif90 #${F90}
 FC = gfortran
@@ -19,7 +20,9 @@ FC = gfortran
 # To run
 # -fpp: Calls first to the C Preprocessor
 #FFLAGS= -cpp -O2 -fno-toplevel-reorder
-FFLAGS= -cpp -O3 -fno-toplevel-reorder
+GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
+#GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
+FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 
 SRC = module_globales.f90 \
       module_Csys.f90 \

@@ -13,8 +13,10 @@ interface
     end function factorcurv
 end interface 
 integer :: iR, aR, i,j 
-real(kind=8) :: shift, denon ! it is  multiplicative factor in pro(cuantas)
-type (mp_real) q ! este valor puede ser MUY grande
+real(kind=8) :: shift, denon, shift_avpol=1.0 ! it is  multiplicative factor in pro(cuantas)
+!type (mp_real) q ! este valor puede ser MUY grande
+real(kind=16) :: q ! este valor puede ser MUY grande
+real(kind=16) :: infinity=HUGE(q) ! este valor puede ser MUY grande
 !real(kind=8) :: aux=0.0
 
 # ifdef fdebug    
@@ -161,18 +163,19 @@ enddo
         print*, "set_pore_distrib L157: loop end"
 #endif
 
-!      q = 0.0 ! Normalization of P(alpha)
-      q = '0.0' ! Normalization of P(alpha) remember that: type (mp_real) q !!
+      q = 0.0 ! Normalization of P(alpha)
+!      q = '0.0' ! Normalization of P(alpha) remember that: type (mp_real) q !!
 # if POL == 2 /* Neutral Polymers */
   shift = 1.0 ! (Should be "shift" an input parameter in fort.8?) 
 # else
 ! *****************
 ! Para elegir el valor de shift es muy bueno tener en cuenta cual es la capa mas probable
 ! y cual es la probabilidad de esa capa. Por ejemplo, si la mas probable es la dimR entonces:
+!  if (xpot(dimR) > 200 ) shift = 1.0d-150
+!  print*, " if (xpot(dimR) > 200 ) shift = 1.0d-150" 
+
   shift = shift_f
-  if (xpot(dimR) > 200 ) shift = 1.0d-150
-  print*, " if (xpot(dimR) > 200 ) shift_n = 1.0d-150" 
-!  if ( long > 28  ) shift = 1.0d-50 ! (Should be "shift" an input parameter in fort.8?) 
+
 # endif
 avpol(:)= 0.0 ! line important to probability calculus
 
@@ -200,7 +203,7 @@ do i=1,cuantas ! i enumerate configurations (configurations ensamble)
 !        print*, "set_pore_distrib L186, i, j, aR=pR(i,j), xpot(ar), pro(i): ", i, j, aR, xpot(aR), pro(i)
 #endif
     if (pro(i) > infinity) then 
-     write(0,'(63a)'), "pro(i) > infinity, Try increasing the value of shift in fort.8!!" ! stderr
+     write(0,'(63a)'), "pro(i) > infinity, Try decreasing the value of shift in fort.8!!" ! stderr
         stop 1 
     endif
     enddo
@@ -212,7 +215,7 @@ do i=1,cuantas ! i enumerate configurations (configurations ensamble)
 ! pR devuelve en que layer se encuentra el monómero j del polímero i.
      ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
 
-       avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR) ! cilindro, ver notas
+       avpol(aR) = avpol(aR) + (pro(i)/shift_avpol)*sigma*vpol*factorcurv(aR) ! cilindro, ver notas
 
 ! ver eq:factorcurv in mis_apuntes.lyx
 !       bR = pR(i, j+1)
@@ -224,8 +227,9 @@ do i=1,cuantas ! i enumerate configurations (configurations ensamble)
 # ifdef fdebug_set_pore_distrib
         print*, "s_p_d L172, aR=pR(i,j), avpol(aR): ", aR, avpol(aR)
 #endif
-    if (avpol(j) > infinity) then 
-     write(0,'(65a)'), "avpol(j) > infinity, Try increasing the value of shift in fort.8!!" ! stderr
+    if (avpol(aR) > infinity) then 
+     write(0,'(65a)'), "avpol(j) > infinity, Try decreasing the value of shift in fort.8!!"! stderr 
+     write(0,*), "infinity = ", infinity ! stderr
         stop 1 
     endif
     end do
@@ -234,7 +238,8 @@ enddo ! End loop over chains/configurations
         print*, "set_pore_distrib L177: End Loop. "
 #endif
 
-    call mpwrite(11,q/shift)
+!    call mpwrite(11,q/shift)
+    write(11, *), q/shift
     !call mpwrite(11,q)
     log_q = log(q/shift) ! Variable clave en el calculo de energias! MPLOG
     !log_q = log(q) ! Variable clave en el calculo de energias! MPLOG
@@ -248,7 +253,7 @@ enddo ! End loop over chains/configurations
 !    print*, "pro(:): ", pro(:)
 !    call printstate("L105 set_pore_distrib")
     do iR=1, dimR            ! norma avpol
-        avpol(iR) = avpol(iR)/ q
+        avpol(iR) = avpol(iR)*shift_avpol/ q
 !        avpoln(iR) = avpoln(iR) / q
 !        avpolp(iR) = avpolp(iR) / q 
 !         avpol(iR) = avpoln(iR) + avpolp(iR)

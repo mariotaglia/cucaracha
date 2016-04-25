@@ -27,7 +27,7 @@
                       1 - PMEP
                       2 - neutral 
                */
-# define PAHCL /* To use with POL == 0 (PAH), chemical eq. between PAH and Cl
+# undef PAHCL /* To use with POL == 0 (PAH), chemical eq. between PAH and Cl
 
 /*Not implemented yet*/
 #undef geometry  /* Select geometry 0 - Flat surface? 
