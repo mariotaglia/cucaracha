@@ -38,6 +38,7 @@ Gvacio = Gvacio + xOHminbulk/vsol*movOHmin
 Gvacio = Gvacio * 1e24/Na ! Corrige unidades concentracion
 Gvacio = Gvacio * 1.0d-18/1d-6 ! Corrige unidades pasa nm2 -> m2 y micrometros -> m
 Gvacio = Gvacio / longporo * pi * radio**2 ! Corrige unidades concentracion
+# Gvacio queda expresado en siemmens
 
 do iR = 1, dimR
          Gporo = Gporo     +xpos(iR)/vsalt/vsol*movpos  *(dfloat(iR)-0.5)

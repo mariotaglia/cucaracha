@@ -27,33 +27,8 @@ subroutine calc_energy(pHbulk)
 ! ******************************************************************
     F_Mix = 0.0
     F_Mix = fmix() ! Calcula las entropías de mezcla por separado y devuelve el total
-! (cada contribucion es guardada en una variable individual)
+                   ! (cada contribucion es guardada en una variable individual)
     Free_Energy =  Free_Energy + F_Mix
-!! ! 1. Mezclas: solvente, H, OH, +ion, -ion (cambiar)
-!!     F_Mix_s = 0.0 
-!!     F_Mix_s = fmixs() ! 1. Mezcla solvente
-!!     Free_Energy = Free_Energy + F_Mix_s
-!! 
-!! ! 2. Mezcla ion positivo
-!!     F_Mix_pos = 0.0 
-!!     F_Mix_pos = fmixpos() ! 2. Mezcla ion positivo
-!!     Free_Energy = Free_Energy + F_Mix_pos
-!! 
-!! ! 3. Mezcla ion negativo
-!!     F_Mix_neg = 0.0
-!!     F_Mix_neg = fmixneg()
-!!     Free_Energy = Free_Energy + F_Mix_neg
-!! 
-!! ! 4. Mezcla protones
-!!     F_Mix_Hplus = 0.0
-!!     F_Mix_Hplus = fmixHplus()
-!!     Free_Energy = Free_Energy + F_Mix_Hplus
-!! 
-!! ! 5. Mezcla hidroxilos
-!!     F_Mix_OHmin = 0.0
-!!     F_Mix_OHmin = fmixOHmin()
-!!     Free_Energy = Free_Energy + F_Mix_OHmin
-! ******************************************************************
 
 ! ********************* POLYMER ************************************
 ! 6. Entropia interna polimero + Eq. Quimico (cambiar?)

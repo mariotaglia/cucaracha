@@ -45,6 +45,8 @@ subroutine printstate(marca)
     write(1984,*) "Case 1 -  Acerco el monomero más cercano a la pared)"
 # elif CRITERIO == 2
     write(1984,*) "Case 2 -  Acerco la coordenadas x al monomero con la coorenada x más cercana a la pared derecha del poro)"
+# elif CRITERIO == 3
+    write(1984,*) "Case 3 -  Cadenas con Centro de Masa en las distintas layers (1 grado de libertad mas para las cadenas)"!. Esta opcion se usa con CHAIN==1"
 # else
     write(1984,*) " (CRITERIO) New System in Code! Please update prinstate.f90" 
 #endif
@@ -64,6 +66,8 @@ subroutine printstate(marca)
        write(1984,'(A20,G10.5)'), "radio              :", radio
     write(1984,*), "sigma      :", sigma, "sigmaq  :", sigmaq
     write(1984,*), "eps1       :", eps1  , "longporo:", longporo
+    
+    write(1984,*), "seed       :", seed 
      
     ! This are all arrays variables:
     write(imprimo,'(A5,I4,A7)'), "(A20,",dimR+2,"G12.4)" ! imprime el formato :D
@@ -111,12 +115,16 @@ subroutine printstate(marca)
     write(1984,*), "Free_Energy2  :", Free_Energy2
     ! This are singlevalue variables    
     write(1984,*), "*** Variables escalares ***"
+    write(1984,'(A12,ES11.3E3)'), "shift_f     :", shift_f ! No olvidar que el character '.' usa un espacio de la noteacion.
     write(1984,*), "*** Eq. Quimico ***"
     write(1984,'(A10,F7.3)'), "fdiswall  :", fdiswall
     write(1984,'(A10,F7.3)'), "zwall     :", zwall ! No olvidar que el character '.' usa un espacio de la noteacion.
-    write(1984,'(3(A10,F7.3))'), "kwall    :", kwall," pKawall :", pKawall, " Kwall0  :", Kwall0
-    write(1984,'(3(A10,F7.3))'), "Ka       :", Ka," pKa     :", pKa, " Ka0     :", Ka0
-    write(1984,'(3(A10,F7.3))'), "Kb       :", Kb," pKb     :", pKb, " Kb0     :", Kb0
+    write(1984,'(3(A10,ES11.3E3))'), "kwall    :", kwall," pKawall :", pKawall, " Kwall0  :", Kwall0
+    write(1984,'(3(A10,ES11.3E3))'), "Ka       :", Ka," pKa     :", pKa, " Ka0     :", Ka0
+    write(1984,'(3(A10,ES11.3E3))'), "Kb       :", Kb," pKb     :", pKb, " Kb0     :", Kb0
+#ifdef PAHCL
+    write(1984,'(3(A10,ES11.3E3))'), "K_Cl     :", K_Cl," pK_Cl   :", pK_Cl, " K_Cl0   :", K_Cl0
+#endif 
 ! BULK
     write(1984,*), "*** BULK ***" 
     write(1984,*), "cpol      :", cpol, "xpolbulk   :", xpolbulk

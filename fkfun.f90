@@ -28,8 +28,8 @@ subroutine fkfun(x,f,ier)
         xh(iR)=x(iR) ! Solvent volume fraction
         psi(iR)=x(iR+dimR) ! Electrical potential
     enddo
-print*, " entrada set_pore_distrib xh= " , xh(:)
-print*, " entrada set_pore_distrib psi(:)= ", psi(:)
+!print*, " entrada set_pore_distrib xh= " , xh(:)
+!print*, " entrada set_pore_distrib psi(:)= ", psi(:)
 !    call printstate('fkfun 32')
 !**********************************
 ! Boundary conditions are inside the function set_pore_distrib

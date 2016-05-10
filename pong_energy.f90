@@ -1,7 +1,12 @@
 function pong_energy()
+#   include "control_run.h"
     use globales, only: delta, radio, dimR, vsalt, vsol, vpol, pi, zwall
-    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, sigmaq
-    use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot!, fdiswall
+    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, sigmaq, K_CL0
+#ifdef PAHCL
+    use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot, fdis, fdis2,avpol!, fdiswall
+#else  
+    use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot, fdis, avpol!, fdiswall
+#endif
     implicit none
 
     real(kind=8) :: pong_energy, sumpi, sumrho, sumel!, sum_disos
@@ -35,7 +40,7 @@ function pong_energy()
 ! electrostatic part free energy
         sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5)*delta/Radio 
 #if CHAIN != 0
-! Writing output in std_mupol.dat 
+! Writing output in std_mupol.dat ! Not clear that this line work! 
         write(202,*) iR, dlog(avpol(iR)/vpol)
 #endif
     enddo

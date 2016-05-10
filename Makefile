@@ -1,10 +1,15 @@
 #Unix makefile for fortran-file	
 
 # Parameters
+<<<<<<< HEAD
 numv = 1.0.3.1
+=======
+numv = 1.3
+>>>>>>> release1.1
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
+
 
 #FC = mpif90 #${F90}
 FC = gfortran
@@ -13,18 +18,20 @@ FC = gfortran
 
 # This flags are used in the compilation stage (name should be CFLAGS)
 # To debug:
-#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall  
+#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall -D_VERSION=\"$(GIT_VERSION)\" 
 ## -g produce debugging information in the operating system's native format.
 ## -pg generate extra code to write profile information suitable for the analysis program gprof
 # To run
 # -fpp: Calls first to the C Preprocessor
 #FFLAGS= -cpp -O2 -fno-toplevel-reorder
-FFLAGS= -cpp -O3 -fno-toplevel-reorder
+GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
+#GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
+FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 
 SRC = module_globales.f90 \
       module_Csys.f90 \
       module_FreeEnergy.f90 \
-      module_pore.f90 \
+      module_pore.f90 module_translators.f90\
       set_bulk_properties.f90 \
       units_adaptation.f90 monolayer.f90 \
       read_input.f90 \
@@ -37,7 +44,7 @@ SRC = module_globales.f90 \
       printstate.f90\
       check_run.f90 \
       creador.f90 pxs.f90 kai.f90 \
-      cadenas72mr.f90 rota36.f90\
+      cadenas72mr.f90 rota36.f90 \
       mrrrr.f90 rands.f90 \
       call_kinsol.f90 fkfun.f90 factorcurv.f90 \
       fkpset.f90 fkpsol.f90 \
@@ -53,7 +60,8 @@ SRC = module_globales.f90 \
       FmixHplus.f90 FmixOHmin.f90 \
       Fchem_eq.f90 \
       Fchem_eq_wall.f90 \
-      pong_energy.f90
+      pong_energy.f90 \
+      calc_adsorvedchains.f90 
 ##      F_vdW.f90\
 
 OBJS = $(SRC:.f90=.o)
@@ -140,6 +148,7 @@ $(OBJS): control_run.h
 monolayer: control_run.h Makefile control_run.h module_globales.o module_Csys.o control_run.h
 module_globales.o: module_globales.f90 control_run.h
 module_Csys.o: module_Csys.f90 control_run.h
+module_translators.o: module_translators.f90 module_Csys.o control_run.h
 fkfun.o: fkfun.f90 control_run.h
 fkpsol.o: fkpsol.f90 control_run.h
 fkpset.o: fkpset.f90 control_run.h

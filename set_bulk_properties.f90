@@ -48,5 +48,7 @@ expmupol = ( cpol*0.602*vsol/( xsolbulk**(vpol*long) ) )            ! mupol 11-6
             Ka0 = (Ka*vsol/xsolbulk)*(Na/1.0d24)
             Kb0 = (Kb*vsol/xsolbulk)*(Na/1.0d24)
          Kwall0 = (Kwall*vsol/xsolbulk)*(Na/1.0d24)
-
+#ifdef PAHCL
+          K_Cl0 = (K_Cl*vsol/xsolbulk)*(Na/1.0d24)
+#endif 
 end subroutine set_bulk_properties

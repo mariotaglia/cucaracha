@@ -24,8 +24,8 @@ program nanochannel
     end interface
 
     integer (KIND=1) :: ier = 0 ! kinsol error flag
-    
     print*, " This is the monolayer program: "
+    print*, 'GIT version = ', _VERSION 
 
 ! *****************************************************************************
 ! Estas subrutinas deberian estar declaradas en algun lugar en un contains o un 
@@ -40,7 +40,9 @@ program nanochannel
 
 ! If chain ==1 then prepare the memory and variables
 #if CHAIN !=0   
+    print*, " Entro a creador!"
     call creador ! Creating the chains
+    print*, "Salgo de creador!"
     call pxs ! Chequea que todos los segmentos esten dentro del slab.
 #ifdef  VDW
     call kai ! Calcula los parametros de L-J 
@@ -63,11 +65,11 @@ program nanochannel
     call set_bulk_properties(pHs(ipH)) 
 ! Inside nanochannel set x1
     call set_initial_guess(0) ! 0 - bulk solution as initial guess
-#ifdef fdebug
-    call printstate("fdebug Aloop L66") ! Report of State
-#endif
+    
+    call printstate("Aloop L69") ! Report of State
+    
     print*, '********************************************'
-    print*, '*** Comienza el loop principal ***'
+    write(0,'(23a)'), '*** Comienza el loop principal ***' ! stderr
 ! *****************************************************************************
 ! Principal Loop loop
 ! *****************************************************************************
@@ -76,7 +78,9 @@ program nanochannel
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
         call set_bulk_properties(pHs(ipH)) 
 !     ! Actualizo las condiciones de bulk se repite solo para ipH=1
-        call printstate("Aloop L77") ! Report of State
+#ifdef fdebug
+        call printstate("fdebug Aloop L82") ! Report of State
+#endif
 !        call set_pore_distrib !Not necesarry this function is inside fkfun
 
 ! Resolution of the equations
@@ -111,6 +115,7 @@ program nanochannel
             call save_data(ipH) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
             call calc_mean_values(pHs(ipH)) ! Rmedio
+!            call calc_adsorvedchains(pHs(ipH)) !Nro de cadenas adsorvidas en el poro
 !            call calc_pkas() 
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
             call calc_conductance(pHs(ipH))
@@ -121,4 +126,5 @@ program nanochannel
 
     call open_files(0) ! Closing all files
     call allocating(0) !DeAllocating
+    write(0,'(23a)'), '*** Fin loop principal ***' ! stderr
 end program nanochannel

@@ -15,6 +15,7 @@ subroutine open_files(m)
             open(unit=308, file='F_eq.dat')
             open(unit=319, file='F_eqwall.dat')
             open(unit=202, file='std_mupol.dat')
+            open(unit=203, file='adsorved_chains.dat')
 # ifdef VDW
             open(unit=309, file='F_vdW.dat')
 # endif
@@ -46,6 +47,7 @@ subroutine open_files(m)
         ! Energy
             close(201) 
             close(202) 
+            close(203) 
             close(301)
             close(302)
             close(303)

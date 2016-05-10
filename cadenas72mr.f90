@@ -5,17 +5,23 @@
 !
 
 subroutine cadenas72mr(chains,ncha)
-    use globales, only: lseg, long, pi
+#   include "control_run.h"
+    use globales, only: lseg, long, pi,dimR, delta!, radio
     use csys
+    use translators
     implicit none
     integer :: ncha
-    REAL(KIND=8), intent(out) :: chains(3,200,100)
+!    REAL(KIND=8), intent(out) :: chains(3,200,100)
+    REAL(KIND=8), intent(out) :: chains(3,200,130)
     
-    real*8 rn,rands,state1,dista
+    real*8 rn,rands,state1,dista!, vect
     real*8 sitheta,cotheta,siphip,cophip
     real*8 m(3,3),mm(3,3),tt(3,3),tp(3,3),tm(3,3)
     real*8 x(3),xend(3,200),xendr(3,200)
-
+# if CRITERIO == 3 
+    real*8 xendt(3,200)
+    integer jj
+# endif
     integer i,state,ii,j,ive,jve
     character*1 test
 
@@ -154,21 +160,47 @@ subroutine cadenas72mr(chains,ncha)
 
       ncha=0
       do 400 i=1,300
-
          test='S'
          call rota36(xend,xendr,long,test)
          if (test.eq.'N') goto 400
-         ncha=ncha+1
+# if CRITERIO == 3 
+!Criterio 3 Le agrega un grado de libertad a las configuraciones de polimero
+!         do 403 jj=1,3000 ! Mueve por layers al azar.
+!            test='S'
+!            call transla(jj,xendr,test)
+!            if (test.eq.'N') go to 403 ! Mueve por layers tambien al azar.
 
-         do 401 j=1,long
-            chains(1,j,ncha)=xendr(1,j) ! y
-            chains(2,j,ncha)=xendr(2,j) ! x
-            chains(3,j,ncha)=xendr(3,j) ! z
- 401     continue
+          do jj=1,dimR ! Mueve por layers
+            test='S'
+            call transla(jj,xendr, xendt,test)
+            if (test.eq.'N') cycle ! Mueve por layers
+# endif
+            ncha=ncha+1
+
+# if CRITERIO == 3 
+            do j=1,long
+               chains(1,j,ncha)=xendt(1,j) ! y
+               chains(2,j,ncha)=xendt(2,j) ! x
+               chains(3,j,ncha)=xendt(3,j) ! z
+            enddo
+         !if (ncha.eq.25) goto 402
+         if (ncha.eq.125) goto 402
+# ifdef fdebug
+         print*, " WARNING! (L180, cadenas72) Esto supone un sesgo en las configuraciones: if (ncha.eq.25) goto 402 "
+         print*, " WARNING! (L181, cadenas72) Para radios grandes hay que pensar otra cosa."
+# endif
+!403     continue
+        enddo ! 403     continue
+# else
+            do j=1,long
+               chains(1,j,ncha)=xendr(1,j) ! y
+               chains(2,j,ncha)=xendr(2,j) ! x
+               chains(3,j,ncha)=xendr(3,j) ! z
+            enddo
          if (ncha.eq.25) goto 402
-         
+# endif
  400  continue
  402  if (ncha.eq.0) goto 223
-!        call imprimir_cadenas
+
       return
 end subroutine cadenas72mr
