@@ -1,7 +1,7 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-numv = 1.2
+numv = 1.3
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
@@ -14,7 +14,7 @@ FC = gfortran
 
 # This flags are used in the compilation stage (name should be CFLAGS)
 # To debug:
-#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall  
+#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall -D_VERSION=\"$(GIT_VERSION)\" 
 ## -g produce debugging information in the operating system's native format.
 ## -pg generate extra code to write profile information suitable for the analysis program gprof
 # To run

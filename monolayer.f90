@@ -126,4 +126,5 @@ program nanochannel
 
     call open_files(0) ! Closing all files
     call allocating(0) !DeAllocating
+    write(0,'(23a)'), '*** Fin loop principal ***' ! stderr
 end program nanochannel

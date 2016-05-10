@@ -6,7 +6,7 @@
 
 subroutine cadenas72mr(chains,ncha)
 #   include "control_run.h"
-    use globales, only: lseg, long, pi,dimR, delta, radio
+    use globales, only: lseg, long, pi,dimR, delta!, radio
     use csys
     use translators
     implicit none
@@ -14,12 +14,15 @@ subroutine cadenas72mr(chains,ncha)
 !    REAL(KIND=8), intent(out) :: chains(3,200,100)
     REAL(KIND=8), intent(out) :: chains(3,200,130)
     
-    real*8 rn,rands,state1,dista, vect
+    real*8 rn,rands,state1,dista!, vect
     real*8 sitheta,cotheta,siphip,cophip
     real*8 m(3,3),mm(3,3),tt(3,3),tp(3,3),tm(3,3)
-    real*8 x(3),xend(3,200),xendr(3,200),xendt(3,200)
-
-    integer i,state,ii,j,jj,ive,jve
+    real*8 x(3),xend(3,200),xendr(3,200)
+# if CRITERIO == 3 
+    real*8 xendt(3,200)
+    integer jj
+# endif
+    integer i,state,ii,j,ive,jve
     character*1 test
 
     sitheta=sin(68.0*pi/180.0)

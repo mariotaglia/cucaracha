@@ -30,7 +30,7 @@
 # undef PAHCL /* To use with POL == 0 (PAH), chemical eq. between PAH and Cl
 
 /*Not implemented yet*/
-#undef geometry  /* Select geometry 0 - Flat surface? 
+# undef geometry  /* Select geometry 0 - Flat surface? 
 # define geometry 1 /* Select geometry 0 - Flat surface?
                                      1 - Long Cylinder (1D)
                                      2 - Square section nanochannel 
@@ -42,7 +42,7 @@
 /**** For debugging change undef by define **** */
 /* This lines prints information in standard output */
 
-# undef fdebug /*Imprime cadenas*/
+# define fdebug /*Imprime cadenas*/
 # undef fdebug_set_pore_distrib
 # undef fdebug_pxs
 

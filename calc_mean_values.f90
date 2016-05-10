@@ -63,7 +63,8 @@ if ( sumpol /= 0.0 ) then ! si sumpol es distinto de cero
 end if
 
 write(318,*) pHbulk, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
-                     sigmaq*(delta/vsol)*zwall*fdiswall, sumcharge
+                     sigmaq*(delta/vsol)*zwall*fdiswall, sumcharge, &
+                     sumpol*(delta/(vpol*vsol))/radio ! borrar esta linea, solo esta de prueba. elefante
 !    write(318,*) pHbulk, Rmedio, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
 !                                 sigmaq*(delta/vsol)*zwall*fdiswall, sumcharge
 ! NOTE: fdiswall was calculated in set_pore_distrib be carefull! ;)

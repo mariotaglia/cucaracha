@@ -120,7 +120,7 @@ subroutine rota36(xend,xendr,n_in,test)
          xendr(1, i) = xendr(1,i) -xmax + (radio-0.01)*xmax /rmax  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
          xendr(2, i) = xendr(2,i) -ymax + (radio-0.01)*ymax /rmax  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
 #   elif CRITERIO == 2 
-         xendr(1, i) = xendr(1,i) - rmax + radio - 1e-5  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
+         xendr(1, i) = xendr(1,i) - xmax + radio - 1e-5  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
          xendr(2, i) = xendr(2,i) - ymax ! lleva la cordenada y del xmax a cero, y=0 corresponde al eje que cruza al xmax
 !         xendr(1, i) = xendr(1,i) + ( sqrt( radio**2 - dist_ymin **2) - rmax - 1e-5)  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
 #   endif 
