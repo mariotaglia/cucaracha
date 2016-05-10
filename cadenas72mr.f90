@@ -6,7 +6,7 @@
 
 subroutine cadenas72mr(chains,ncha)
 #   include "control_run.h"
-    use globales, only: lseg, long, pi,dimR, delta, radio
+    use globales, only: lseg, long, pi,dimR, delta!, radio
     use csys
     use translators
     implicit none
@@ -14,12 +14,15 @@ subroutine cadenas72mr(chains,ncha)
 !    REAL(KIND=8), intent(out) :: chains(3,200,100)
     REAL(KIND=8), intent(out) :: chains(3,200,130)
     
-    real*8 rn,rands,state1,dista, vect
+    real*8 rn,rands,state1,dista!, vect
     real*8 sitheta,cotheta,siphip,cophip
     real*8 m(3,3),mm(3,3),tt(3,3),tp(3,3),tm(3,3)
-    real*8 x(3),xend(3,200),xendr(3,200),xendt(3,200)
-
-    integer i,state,ii,j,jj,ive,jve
+    real*8 x(3),xend(3,200),xendr(3,200)
+# if CRITERIO == 3 
+    real*8 xendt(3,200)
+    integer jj
+# endif
+    integer i,state,ii,j,ive,jve
     character*1 test
 
     sitheta=sin(68.0*pi/180.0)
@@ -174,12 +177,12 @@ subroutine cadenas72mr(chains,ncha)
 # endif
             ncha=ncha+1
 
+# if CRITERIO == 3 
             do j=1,long
                chains(1,j,ncha)=xendt(1,j) ! y
                chains(2,j,ncha)=xendt(2,j) ! x
                chains(3,j,ncha)=xendt(3,j) ! z
             enddo
-# if CRITERIO == 3 
          !if (ncha.eq.25) goto 402
          if (ncha.eq.125) goto 402
 # ifdef fdebug
@@ -189,6 +192,11 @@ subroutine cadenas72mr(chains,ncha)
 !403     continue
         enddo ! 403     continue
 # else
+            do j=1,long
+               chains(1,j,ncha)=xendr(1,j) ! y
+               chains(2,j,ncha)=xendr(2,j) ! x
+               chains(3,j,ncha)=xendr(3,j) ! z
+            enddo
          if (ncha.eq.25) goto 402
 # endif
  400  continue

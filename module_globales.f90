@@ -8,7 +8,7 @@ module globales
     real(KIND=8), parameter :: &
         Na=6.02d23, & ! Avogadro Number
         pi=3.14159265359, &
-!        infinity = HUGE(dbl_prec_var), & ! computer infinity
+!        infinity = HUGE(Na), & ! computer infinity
 ! Charges        
         zpos=1.0, zH=1.0, zpos2=3.0, &
         zneg=-1.0, zOH=-1.0, &

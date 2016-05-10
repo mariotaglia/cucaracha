@@ -24,8 +24,8 @@ program nanochannel
     end interface
 
     integer (KIND=1) :: ier = 0 ! kinsol error flag
-    
     print*, " This is the monolayer program: "
+    print*, 'GIT version = ', _VERSION 
 
 ! *****************************************************************************
 ! Estas subrutinas deberian estar declaradas en algun lugar en un contains o un 
@@ -37,7 +37,7 @@ program nanochannel
     call units_adaptation ! units and variables adaptation
 
     call allocating(1) ! Allocating memory
-    call printstate("Aloop L40") ! Report of State
+
 ! If chain ==1 then prepare the memory and variables
 #if CHAIN !=0   
     print*, " Entro a creador!"
@@ -115,7 +115,7 @@ program nanochannel
             call save_data(ipH) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
             call calc_mean_values(pHs(ipH)) ! Rmedio
-            call calc_adsorvedchains(pHs(ipH)) !Nro de cadenas adsorvidas en el poro
+!            call calc_adsorvedchains(pHs(ipH)) !Nro de cadenas adsorvidas en el poro
 !            call calc_pkas() 
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
             call calc_conductance(pHs(ipH))
@@ -126,4 +126,5 @@ program nanochannel
 
     call open_files(0) ! Closing all files
     call allocating(0) !DeAllocating
+    write(0,'(23a)'), '*** Fin loop principal ***' ! stderr
 end program nanochannel

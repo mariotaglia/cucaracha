@@ -1,10 +1,14 @@
 function fchem_eq()
 #   include "control_run.h"
     use globales, only: dimR, delta, vpol, vsol, radio
-    use csys, only: expmuHplus, expmuOHmin, Ka0, Kb0
+    use csys, only: expmuHplus, expmuOHmin, expmuneg, K_Cl0,Ka0, Kb0
 !    use FreeEnergy, only: checknumber
 # if POL == 0 /* PAH */
+#ifdef PAHCL
+    use pore, only: avpol, fdis , fdis2
+#else
     use pore, only: avpol, fdis !, fdis2
+#endif
 # elif POL == 2 /* Neutral Polymer */
     use pore, only: avpol, fdis !, fdis2
 # elif POL == 1 /* PMEP */
@@ -21,7 +25,18 @@ function fchem_eq()
     fchem_eq = 0.0
     
     do i = 1, dimR
-# if POL == 0  
+# if POL == 0 /* PAH */
+#ifdef PAHCL
+! Nueva expresion para el equilibrio quimico PAH + CL
+      fchem_eq = fchem_eq + ( fdis(i) *dlog( fdis(i) ) &
+                          +   fdis2(i) *dlog( fdis2(i)*Ka0  ) &
+                          + (1-fdis(i)-fdis2(i))*dlog( (1-fdis(i)-fdis2(i) )*K_Cl0 ) )&
+                          *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio
+      fchem_eq = fchem_eq + fdis(i)*dlog(expmuneg) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio ! ojo! 
+      fchem_eq = fchem_eq + fdis2(i)*(dlog(expmuneg)-dlog(expmuOHmin)) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio ! 
+!! Mantiene la coherencia, expmuneg cambia con el pH! por lo tanto es una constante valiosa.
+      fchem_eq = fchem_eq - dlog(expmuneg) *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio !!
+#else
 ! Nueva expresion para el equilibrio quimico
       fchem_eq = fchem_eq + ( fdis(i) *dlog( fdis(i)/Ka0 ) &
                           + (1-fdis(i))*dlog( (1-fdis(i)) ) )  *(avpol(i)/(vpol*vsol)) *delta*(dfloat(i)-0.5)*delta/Radio
@@ -32,6 +47,8 @@ function fchem_eq()
 !                   
 !      fchem_eq = fchem_eq + (1.0-fdis(i))*dlog(Ka0)            *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
 !      fchem_eq = fchem_eq + (1.0-fdis(i))*(-dlog(expmuOHmin)) *avpol(i)/vpol *(dfloat(i)-0.5)*delta/Radio
+#endif
+
 # elif POL == 1
 ! Here PMEP - TO CHECK!
       fchem_eq = fchem_eq + ( fdis(i)*dlog(fdis(i)/Ka0) &

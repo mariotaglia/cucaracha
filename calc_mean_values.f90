@@ -32,6 +32,9 @@ do iR = 1, dimR
 
 ! suma de frdis*avpoln*r (falta constante)
 !    fmedio = fmedio + fdis(iR)*avpoln(iR)*(dfloat(iR)-0.5) 
+#ifdef PAHCL
+    fmedio2 = fmedio2 + fdis2(iR)*avpol(iR)*(dfloat(iR)-0.5) 
+#endif
 # if POL == 0 || POL == 2/* PAH */
     sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpol(iR)/(vpol*vsol))*zpos *(fdis(iR))
 # elif POL == 1 /* PMEP */
@@ -54,19 +57,25 @@ if ( sumpol /= 0.0 ) then ! si sumpol es distinto de cero
       Rmedio = Rmedio/sumpol
 ! carga polimerica total por unidad de superficie 
    sumcharge = (delta/radio)*sumcharge 
-# if POL == 1
+# if POL == 1 || POL == 0
      fmedio2 = fmedio2/sumpol    ! fraccion desprotonada media por monomero
 # endif
 end if
 
 write(318,*) pHbulk, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
-                     sigmaq*(delta/vsol)*zwall*fdiswall, sumcharge
+                     sigmaq*(delta/vsol)*zwall*fdiswall, sumcharge, &
+                     sumpol*(delta/(vpol*vsol))/radio ! borrar esta linea, solo esta de prueba. elefante
 !    write(318,*) pHbulk, Rmedio, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
 !                                 sigmaq*(delta/vsol)*zwall*fdiswall, sumcharge
 ! NOTE: fdiswall was calculated in set_pore_distrib be carefull! ;)
 #   if POL == 0 /* PAH */
+#ifdef PAHCL
+! writing fmedio.dat:
+    write(313,*) pHbulk, fmedio, fmedio2, fdiswall !, fmedio2, fdiswall
+#else
 ! writing fmedio.dat:
     write(313,*) pHbulk, fmedio, fdiswall !, fmedio2, fdiswall
+#endif
 #   elif POL == 1 /* PMEP */
 ! writing fmedio.dat:
     write(313,*) pHbulk, fmedio, fmedio2, fdiswall

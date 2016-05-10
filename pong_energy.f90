@@ -1,7 +1,12 @@
 function pong_energy()
+#   include "control_run.h"
     use globales, only: delta, radio, dimR, vsalt, vsol, vpol, pi, zwall
-    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, sigmaq
-    use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot!, fdiswall
+    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, sigmaq, K_CL0
+#ifdef PAHCL
+    use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot, fdis, fdis2,avpol!, fdiswall
+#else  
+    use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot, fdis, avpol!, fdiswall
+#endif
     implicit none
 
     real(kind=8) :: pong_energy, sumpi, sumrho, sumel!, sum_disos

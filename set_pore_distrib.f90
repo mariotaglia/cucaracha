@@ -13,12 +13,16 @@ interface
     end function factorcurv
 end interface 
 integer :: iR, aR, i,j 
-real(kind=8) :: shift, denon ! it is  multiplicative factor in pro(cuantas)
-type (mp_real) q ! este valor puede ser MUY grande
-!real(kind=8) :: aux=0.0
+real(kind=8) :: temp2, denon  ! it is  multiplicative factor in pro(cuantas)
+!type (mp_real) q ! este valor puede ser MUY grande
+real(kind=16) :: q, shift ! este valor puede ser MUY grande
+real(kind=16) :: infinity ! este valor puede ser MUY grande
+real(kind=8) :: fdisbulk!,aux=0.0
+!integer, dimension(dimR,nmon) :: n_exp 
 
+infinity=HUGE(q)
 # ifdef fdebug    
-    call printstate("set_pore_distrib L19")
+    call printstate("set_pore_distrib L21")
 # endif
 !**************************************************************
 ! Volume fractions and degrees of dissociations: fdis
@@ -48,8 +52,18 @@ do iR=1,dimR
  !fdis(iR) = 1.0 / (1.0 + expmuOHmin*dexp(psi(iR)*zpol)/Ka0 ) ! FACUNDO funciona(!)
  !fdis(iR) = Ka0 / (expmuOHmin*dexp( psi(iR)*zpos) + Ka0 ) ! using fdiswall symmetry 
 
+# ifdef PAHCL
+     denon = (xneg(iR)/( (xh(iR)**vsalt)*vsalt) *Ka0 + xOHmin(iR)/xh(iR) *K_Cl0) &
+!     denon = expmuneg*dexp(psi(iR)) *Ka0 + expmuOHmin* dexp(psi(iR) *K_Cl0) &
+             + Ka0*K_Cl0 ! Kb0 = Ka20 for dobule protonation
+    fdis(iR) = Ka0*K_Cl0 / denon ! Kb0 = Ka20 for dobule protonation
+    fdis2(iR) = (xOHmin(iR)/xh(iR))*K_Cl0 / denon 
+!    fdis2(iR) = expmuOHmin*dexp(psi(iR))*K_Cl0 / denon 
+    
+# else 
 fdis(iR) = Ka0 / ( xOHmin(iR)/xh(iR)  + Ka0   ) ! using fdiswall symmetry 
-
+fdisbulk = Ka0 / (( xOHminbulk/xsolbulk)  + Ka0   ) ! using fdiswall symmetry 
+#endif 
 ! fdis(iR) = 1.0 / (1.0 + xOHmin(iR)/(xh(iR)*Ka0) ) ! MARIO EXPRESSION ! Funciona 
 ! fdis(iR) = 0.9
 ! fdis(iR) = 1.0d0/(1.0d0 + (Ka0*dexp(psi(iR)*zpos)/expmuHplus))! from the theory
@@ -72,6 +86,9 @@ fdis(iR) = Ka0 / ( xOHmin(iR)/xh(iR)  + Ka0   ) ! using fdiswall symmetry
     fdis(iR) = 0.0 ! Neutral polymer
 #   endif /* POL */
 # endif /* CHAIN */
+# ifdef fdebug    
+    print*, "Adentro del loop para calcular fdis, xneg, xpos, xh, etc. iR=", iR
+# endif
 end do
 !**************************************************************
 ! Dissociation in the inner wall of the pore 
@@ -83,9 +100,14 @@ end do
 # elif fsigmaq == 0 /* No hay regulacion en la pared */
     fdiswall = 1.0  
 # endif
+# ifdef fdebug_set_pore_distrib
 !**************************************************************
+print*, "**************************************************************"
+print*, "Ya se calcularon las constantes de disociacion de la pared, y las distribuciones dentro del poro."
+print*, "set_pore_distrib L99 fdiswall, fdis(iR), xh(iR): ", fdiswall, fdis(:), xh(:)
+!**************************************************************
+#endif
 
-!**************************************************************
 ! Boundary Conditions: Electrical Potential
 !! Estas ecuaciones son suplementarias a la eq. de Poisson discretizada
 !   *   The derivate at r=0 should be zero. 
@@ -103,21 +125,31 @@ end do
 
 # if CHAIN != 0
 !!!!!! AQUI FALTA ACTUALIZAR xH! debe tomar el valor de  x1
+# ifdef fdebug_set_pore_distrib
+print*, "spd L127 L149 iR, xpot(iR), fdis(iR), xh(iR): "
+#endif
 do iR = 1, dimR
 ! (xh(iR)**vpol): viene de reemplazar la presion osmotica por 
 !                 la expresion para el solvent
 #   if POL == 0 /* PAH */
-    ! Para polimero con regulacion de carga (cargado positivamente) elefante mayor
-    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))
+#ifdef PAHCL
+    ! Para polimero con regulacion de carga (cargado positivamente) 
+    xpot(iR) = (xh(iR)**vpol)*expmuneg / ( K_Cl0*(1-fdis(iR)-fdis2(iR)) )
+!    xpot(iR) = (xh(iR)**vpol) !/ (1-fdis(iR))
+#else
+    ! Para polimero con regulacion de carga (cargado positivamente) 
+    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk)
     !xpot(iR) = (xh(iR)**vpol)*exp(-psi(iR)*zpol) /(1-fdis(iR)-fdis2(iR) )
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
+#endif
 #   elif POL == 1 /* PMEP */
     xpot(iR) = (xh(iR)**vpol)/(1.0-fdis(iR)-fdis2(iR) ) 
 #   elif POL == 2 /* Neutral Polymer */
     xpot(iR) = (xh(iR)**vpol) ! Polimero neutro ! For Neutral Polymers OK!
 #   endif /* PAH || PMEP */
 # ifdef fdebug_set_pore_distrib
-print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
+print*, "spd L149", iR, xpot(iR), fdis(iR), xh(iR)
+!print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
 #endif
 # ifdef VDW
 !**************************************************************
@@ -131,45 +163,67 @@ print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), 
 #endif /* VDW */
 enddo
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L133: loop end"
+        print*, "spd L157: loop end"
 #endif
 
-!      q = 0.0 ! Normalization of P(alpha)
-      q = '0.0' ! Normalization of P(alpha) remember that: type (mp_real) q !!
+      q = 0.0 ! Normalization of P(alpha)
+!      q = '0.0' ! Normalization of P(alpha) remember that: type (mp_real) q !!
 # if POL == 2 /* Neutral Polymers */
   shift = 1.0 ! (Should be "shift" an input parameter in fort.8?) 
 # else
-  shift = 1.0d-50 ! (Should be "shift" an input parameter in fort.8?) 
+! *****************
+! Para elegir el valor de shift es muy bueno tener en cuenta cual es la capa mas probable
+! y cual es la probabilidad de esa capa. Por ejemplo, si la mas probable es la dimR entonces:
+!  if (xpot(dimR) > 200 ) shift = 1.0d-150
+!  print*, " if (xpot(dimR) > 200 ) shift = 1.0d-150" 
+
+  !shift = shift_f
+    shift = (1-fdisbulk)**long
 # endif
+
 avpol(:)= 0.0 ! line important to probability calculus
 
 !**************************************************************
 ! Calculo de la densidad de probabilidad de cada configuracion
 ! Estos Do's estan bien, siempre dejar la coma a la izquierda.
 do i=1,cuantas ! i enumerate configurations (configurations ensamble)
-    pro(i)=1.0*shift
+# ifdef fdebug_set_pore_distrib
+        print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
+#endif
+    pro(i)=1.0!*shift
 !      do j=1,long, 2 ! (long=28) ! Here you choose the type of the first segment
     do j=1,long ! (long=28)
-        aR = pR(i, j) 
+        aR = pR(i, j)
+!        n_exp(i,aR) = n_exp(i,aR) + 1
 !            pR()'s output is the layer where is the segment j of configuration i.
 !            bR = pR(i, j+1)   
 ! The configuration's probability is the product of layer's probability
 ! many times as particles in that layer.
+
             pro(i) = pro(i) * xpot(aR)
+
 ! ATENTTION: Now you insert structural detail about alternating type of 
 ! monomers, A - B - A - B - etc
 !            pro(i) = pro(i) * xpot_neg(aR) * xpot_pos(bR)
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L154, i, j, aR=pR(i,j), pro(i): ", i, j, aR, pro(i)
+        print*, "spd L206", i, j, aR, xpot(aR), pro(i)
+!        print*, "spd L206, i, j, aR=pR(i,j), xpot(ar), pro(i): ", i, j, aR, xpot(aR), pro(i)
 #endif
+    if (pro(i) > infinity) then 
+     write(0,'(63a)'), "pro(i) > infinity, Try decreasing the value of shift in fort.8!!" ! stderr
+        stop 1 
+    endif
     enddo
 ! q es la suma de todas las probabilidades
     q=q+pro(i)
+!    q=q+pro(i)/shift ! Divido q por shift!
     do j = 1,long
         aR = pR(i, j) 
 ! pR devuelve en que layer se encuentra el monómero j del polímero i.
-     ! OJO aca no es sigma el factor multiplicativo! elefante!
+     ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
+
        avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR) ! cilindro, ver notas
+
 ! ver eq:factorcurv in mis_apuntes.lyx
 !       bR = pR(i, j+1)
 !       avpol(aR) = avpol(aR) + pro(i)*sigma*vpol ! plano
@@ -178,18 +232,29 @@ do i=1,cuantas ! i enumerate configurations (configurations ensamble)
 !      avpoln(aR) = avpoln(aR) + pro(i)*sigma*vpol*Factorcurv(aR) 
 !      avpolp(bR) = avpolp(bR) + pro(i)*sigma*vpol*Factorcurv(bR)
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L172, aR=pR(i,j), avpol(aR): ", aR, avpol(aR)
+!cucaracha        print*, "spd L172, aR=pR(i,j), avpol(aR): ", aR, avpol(aR)
 #endif
+    if (avpol(aR) > infinity) then 
+     write(0,'(65a)'), "avpol(j) > infinity, Try decreasing the value of shift in fort.8!!"! stderr 
+     write(0,*), "infinity = ", infinity ! stderr
+        stop 1 
+    endif
     end do
 enddo ! End loop over chains/configurations
 # ifdef fdebug_set_pore_distrib
-        print*, "set_pore_distrib L177: End Loop"
+        print*, "spd L177: End Loop over configurations"
 #endif
 
-    call mpwrite(11,q/shift)
+!    call mpwrite(11,q/shift)
+    write(11, *), q/shift
+    !call mpwrite(11,q)
     log_q = log(q/shift) ! Variable clave en el calculo de energias! MPLOG
-! log(q) is nepperian log of q. has 15 digits of precision.
+    !log_q = log(q) ! Variable clave en el calculo de energias! MPLOG
+!    log_q = log(q)-log(shift) ! Variable clave en el calculo de energias! MPLOG
+
+! log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
     
+!    shift = q/shift ! la idea es hacerlo adaptativo cucaracha
     do i=1,cuantas 
         pro(i) = pro(i)/q
     enddo
@@ -202,10 +267,11 @@ enddo ! End loop over chains/configurations
 !         avpol(iR) = avpoln(iR) + avpolp(iR)
     enddo
 ! Chequeo avpol
-!!    do iR=1,dimR
-!!        temp2= temp2+avpol(iR)
-!!    enddo
-!!    print*, "suma avpol", sigma, temp2
+!     temp2=0.0
+!     do iR=1,dimR
+!         temp2= temp2+avpol(iR)*(dfloat(iR) - 0.5d0)*(delta/float(dimR))/(vpol*vsol)
+!     enddo
+!     print*, "suma avpol", sigma, temp2
 
 ! Chequeo q
 !    call checknum(q,'q en set_pore_distrib')

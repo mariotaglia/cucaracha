@@ -6,12 +6,14 @@ subroutine set_initial_guess(m)
     implicit none
     integer, intent(in) :: m
     integer :: i
+    real(kind=8) :: c
 
+    c=1.0
 select case (m)
     case ( 0 )  ! Bulk solution
-         xh(:dimR) = xsolbulk
+         xh(:dimR) = xsolbulk*c
 !        xg1(:dimR) = xsolbulk
-         x1(:dimR) = xsolbulk
+         x1(:dimR) = xsolbulk*c
 ! Psi Initial values
 !          xg1(dimR+1:) = 0.0d0
 !         psi(0:dimR+1) = 0.0d0 ! No hacen falta los exremos

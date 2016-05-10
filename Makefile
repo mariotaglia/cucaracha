@@ -1,10 +1,11 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-numv = 1.1
+numv = 1.3
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
+
 
 #FC = mpif90 #${F90}
 FC = gfortran
@@ -13,13 +14,15 @@ FC = gfortran
 
 # This flags are used in the compilation stage (name should be CFLAGS)
 # To debug:
-#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall  
+#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall -D_VERSION=\"$(GIT_VERSION)\" 
 ## -g produce debugging information in the operating system's native format.
 ## -pg generate extra code to write profile information suitable for the analysis program gprof
 # To run
 # -fpp: Calls first to the C Preprocessor
 #FFLAGS= -cpp -O2 -fno-toplevel-reorder
-FFLAGS= -cpp -O3 -fno-toplevel-reorder
+GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
+#GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
+FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 
 SRC = module_globales.f90 \
       module_Csys.f90 \
@@ -45,7 +48,6 @@ SRC = module_globales.f90 \
       set_initial_guess.f90 \
       set_pore_distrib.f90 \
       calc_conductance.f90 \
-      calc_adsorvedchains.f90 \
       calc_mean_values.f90 \
       calc_energy.f90 \
       Fmix.f90 Fmixs.f90 Fconf.f90 \
@@ -54,7 +56,8 @@ SRC = module_globales.f90 \
       FmixHplus.f90 FmixOHmin.f90 \
       Fchem_eq.f90 \
       Fchem_eq_wall.f90 \
-      pong_energy.f90
+      pong_energy.f90 \
+      calc_adsorvedchains.f90 
 ##      F_vdW.f90\
 
 OBJS = $(SRC:.f90=.o)
