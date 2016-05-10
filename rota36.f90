@@ -37,8 +37,7 @@ subroutine rota36(xend,xendr,n_in,test)
       sga=sin(gama)
       
 ! Preparo los valores iniciales para buscar el maximo
-      !dist_ymin=xend(1,2)*(cbe*cal*sga+sal*cga)+ xend(2,2)*(cbe*cal*cga-sal*sga)-xend(3,2)*sbe*cal
-      dist_ymin=xend(1,1)*(cbe*cal*sga+sal*cga)+ xend(2,1)*(cbe*cal*cga-sal*sga)-xend(3,1)*sbe*cal
+      dist_ymin=xend(1,2)*(cbe*cal*sga+sal*cga)+ xend(2,2)*(cbe*cal*cga-sal*sga)-xend(3,2)*sbe*cal
 # if CRITERIO ==1
       rmax=0.0
       xmax=0.0
