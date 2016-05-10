@@ -45,13 +45,6 @@ subroutine rota36(xend,xendr,n_in,test)
       ymax=0.0
       int_ymin = 1
 # elif CRITERIO ==2 
-<<<<<<< HEAD
-      !rmax = xend(1,1)
-      rmax=xend(1,1)*(-cbe*sal*sga+cal*cga) -xend(2,1)*(cbe*sal*cga+cal*sga) +xend(3,1)*sbe*sal
-#endif
-      !int_ymin = 2
-      int_ymin = 1
-=======
       xmax = 0.0 !xend(1,1)
       int_ymin = 1
 # elif CRITERIO ==3
@@ -60,7 +53,6 @@ subroutine rota36(xend,xendr,n_in,test)
          yc=0.0
          zc=0.0
 #endif
->>>>>>> release1.1
 
 !      dist_ymin = 0.0 ! seguro existe al menos 1 segmento con y_segmento menor que este valor
       do 1 i=1,n_in
