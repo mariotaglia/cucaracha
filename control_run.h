@@ -42,7 +42,7 @@
 /**** For debugging change undef by define **** */
 /* This lines prints information in standard output */
 
-# define fdebug /*Imprime cadenas*/
+# undef fdebug /*Imprime cadenas*/
 # undef fdebug_set_pore_distrib
 # undef fdebug_pxs
 

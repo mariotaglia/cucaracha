@@ -126,7 +126,7 @@ print*, "set_pore_distrib L99 fdiswall, fdis(iR), xh(iR): ", fdiswall, fdis(:), 
 # if CHAIN != 0
 !!!!!! AQUI FALTA ACTUALIZAR xH! debe tomar el valor de  x1
 # ifdef fdebug_set_pore_distrib
-print*, "spd L127 L149 iR, xpot(iR), fdis(iR), xh(iR): "
+print*, "spd L127 L149 iR, fdisbulk, xpot(iR), fdis(iR), xh(iR): "
 #endif
 do iR = 1, dimR
 ! (xh(iR)**vpol): viene de reemplazar la presion osmotica por 
@@ -148,7 +148,7 @@ do iR = 1, dimR
     xpot(iR) = (xh(iR)**vpol) ! Polimero neutro ! For Neutral Polymers OK!
 #   endif /* PAH || PMEP */
 # ifdef fdebug_set_pore_distrib
-print*, "spd L149", iR, xpot(iR), fdis(iR), xh(iR)
+print*, "spd L149", iR, fdisbulk, xpot(iR), fdis(iR), xh(iR)
 !print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
 #endif
 # ifdef VDW
@@ -211,7 +211,7 @@ do i=1,cuantas ! i enumerate configurations (configurations ensamble)
 #endif
     if (pro(i) > infinity) then 
      write(0,'(63a)'), "pro(i) > infinity, Try decreasing the value of shift in fort.8!!" ! stderr
-        stop 1 
+        stop 2 
     endif
     enddo
 ! q es la suma de todas las probabilidades
@@ -246,9 +246,11 @@ enddo ! End loop over chains/configurations
 #endif
 
 !    call mpwrite(11,q/shift)
-    write(11, *), q/shift
+    !write(11, *), q/shift
+    log_q = log(q)-long*log((1-fdisbulk)) ! por que shift es muy chico (eventualmente cero) 
+    write(11, *), log_q
     !call mpwrite(11,q)
-    log_q = log(q/shift) ! Variable clave en el calculo de energias! MPLOG
+    !log_q = log(q/shift) ! Variable clave en el calculo de energias! MPLOG
     !log_q = log(q) ! Variable clave en el calculo de energias! MPLOG
 !    log_q = log(q)-log(shift) ! Variable clave en el calculo de energias! MPLOG
 
