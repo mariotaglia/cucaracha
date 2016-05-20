@@ -46,7 +46,7 @@ subroutine rota36(xend,xendr,n_in,test)
 # elif CRITERIO ==2 
       xmax = 0.0 !xend(1,1)
       int_ymin = 1
-# elif CRITERIO ==3
+# elif CRITERIO == 3 || CRITERIO == 4
 ! Calc Center of Mass
          xc=0.0
          yc=0.0
@@ -79,6 +79,8 @@ subroutine rota36(xend,xendr,n_in,test)
 !              dist_ymin = xendr(2,i) 
          endif
 #elif CRITERIO == 2
+! Acerco el monomero con la coordenada xmax 
+! a la pared derecha del poro. El y se deja en y=0. ( todas las conf. superpuestas)
         rmaxaux = xendr(1,i) ! Maxima coordenada X
 !        rmaxaux = sqrt( xendr(1,i)**2 + xendr(2,i)**2 ) 
         if ( rmaxaux > xmax ) then 
@@ -86,7 +88,9 @@ subroutine rota36(xend,xendr,n_in,test)
             int_ymin = i   
             ymax = xendr(2,i) ! Coordenada Y correspondiente a la maxima coordenada X 
          endif
-# elif CRITERIO == 3
+# elif CRITERIO == 3 || CRITERIO == 4
+! CRITERIO 3 Rotacion y traslacion del centro de masa
+! CRITERIO 4 Solo rotacion con el centro de masa en el centro del poro
 ! Calc Center of Mass
          xc=xc+xend(1,i)
          yc=yc+xend(2,i)
@@ -94,7 +98,7 @@ subroutine rota36(xend,xendr,n_in,test)
 # endif
  1    continue
 
-# if CRITERIO == 3
+# if CRITERIO == 3 || CRITERIO == 4
 ! Pone el centro de masa en la posicion (0,0,0) de forma que
 ! la rutina rota36, solo hace una rotación (sin la traslación respecto del origen)
 ! Calc Center of Mass
@@ -132,10 +136,10 @@ subroutine rota36(xend,xendr,n_in,test)
 # endif /*Here I choose the system*/
 
          vect = (xendr(1, i))**2 + (xendr(2, i))**2 ! distancia desde el centro al segmento ^ 2
-          
          !if ( (abs(dist_ymin) .gt. radio) .or. (vect.gt.radio**2) ) test='N'  ! hay un segmento fuera del poro
 !         if ( (vect.ge.radio**2) ) test='N'  ! hay un segmento fuera del poro
          if ( (sqrt(vect) > radio) ) test='N'  ! hay un segmento fuera del poro
+
 # ifdef fdebug_rota36
   print*,"rota36, i, (r^2 -vect), test: ", i, (radio**2 - vect), radio**2 - ( xendr(1,int_ymin)**2 + xendr(2,int_ymin)**2), test 
 # endif

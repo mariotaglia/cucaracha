@@ -14,12 +14,12 @@ FC = gfortran
 
 # This flags are used in the compilation stage (name should be CFLAGS)
 # To debug:
-#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall -D_VERSION=\"$(GIT_VERSION)\" 
+FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall -D_VERSION=\"$(GIT_VERSION)\" 
 ## -g produce debugging information in the operating system's native format.
 ## -pg generate extra code to write profile information suitable for the analysis program gprof
 # To run
 # -fpp: Calls first to the C Preprocessor
-#FFLAGS= -cpp -O2 -fno-toplevel-reorder
+#FFLAGS= -cpp -O2 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
 #GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
 FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"

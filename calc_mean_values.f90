@@ -56,7 +56,7 @@ if ( sumpol /= 0.0 ) then ! si sumpol es distinto de cero
       fmedio = fmedio/sumpol    ! fraccion desprotonada media por monomero
       Rmedio = Rmedio/sumpol
 ! carga polimerica total por unidad de superficie 
-   sumcharge = (delta/radio)*sumcharge 
+   sumcharge = (delta*delta/radio)*sumcharge 
 # if POL == 1 || POL == 0
      fmedio2 = fmedio2/sumpol    ! fraccion desprotonada media por monomero
 # endif
