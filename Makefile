@@ -14,7 +14,8 @@ FC = gfortran
 
 # This flags are used in the compilation stage (name should be CFLAGS)
 # To debug:
-FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall -D_VERSION=\"$(GIT_VERSION)\" 
+#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -fchekbounds -Wall -D_VERSION=\"$(GIT_VERSION)\" 
+FFLAGS= -cpp -g -p -fbacktrace  -fbounds-check -Wall -D_VERSION=\"$(GIT_VERSION)\" 
 ## -g produce debugging information in the operating system's native format.
 ## -pg generate extra code to write profile information suitable for the analysis program gprof
 # To run

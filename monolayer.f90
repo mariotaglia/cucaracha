@@ -40,7 +40,7 @@ program nanochannel
 
 ! If chain ==1 then prepare the memory and variables
 #if CHAIN !=0   
-    print*, " Entro a creador!"
+    print*, "Entro a creador!"
     call creador ! Creating the chains
     print*, "Salgo de creador!"
     call pxs ! Chequea que todos los segmentos esten dentro del slab.

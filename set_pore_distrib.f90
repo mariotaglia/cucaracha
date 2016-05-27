@@ -186,11 +186,7 @@ avpol(:)= 0.0 ! line important to probability calculus
 !**************************************************************
 ! Calculo de la densidad de probabilidad de cada configuracion
 ! Estos Do's estan bien, siempre dejar la coma a la izquierda.
-# ifdef BMu_const
-do i=1,new_cuantas ! i enumerate configurations (configurations ensamble)
-# else
-do i=1,cuantas ! i enumerate configurations (configurations ensamble)
-# endif
+do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 # ifdef fdebug_set_pore_distrib
         print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
 #endif
@@ -259,11 +255,7 @@ enddo ! End loop over chains/configurations
 ! log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
     
 !    shift = q/shift ! la idea es hacerlo adaptativo cucaracha
-# ifdef BMu_const
-    do i=1,new_cuantas 
-# else
-    do i=1,cuantas 
-# endif
+    do i=1,chaintot 
         pro(i) = pro(i)/q
     enddo
 !    print*, "pro(:): ", pro(:)

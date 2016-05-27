@@ -62,7 +62,7 @@ subroutine printstate(marca)
     write(1984,imprimo), ps_i, " Estado del programa en: ", marca  
     write(1984,'(A10,I3.3, F7.2, A10, F7.2)'), "ipH, pH : ", ipH, pHs(ipH), " pOHbulk :", pOHbulk
 
-    write(1984,'(A20,I4,I4,I7)'), "long, dimR, cuantas:", long, dimR, cuantas ! numero de layers del radio del poro  (tiene que ser par?)
+    write(1984,'(A29,I4,I4,I7,A2,I7)'), "long, dimR, chaintot/cuantas:", long, dimR, chaintot," /", cuantas ! numero de layers del radio del poro  (tiene que ser par?)
        write(1984,'(A20,G10.5)'), "radio              :", radio
     write(1984,*), "sigma      :", sigma, "sigmaq  :", sigmaq
     write(1984,*), "eps1       :", eps1  , "longporo:", longporo

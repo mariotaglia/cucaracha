@@ -11,21 +11,20 @@ subroutine pxs
     REAL(KIND=8) :: vect
     INTEGER :: i,j
 #ifdef fdebug_pxs
-    print* , "long, cuantas, new_cuantas: ", long, cuantas, new_cuantas
+    print* , "long, cuantas, chaintot: ", long, cuantas, chaintot
 #endif
-    new_cuantas=0
+    chaintot=0
     do i=1,cuantas
-# ifdef BMu_const
-        new_cuantas=new_cuantas+1
-# endif
+        chaintot =chaintot+1
         do j=1,long ! 1 = y, 2 = x, 3 = z... z no se usa...)
             vect = sqrt((in1(i,j,1))**2 + in1(i,j,2)**2) ! distancia del centro al segmento
 # ifdef BMu_const
-            if(pR(i, j).gt.dimR) then
-                new_cuantas=new_cuantas-1
+            if( (int(vect/delta)+1).gt.dimR) then
+                chaintot=chaintot-1
                 exit
+            else
+                pR(chaintot,j)=int(vect/delta)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
             endif
-            pR(new_cuantas,j)=int(vect/delta)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
 # else
 ! **************************************************************************************
 ! ATENTO: el segundo parametro de int(expression, KIND) fija la cantidad de memoria asignada para el entero
@@ -45,6 +44,6 @@ subroutine pxs
 !         print*, j, pR(10, j)
     enddo
 #ifdef fdebug_pxs
-    print* , "long, cuantas, new_cuantas: ", long, cuantas, new_cuantas
+    print* , "long, cuantas, chaintot: ", long, cuantas, chaintot
 #endif
 end subroutine pxs

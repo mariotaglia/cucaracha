@@ -48,7 +48,7 @@ module globales
 
     integer, parameter :: itmax=200
 ! System parameter (INPUTS)
-    integer :: long, cuantas,new_cuantas=0 ! numero de layers del radio del poro  (tiene que ser par?)
+    integer :: long, cuantas, chaintot ! numero de layers del radio del poro  (tiene que ser par?)
 !    integer, parameter :: long=14, dimR=20, cuantas=100 ! numero de layers del radio del poro  (tiene que ser par?)
 ! Kinsol Parameters
 !    integer :: neq = 2*dimR

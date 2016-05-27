@@ -22,11 +22,9 @@ subroutine creador ! crea cadenas
 !    REAL(KIND=8)  indax, inday, indaz, rands
 !    REAL(KIND=8), dimension(3,200,100) :: chains ! en un modulo especial?
     REAL(KIND=8), dimension(3,200,130) :: chains ! en un modulo especial?
-    INTEGER :: i, il, j, ncha,nchan, ntot
+    INTEGER :: i, il, j, ncha
 
     ncha=0
-    nchan=0
-    ntot=0
     il=0
 
     do while (il.lt.cuantas)
