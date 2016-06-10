@@ -41,7 +41,7 @@ function pong_energy()
         sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5)*delta/Radio 
 #if CHAIN != 0
 ! Writing output in std_mupol.dat ! Not clear that this line work! 
-        write(202,*) iR, dlog(avpol(iR)/vpol)
+  !      write(202,*) iR, dlog(avpol(iR)/vpol)
 #endif
     enddo
 

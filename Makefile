@@ -23,7 +23,7 @@ FFLAGS= -cpp -g -p -fbacktrace  -fbounds-check -Wall -D_VERSION=\"$(GIT_VERSION)
 #FFLAGS= -cpp -O2 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
 #GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
-FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
+#FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 
 SRC = module_globales.f90 \
       module_Csys.f90 \

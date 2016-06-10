@@ -9,7 +9,7 @@ subroutine units_adaptation
 ! Here we use vsol/delta because this is size independent?
 ! be carefull sigmaq is charge/surface as a function of solvent 
 ! size and discretization size
-    sigma = sigma *vsol/ delta ! La superficie de referencia es vsol/delta
+    vsigma(:) = vsigma(:) *vsol/ delta ! La superficie de referencia es vsol/delta
    sigmaq = sigmaq *vsol/delta ! Funciona! ver energia pong o 9.0 Electrostatic
 
 ! Electrostatic

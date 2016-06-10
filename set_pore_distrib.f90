@@ -12,11 +12,13 @@ interface
         double precision :: factorcurv
     end function factorcurv
 end interface 
+
 integer :: iR, aR, i,j 
 real(kind=8) :: temp2, denon  ! it is  multiplicative factor in pro(cuantas)
 !type (mp_real) q ! este valor puede ser MUY grande
-real(kind=16) :: q, shift ! este valor puede ser MUY grande
-real(kind=16) :: infinity ! este valor puede ser MUY grande
+real(kind=dp) :: q, shift ! este valor puede ser MUY grande
+!real(kind=16) :: q, shift ! este valor puede ser MUY grande
+real(kind=dp) :: infinity ! este valor puede ser MUY grande
 real(kind=8) :: fdisbulk!,aux=0.0
 !integer, dimension(dimR,nmon) :: n_exp 
 
@@ -178,7 +180,8 @@ enddo
 !  print*, " if (xpot(dimR) > 200 ) shift = 1.0d-150" 
 
   !shift = shift_f
-    shift = (1-fdisbulk)**long
+    !shift = (1-fdisbulk)**long
+    shift = 1.0
 # endif
 
 avpol(:)= 0.0 ! line important to probability calculus
@@ -245,16 +248,23 @@ enddo ! End loop over chains/configurations
         print*, "spd L177: End Loop over configurations"
 #endif
 
+# if POL == 0 /* PAH */ 
+#   ifdef PAHCL
+    write(11, *), q/shift!, q, shift
+    log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
+#   else
+    write(11, *), q/shift/(1-fdisbulk)**long !, q, shift
+    log_q = dlog(q/shift)-long*log(1-fdisbulk) ! Variable clave en el calculo de energias! MPLOG
+#   endif
+# else
+    write(11, *), q/shift!, q, shift
+    log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
+# endif
 !    call mpwrite(11,q/shift)
-    write(11, *), q/shift
     !call mpwrite(11,q)
-    log_q = log(q/shift) ! Variable clave en el calculo de energias! MPLOG
     !log_q = log(q) ! Variable clave en el calculo de energias! MPLOG
 !    log_q = log(q)-log(shift) ! Variable clave en el calculo de energias! MPLOG
-
 ! log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
-    
-!    shift = q/shift ! la idea es hacerlo adaptativo cucaracha
     do i=1,chaintot 
         pro(i) = pro(i)/q
     enddo

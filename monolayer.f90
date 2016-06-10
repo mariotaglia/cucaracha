@@ -17,7 +17,7 @@ program nanochannel
         integer, intent(inout) :: ipH
         integer(KIND=1), intent(in) :: ier
         end function 
-        subroutine save_data(ipH)
+        subroutine save_data(ipH,isigma)
         integer, intent(in) :: ipH
         end subroutine
 
@@ -49,7 +49,8 @@ program nanochannel
 #endif
 #endif
     call mpinit(15) ! Initial working precision, number of digits =15
-    call open_files(1) ! Open files to save data? how to do that?
+    
+
 !    write(11,*) "set_pore_distrib 109: q "
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -75,9 +76,11 @@ program nanochannel
 ! *****************************************************************************
     ipH=1 
     do while (ipH <= npH)  ! Start principal Loop
+     ! Actualizo las condiciones de bulk se repite solo para ipH=1
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
+        call open_files(1,ipH) ! Open files to save data? how to do that?
         call set_bulk_properties(pHs(ipH)) 
-!     ! Actualizo las condiciones de bulk se repite solo para ipH=1
+
 #ifdef fdebug
         call printstate("fdebug Aloop L82") ! Report of State
 #endif
@@ -85,23 +88,26 @@ program nanochannel
 
 ! Resolution of the equations
         ier=0
-!        print*, "Solucion inicial x1: ", x1(:)
-        call call_kinsol(x1, ier)
- 
-        write(10,*), " " ! para formatear fort.10
-        write(11,*), " " ! para formatear fort.11
-        xh(:) = x1(:dimR)    ! Solvent volume fraction
-        psi(1:dimR) = x1(dimR+1:) ! Electrostatic Potential
+        !print*, "Solucion inicial x1: ", x1(:)
+        isigma = 1
+        do while (isigma <= nsigma)  ! Start principal Loop
+            sigma = vsigma(isigma)
+            call call_kinsol(x1, ier)
+             
+            write(10,*), " " ! para formatear fort.10
+            write(11,*), " " ! para formatear fort.11
+            xh(:) = x1(:dimR)    ! Solvent volume fraction
+            psi(1:dimR) = x1(dimR+1:) ! Electrostatic Potential
 #ifdef fdebug
         print*, 'monolayer L91,  xh(:)= ' , xh(:)
         print*, 'monolayer L91, psi(:)= ' , psi(:)
 #endif 
 
-
 ! FUNCION: check_run == true if error.
         if ( check_run(ipH,ier) ) then
 !       Si hubo un error entonces imprimir alguna informacion y terminar
             print*, "funcion check run: Mal run!"
+            print*, "sigma: ", vsigma(isigma)
             stop
         ! Mean value between the last good value and the actual wrong value        
         !        goto 257 (abajo de 255(no calculapHbulk))
@@ -112,7 +118,7 @@ program nanochannel
 !            xflag(:) = x1(:) ! xflag sirve como input para la proxima iteracion
 !  Preparar el siguiente paso: infile = 2
 ! Se escribe el output 
-            call save_data(ipH) ! Saving data
+            call save_data(ipH,isigma) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
             call calc_mean_values(pHs(ipH)) ! Rmedio
 !            call calc_adsorvedchains(pHs(ipH)) !Nro de cadenas adsorvidas en el poro
@@ -120,7 +126,8 @@ program nanochannel
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
             call calc_conductance(pHs(ipH))
         endif
-
+        isigma= isigma +1
+        enddo ! loop over sigma
         ipH=ipH+1
    enddo  ! End principal Loop 
 

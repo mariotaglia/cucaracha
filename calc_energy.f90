@@ -40,7 +40,8 @@ subroutine calc_energy(pHbulk)
     Free_Energy = Free_Energy + F_Conf
 !    print*, "E + F_Fconf" , Free_energy
  
-    std_mupol = std_mupol + F_conf ! just the sum: P*log(P)
+    !std_mupol = std_mupol + F_conf ! just the sum: P*log(P) (viejo)
+    std_mupol = -log_q
 
 ! 7. Chemical Equilibria
 ! ******************************************************************
@@ -134,25 +135,25 @@ enddo
     Print*, "diff", Free_Energy -  Free_Energy2
 
 ! Guarda energia libre
-         write(311,*) pHbulk, F_electro
-         write(312,*) pHbulk, Free_energy2, suma_pong
-         write(301,*) pHbulk, Free_energy
-         write(302,*) pHbulk, F_Mix_s 
-         write(303,*) pHbulk, F_Mix_pos
-         write(304,*) pHbulk, F_Mix_neg
-         write(305,*) pHbulk, F_Mix_Hplus
-         write(306,*) pHbulk, F_Mix_OHmin
-         write(308,*) pHbulk, F_Eq
-         write(319,*) pHbulk, F_Eq_wall
-         write(202,*) pHbulk, std_mupol
+         write(311,*) sigma*delta/vsol, F_electro
+         write(312,*) sigma*delta/vsol, Free_energy2, suma_pong
+         write(301,*) sigma*delta/vsol, Free_energy
+         write(302,*) sigma*delta/vsol, F_Mix_s 
+         write(303,*) sigma*delta/vsol, F_Mix_pos
+         write(304,*) sigma*delta/vsol, F_Mix_neg
+         write(305,*) sigma*delta/vsol, F_Mix_Hplus
+         write(306,*) sigma*delta/vsol, F_Mix_OHmin
+         write(308,*) sigma*delta/vsol, F_Eq
+         write(319,*) sigma*delta/vsol, F_Eq_wall
+         write(202,*) sigma*delta/vsol, std_mupol
 #ifdef VDW
-         write(309,*) pHbulk, F_vdW
+         write(309,*) sigma*delta/vsol, F_vdW
 #endif
 # if CHAIN != 0
-         write(307,*) pHbulk, F_Conf
-         write(310,*) pHbulk, F_eps
+         write(307,*) sigma*delta/vsol, F_Conf
+         write(310,*) sigma*delta/vsol, F_eps
 # endif
-         write(201,*) pHbulk, F_ospi
+         write(201,*) sigma*delta/vsol, F_ospi
 
 !c--------------------------- FIN DE ENERGIA LIBRE -----------------
 

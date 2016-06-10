@@ -11,7 +11,10 @@ subroutine read_input
     print*, 'Reading input parameters'
 ! Input variables from fort.8
       read(8, *), basura
-      read(8, *), sigma   ! Surface coverage
+      read(8, *), nsigma   ! Surface coverage
+! OJO! esta memoria debe ser liberada en el main! becareful!
+      allocate(vsigma(nsigma)) 
+      read(8, *), (vsigma(i), i=1, nsigma)
 
       read(8, *), basura
       read(8, *), sigmaq   ! Surface chargeable sites

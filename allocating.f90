@@ -31,7 +31,7 @@ subroutine allocating(m)
             deallocate( x1, stat=var1)
             !deallocate( x1, xg1, xflag, stat=var1)
             if ( var1 /= 0 ) print*, "There was an error in  memory deallocation. See last lines in main program. "
-            deallocate(pHs, xh,    &  
+            deallocate(pHs, vsigma, xh,    &  
                      xpot,  &
                      qtot,  &
                      psi, &

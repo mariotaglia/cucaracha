@@ -4,7 +4,7 @@
 subroutine calc_mean_values(pHbulk)
 #   include "control_run.h"
 use globales, only: delta, vpol, vsol, zpos, pi, lb, radio, zwall
-use csys, only: sigmaq
+use csys, only: sigmaq, sigma
 use pore
 implicit none
 real(kind=8), intent(in) :: pHbulk
@@ -62,7 +62,7 @@ if ( sumpol /= 0.0 ) then ! si sumpol es distinto de cero
 # endif
 end if
 
-write(318,*) pHbulk, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
+write(318,*) sigma*delta/vsol, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
                      sigmaq*(delta/vsol)*zwall*fdiswall, sumcharge
 !    write(318,*) pHbulk, Rmedio, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
 !                                 sigmaq*(delta/vsol)*zwall*fdiswall, sumcharge
@@ -70,22 +70,22 @@ write(318,*) pHbulk, sigmaq*(delta/vsol)*zwall*fdiswall +sumcharge, &
 #   if POL == 0 /* PAH */
 #ifdef PAHCL
 ! writing fmedio.dat:
-    write(313,*) pHbulk, fmedio, fmedio2, fdiswall !, fmedio2, fdiswall
+    write(313,*) sigma*delta/vsol, fmedio, fmedio2, fdiswall !, fmedio2, fdiswall
 #else
 ! writing fmedio.dat:
-    write(313,*) pHbulk, fmedio, fdiswall !, fmedio2, fdiswall
+    write(313,*) sigma*delta/vsol, fmedio, fdiswall !, fmedio2, fdiswall
 #endif
 #   elif POL == 1 /* PMEP */
 ! writing fmedio.dat:
-    write(313,*) pHbulk, fmedio, fmedio2, fdiswall
+    write(313,*) sigma*delta/vsol, fmedio, fmedio2, fdiswall
 #   elif POL == 2 /* Neutral Polymer */
-    write(313,*) pHbulk, fdiswall !, fmedio2, fdiswall
+    write(313,*) sigma*delta/vsol, fdiswall !, fmedio2, fdiswall
 #   endif /* PAH || PMEP */
 
 #else
 ! writing fmedio.dat:
-write(313,*) pHbulk, fdiswall, (sigmaq*delta/vsol)*fdiswall*zwall, sumcharge
-!write(313,*) pHbulk, fdiswall, (sigmaq)*fdiswall*zwall, sumcharge
+write(313,*) sigma*delta/vsol, fdiswall, (sigmaq*delta/vsol)*fdiswall*zwall, sumcharge
+!write(313,*) sigma, fdiswall, (sigmaq)*fdiswall*zwall, sumcharge
 #endif
 
 end subroutine calc_mean_values
