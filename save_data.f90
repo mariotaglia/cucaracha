@@ -1,11 +1,11 @@
 !!!!!!!!!!!!!!!!! Guarda archivos !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine save_data(ipH)
+subroutine save_data(ipH,isigma)
 #   include "control_run.h"
-    use globales, only: delta, dimR, vsalt
-    use csys, only: pHs, expmuHplus, expmuOHmin, expmupos, expmuneg!,x1
+    use globales, only: delta, dimR, vsalt, vsol
+    use csys, only: pHs, expmuHplus, expmuOHmin, expmupos, expmuneg, vsigma!,x1
     use pore, only: avpol, qtot, xh, xpos, xneg, xHplus, xOHmin, fdis, psi!, fdis!, fdis2
-    integer, intent(in) :: ipH
-    real(kind=8) :: pH
+    integer, intent(in) :: ipH, isigma
+    real(kind=8) :: pH, sigma
     character(len=5) :: title
 !    character(len=17) :: outfile
     character(len=30) :: format_string, filename
@@ -24,51 +24,53 @@ subroutine save_data(ipH)
     print*, "Saving data..."
 ! GUARDAR! usar savetodisk
         pH=pHs(ipH)
+        sigma=vsigma(isigma)*delta/vsol
+    print*, 'SIGMA: ', sigma
 # if CHAIN != 0
 ! Polimero
       title = 'avpol'
-      call savetodisk(avpol, title, pH ,ipH)
+      call savetodisk(avpol, title, sigma, pH ,ipH)
 ! fdis
       title = 'fdis1'
-      call savetodisk(fdis, title, pH, ipH)
+      call savetodisk(fdis, title, sigma, pH, ipH)
 
 !! ! fdis2
 !!       title = 'fdis2'
-!!       call savetodisk(fdis2, title, pH, ipH)
+!!       call savetodisk(fdis2, title, sigma, pH, ipH)
 
 #endif /* CHAIN != 0 */
 ! Total Charge
       title = 'qtodo'
-      call savetodisk(qtot, title, pH ,ipH)
+      call savetodisk(qtot, title, sigma, pH ,ipH)
 
 ! Solvente
       title = 'avsol'
-      call savetodisk(xh, title, pH, ipH)
+      call savetodisk(xh, title, sigma, pH, ipH)
 
 ! Cationes
       title = 'avpos'
-      call savetodisk(xpos, title, pH, ipH)
+      call savetodisk(xpos, title, sigma, pH, ipH)
 
 ! Cationes2
 !      title = 'avpo2'
-!      call savetodisk(xpos2, title, pH, ipH)
+!      call savetodisk(xpos2, title, sigma, pH, ipH)
 
 ! Aniones
       title = 'avneg'
-      call savetodisk(xneg, title, pH, ipH)
+      call savetodisk(xneg, title, sigma, pH, ipH)
 
 ! H+
       title = 'avHpl'
-      call savetodisk(xHplus, title, pH, ipH)
+      call savetodisk(xHplus, title, sigma, pH, ipH)
 
 ! OH-
       title = 'avOHm'
-      call savetodisk(xOHmin, title, pH,ipH)
+      call savetodisk(xOHmin, title, sigma, pH,ipH)
 
 ! Potencial electrostatico
 !        call printstate('save_data L71')
       title = 'poten'
-      call savetodisk(psi, title, pH, ipH)
+      call savetodisk(psi, title, sigma, pH, ipH)
 
 # ifdef debug
     format_string = '(A5,A1,I2.2,F0.2,A1,I3.3,A4)'

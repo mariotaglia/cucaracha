@@ -162,7 +162,10 @@ subroutine cadenas72mr(chains,ncha)
       do 400 i=1,300
          test='S'
          call rota36(xend,xendr,long,test)
+# ifdef BMu_const
+# else
          if (test.eq.'N') goto 400
+# endif
 # if CRITERIO == 3 
 !Criterio 3 Le agrega un grado de libertad a las configuraciones de polimero
 !         do 403 jj=1,3000 ! Mueve por layers al azar.
@@ -173,18 +176,24 @@ subroutine cadenas72mr(chains,ncha)
           do jj=1,dimR ! Mueve por layers
             test='S'
             call transla(jj,xendr, xendt,test)
+# ifdef BMu_const
+# else
             if (test.eq.'N') cycle ! Mueve por layers
 # endif
-            ncha=ncha+1
 
+# endif
+            ncha=ncha+1
+            
 # if CRITERIO == 3 
             do j=1,long
                chains(1,j,ncha)=xendt(1,j) ! y
                chains(2,j,ncha)=xendt(2,j) ! x
                chains(3,j,ncha)=xendt(3,j) ! z
             enddo
+
          !if (ncha.eq.25) goto 402
          if (ncha.eq.125) goto 402
+
 # ifdef fdebug
          print*, " WARNING! (L180, cadenas72) Esto supone un sesgo en las configuraciones: if (ncha.eq.25) goto 402 "
          print*, " WARNING! (L181, cadenas72) Para radios grandes hay que pensar otra cosa."
@@ -197,6 +206,7 @@ subroutine cadenas72mr(chains,ncha)
                chains(2,j,ncha)=xendr(2,j) ! x
                chains(3,j,ncha)=xendr(3,j) ! z
             enddo
+
          if (ncha.eq.25) goto 402
 # endif
  400  continue

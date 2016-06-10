@@ -16,6 +16,8 @@
                             a la pared derecha del poro. El y se deja en y=0. ( todas las conf. superpuestas)
                        3 -  Cadenas con Centro de Masa en las distintas layers (1 grado de libertad mas para las cadenas).
                             Esta opcion se usa con CHAIN==1
+                       4 -  Cadenas con Centro de Masa en el centro del poro.
+                            Esta opcion se usa con CHAIN==1
                     */
 # define fsigmaq 1 /* 0 -  Sin regulacion de carga en la superficie
                       1 -  con equilibrio quimico (regulacion de carga) en la pared del poro
@@ -38,6 +40,9 @@
                   */
 /* END Not implemented */
 # undef VDW 
+
+/*Betamu constante*/
+# undef BMu_const
 
 /**** For debugging change undef by define **** */
 /* This lines prints information in standard output */

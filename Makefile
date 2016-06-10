@@ -1,7 +1,7 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-numv = 1.3
+numv = 1.3.1
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
@@ -14,15 +14,16 @@ FC = gfortran
 
 # This flags are used in the compilation stage (name should be CFLAGS)
 # To debug:
-#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -Wall -D_VERSION=\"$(GIT_VERSION)\" 
+#FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -fchekbounds -Wall -D_VERSION=\"$(GIT_VERSION)\" 
+FFLAGS= -cpp -g -p -fbacktrace  -fbounds-check -Wall -D_VERSION=\"$(GIT_VERSION)\" 
 ## -g produce debugging information in the operating system's native format.
 ## -pg generate extra code to write profile information suitable for the analysis program gprof
 # To run
 # -fpp: Calls first to the C Preprocessor
-#FFLAGS= -cpp -O2 -fno-toplevel-reorder
+#FFLAGS= -cpp -O2 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
 #GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
-FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
+#FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 
 SRC = module_globales.f90 \
       module_Csys.f90 \

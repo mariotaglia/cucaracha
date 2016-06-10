@@ -38,7 +38,11 @@ Gvacio = Gvacio + xOHminbulk/vsol*movOHmin
 Gvacio = Gvacio * 1e24/Na ! Corrige unidades concentracion
 Gvacio = Gvacio * 1.0d-18/1d-6 ! Corrige unidades pasa nm2 -> m2 y micrometros -> m
 Gvacio = Gvacio / longporo * pi * radio**2 ! Corrige unidades concentracion
+<<<<<<< HEAD
 ! Gvacio queda expresado en siemmens
+=======
+!# Gvacio queda expresado en siemmens
+>>>>>>> develop
 
 do iR = 1, dimR
          Gporo = Gporo     +xpos(iR)/vsalt/vsol*movpos  *(dfloat(iR)-0.5)
@@ -107,17 +111,14 @@ Gporo_coefDOHmin = Gporo_coefDOHmin / longporo * 2*pi * delta**2
 
 Grel_coefD = Gporo_coefD/Gvacio
 
-! ****************************************************************************
-! 2nd Column correspond to conductance corrected by difusion coeficient.
-!
-write(315,*) pHbulk, Gporo, Gporo_coefD
-write(316,*) pHbulk, Gvacio
-write(317,*) pHbulk, Grel, Grel_coefD
+write(315,*) sigma*delta/vsol, Gporo, Gporo_coefD
+write(316,*) sigma*delta/vsol, Gvacio
+write(317,*) sigma*delta/vsol, Grel, Grel_coefD
 
-write(320,*) pHbulk, Gporopos, Gporo_coefDpos
-write(321,*) pHbulk, Gporoneg, Gporo_coefDneg
-write(322,*) pHbulk, GporoHplus, Gporo_coefDplus
-write(323,*) pHbulk, GporoOHmin, Gporo_coefDOHmin
+write(320,*) sigma*delta/vsol, Gporopos, Gporo_coefDpos
+write(321,*) sigma*delta/vsol, Gporoneg, Gporo_coefDneg
+write(322,*) sigma*delta/vsol, GporoHplus, Gporo_coefDplus
+write(323,*) sigma*delta/vsol, GporoOHmin, Gporo_coefDOHmin
 ! output.aux
-    write(324,*) pHbulk, (Gporo - Gvacio), 7.352*(sigmaq*delta/vsol)*(3.141592*dimR/12000)/(6.02*1.0d7)
+    write(324,*) sigma*delta/vsol, (Gporo - Gvacio), 7.352*(sigmaq*delta/vsol)*(3.141592*dimR/12000)/(6.02*1.0d7)
 end subroutine calc_conductance

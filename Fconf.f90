@@ -1,20 +1,21 @@
 function fconf_pol()
     use mpmodule
-    use globales, only: cuantas, delta, vsol
-    use csys, only: log_q, pro, sigma 
+    use globales, only: chaintot, delta, vsol
+    use csys, only: dp, log_q, pro, sigma
 !    use FreeEnergy, only: checknumber
     implicit none
-    real(kind=8) :: fconf_pol, aux_mp
+    real(kind=8) :: aux_mp
+    real(kind=dp) :: fconf_pol
     integer :: i
     fconf_pol=0
 ! Siempre se calcula la energia respecto de la de bulk!
 !    print*, "Fconf10: Valor log_q", log_q
-    do i = 1, cuantas
+    do i = 1, chaintot
 !        aux_mp = log(pro(i)/q)
 !        aux_mp = log(pro(i)) - log_q
 !        fconf_pol = fconf_pol + (pro(i)/q)*aux_mp /vsol*delta*sigma
 !        fconf_pol = fconf_pol + sigma*delta*pro(i)*log(pro(i))/vsol
-        fconf_pol = fconf_pol + (pro(i))*log(pro(i)) 
+        fconf_pol = fconf_pol + (pro(i))*dlog(pro(i)) 
         !fconf_pol = fconf_pol + (pro(i)/q)*dlog((pro(i))/q)  /vsol*delta*sigma
     enddo
 ! Aca mp deneroa janer ima coreccion? elefante

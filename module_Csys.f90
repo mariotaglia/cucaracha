@@ -30,20 +30,20 @@ module csys
                     pOHbulk, xposbulk, xnegbulk, xsolbulk, &
                     xHplusbulk, xOHminbulk, &
                     expmupol, expmupos, expmuneg, expmuHplus, expmuOHmin
-    real(kind=8), dimension(:), allocatable :: pHs ! list of bulk pHs
+    real(kind=8), dimension(:), allocatable :: pHs, vsigma ! list of bulk pHs
     real(kind=8), dimension(:,:), allocatable :: Xu
     real(kind=8), dimension(:,:,:), allocatable :: in1 ! guarda las configuraciones de cadena 
     real(kind=8), dimension(:), allocatable :: x1, xg1, xflag
-    real(kind=16),dimension(:), allocatable ::  pro !  list of probability 
+    real(kind=dp),dimension(:), allocatable ::  pro !  list of probability 
 !    type(mp_real),dimension(:), allocatable ::  pro !  list of probability 
     integer, dimension(:,:), allocatable :: pR ! pR stores the position of the segment j from conf. i . 
 !    integer, dimension(:,:)dimension(cuantas,long)  :: pR ! pR stores the position of the segment j from conf. i . 
 !    real(kind=8), dimension(cuantas,long,3) :: in1 ! guarda las configuraciones de cadena 
 !    real(kind=8), dimension(dimR,dimR) :: Xu
-    real(kind=8) :: log_q !
+    real(kind=16) :: log_q !
 !    real(kind=8) :: norma
-    integer :: infile, iter, npH, npKa=2, seed=1015 ! ojo! seed cambia a lo largo del programa!
+    integer :: infile, iter, npH, nsigma, npKa=2, seed=1015 ! ojo! seed cambia a lo largo del programa!
     integer :: ps_i, flag ! used in check_run subroutine
-    integer :: ipH ! Contador en el main
+    integer :: ipH, isigma ! Contador en el main
     ! ps_i : printstate counter
 end module csys
