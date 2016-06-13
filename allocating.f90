@@ -28,8 +28,8 @@ subroutine allocating(m)
                 
             if ( var1 /= 0 ) print*, "There was an error in  memory deallocation. See last lines in main program. "
             var1=0
-            deallocate( x1, stat=var1)
-            !deallocate( x1, xg1, xflag, stat=var1)
+            !deallocate( x1, stat=var1)
+            deallocate( x1, xflag, stat=var1)
             if ( var1 /= 0 ) print*, "There was an error in  memory deallocation. See last lines in main program. "
             deallocate(pHs, vsigma, xh,    &  
                      xpot,  &
@@ -47,9 +47,9 @@ subroutine allocating(m)
                      stat=var1)
             if ( var1 /= 0 ) print*, "allocating.f90: There is an erro while deallocating memory for variables: xh - fdis" 
         case ( 1 ) ! Allocating
-            allocate( x1(2*dimR), stat=var1)
-            !allocate( x1(2*dimR), xg1(2*dimR), xflag(2*dimR) , stat=var1)
-            if ( var1 /= 0 ) print*, "There is no sufficient memory for variables: x1, xg1, xflag" 
+            !allocate( x1(2*dimR), stat=var1)
+            allocate( x1(2*dimR), xflag(2*dimR) , stat=var1)
+            if ( var1 /= 0 ) print*, "There is no sufficient memory for variables: x1, xflag" 
             var1=0
 #           if CHAIN != 0
             allocate( avpol(dimR), &
@@ -63,7 +63,7 @@ subroutine allocating(m)
                       pR(cuantas,long), in1(cuantas,long,3),&
                       Xu(dimR,dimR),pro(cuantas) )
 #           endif
-            if ( var1 /= 0 ) print*, "There is no sufficient memory for variables: x1, xg1, xflag" 
+            if ( var1 /= 0 ) print*, "There is no sufficient memory for variables: x1, xflag" 
             var1=0
             allocate(xh(dimR),    &  
                      xpot(dimR),  &
