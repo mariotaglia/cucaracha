@@ -1,13 +1,13 @@
+! El input m es infile!:D
 subroutine set_initial_guess(m)
 #   include "control_run.h"
     use globales, only: dimR
-    use csys, only: x1, xsolbulk
+    use csys, only: x1, xsolbulk, xflag
     use pore, only: xh, psi
     implicit none
     integer, intent(in) :: m
     integer :: i
     real(kind=8) :: c
-
     c=1.0
 select case (m)
     case ( 0 )  ! Bulk solution
@@ -36,6 +36,10 @@ select case (m)
     !      psi(0) = 0. ! No hace fatal se resuelve en set_pore_distrib
     !      psi(dimR+1) = 0. ! NO hace falta se resuelve en set_pore_distrib
           !x1(:) = xg1(:)
+    case ( 2 )  ! Last solution
+         x1(:) = xflag(:)
+      !   xh(:dimR) = x1(:dimR) 
+      !   psi(1:dimR)= x1(dimR+1:)
 end select
 ! Por unica vez. Luego es llamada desde fkfun
 # ifdef fdebug
