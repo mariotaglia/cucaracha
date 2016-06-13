@@ -131,43 +131,43 @@ subroutine open_files(m,ipH)
             open(unit=323, file=name_323)
 !            open(unit=323, file='GOHmin')
 ! AUXILIAR FILES
-            write(name_324,'(A11, A9)') 'output_aux_', pH_dat_str
-            open(unit=324, file=name_324)
+ !           write(name_324,'(A11, A9)') 'output_aux_', pH_dat_str
+ !           open(unit=324, file=name_324)
 !            open(unit=324, file='output.aux')
         case ( 0 )
         ! Energy
-            close(201) 
-            close(202) 
-            close(203) 
-            close(301)
-            close(302)
-            close(303)
-            close(304)
-            close(305)
-            close(306)
-            close(307)
-            close(308)
+            close(201) ! F_ospi(?) 
+            close(202) ! std_mupol
+            close(203) ! adsorved_chains
+            close(301) ! F_tot 
+            close(302) ! F_mixs
+            close(303) ! F_mixpos
+            close(304) ! F_mixneg
+            close(305) ! F_mixH
+            close(306) ! F_mixOH
+            close(307) ! F_conf
+            close(308) ! F_eq
 #       ifdef VDW
-            close(309)
+            close(309) ! F_vdw
 #       endif
-            close(310)
-            close(311) 
-            close(312)
+            close(310) ! F_eps 
+            close(311) ! F_electro
+            close(312) ! F_tot2 
 
         ! Conductance and mean values (313 - 323)
-            close(313) 
-            close(314)
-            close(315)
-            close(316)
-            close(317)
+            close(313) ! fmedio 
+            close(314) ! pKas
+            close(315) ! Gporo
+            close(316) ! Gvacio 
+            close(317) ! Grel
             close(318) ! Rmedio
             close(319) ! F_eqwall
-            close(320)
-            close(321)
-            close(322)
-            close(323)
+            close(320) ! Gpos
+            close(321) ! Gneg
+            close(322) ! GHplus
+            close(323) ! GOHmin
 ! AUXILIAR FILES
-            close(324) ! output.aux
+  !          close(324) ! output.aux
     end select 
      
 end subroutine
