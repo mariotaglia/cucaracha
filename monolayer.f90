@@ -143,12 +143,13 @@ program nanochannel
         endif
         isigma= isigma +1
         enddo ! loop over sigma
+       
+        call open_files(0) ! Closing all files
 !       Inside nanochannel set x1
         call set_initial_guess(2) ! 2 - read from xflag
         ipH=ipH+1
    enddo  ! End principal Loop 
 
-    call open_files(0) ! Closing all files
     call allocating(0) !DeAllocating
     write(0,'(23a)'), '*** Fin loop principal ***' ! stderr
 end program nanochannel
