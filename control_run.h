@@ -42,7 +42,7 @@
 # undef VDW 
 
 /*Betamu constante*/
-# undef BMu_const
+# undef BMu_const  /* Que hace esto? */
 
 /**** For debugging change undef by define **** */
 /* This lines prints information in standard output */
