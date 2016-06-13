@@ -24,6 +24,7 @@ program nanochannel
     end interface
 
     integer (KIND=1) :: ier = 0 ! kinsol error flag
+    integer :: i 
     print*, " This is the monolayer program: "
     print*, 'GIT version = ', _VERSION 
 
@@ -115,19 +116,35 @@ program nanochannel
         else
 !            print*, " funcion check run: " // "RUN OK!"
 !  Si no exploto guardar xflag! (input para la proxima iteracion)
-!            xflag(:) = x1(:) ! xflag sirve como input para la proxima iteracion
-!  Preparar el siguiente paso: infile = 2
+            if ( isigma==1  ) then
+                select case (2)
+                    case ( 0 )  ! Bulk solution
+                    case ( 1 )  ! Save to file 
+                         open(unit=92,file='initial_guess')
+                            write(92,*) "# sigma= ", sigma*delta/vsol, " pH= ", pHs(ipH)
+                            write(92,*) ! ignore first and second lines
+                        
+                            do i=1,2*dimR
+                                write(92,*) x1(i)
+                            end do
+                         close(92)
+                    case ( 2 )  ! Last solution
+                            xflag(:) = x1(:) ! xflag sirve como input para la proxima iteracion
+                end select
+            endif
 ! Se escribe el output 
-            call save_data(ipH,isigma) ! Saving data
+!            call save_data(ipH,isigma) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
             call calc_mean_values(pHs(ipH)) ! Rmedio
 !            call calc_adsorvedchains(pHs(ipH)) !Nro de cadenas adsorvidas en el poro
 !            call calc_pkas() 
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
-            call calc_conductance(pHs(ipH))
+!            call calc_conductance(pHs(ipH))
         endif
         isigma= isigma +1
         enddo ! loop over sigma
+!       Inside nanochannel set x1
+        call set_initial_guess(2) ! 2 - read from xflag
         ipH=ipH+1
    enddo  ! End principal Loop 
 
