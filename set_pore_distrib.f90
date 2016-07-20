@@ -12,7 +12,6 @@ interface
         double precision :: factorcurv
     end function factorcurv
 end interface 
-
 integer :: iR, aR, i,j 
 real(kind=8) :: temp2, denon  ! it is  multiplicative factor in pro(cuantas)
 !type (mp_real) q ! este valor puede ser MUY grande
@@ -20,6 +19,9 @@ real(kind=dp) :: q, shift ! este valor puede ser MUY grande
 !real(kind=16) :: q, shift ! este valor puede ser MUY grande
 real(kind=dp) :: infinity ! este valor puede ser MUY grande
 real(kind=8) :: fdisbulk!,aux=0.0
+
+    log_q=0.0 ! elefante!
+
 !integer, dimension(dimR,nmon) :: n_exp 
 
 infinity=HUGE(q)
@@ -44,6 +46,11 @@ do iR=1,dimR
 
 !  xOHmin(iR) = expmuOHmin*(xh(iR)**vOHmin) *dexp(-psi(iR)*zOH) ! OH- volume fraction
   xOHmin(iR) = expmuOHmin*xh(iR) *dexp(psi(iR))           ! OH-  volume fraction
+
+#if MUPOL == 1
+! Para monocapas en superficie interna del nanocanal
+  sigma = expmupol *(delta/vsol) * exp(log_q)
+#endif
 
 !  fdis(iR) = dissos_degree(1,iR)
 # if CHAIN != 0 

@@ -32,6 +32,7 @@ subroutine open_files(m,ipH)
     character(len=16) :: name_322
     character(len=16) :: name_323
     character(len=20) :: name_324
+    character(len=18) :: name_325
 
     
     select case ( m)
@@ -134,6 +135,9 @@ subroutine open_files(m,ipH)
  !           write(name_324,'(A11, A9)') 'output_aux_', pH_dat_str
  !           open(unit=324, file=name_324)
 !            open(unit=324, file='output.aux')
+            write(name_325,'(A9, A9)') 'sigmapol_', pH_dat_str
+            open(unit=325, file=name_325)
+            write(325,*) "#cpol, sigmapol # Mupol_cte" 
         case ( 0 )
         ! Energy
             close(201) ! F_ospi(?) 
@@ -168,6 +172,7 @@ subroutine open_files(m,ipH)
             close(323) ! GOHmin
 ! AUXILIAR FILES
   !          close(324) ! output.aux
+            close(325) ! output.aux
     end select 
      
 end subroutine

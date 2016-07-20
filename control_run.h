@@ -7,7 +7,7 @@
                     2 - Grafted polymer chains (brushes)
                  */
 
-# define MUPOL 0 /* 0 - number of polymer is regulated with sigma (no polymer in bulk)
+# define MUPOL 1 /* 0 - number of polymer is regulated with sigma (no polymer in bulk)
                     1 - indicating use of mupol polymer see units_adaptation.f90 */
 
 # define CRITERIO 2 /* 1 -  Acerco el monomero más cercano a la pared. 
