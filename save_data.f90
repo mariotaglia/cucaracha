@@ -1,11 +1,11 @@
 !!!!!!!!!!!!!!!!! Guarda archivos !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-subroutine save_data(ipH,isigma)
+subroutine save_data(ipH,icpol)
 #   include "control_run.h"
     use globales, only: delta, dimR, vsalt, vsol
-    use csys, only: pHs, expmuHplus, expmuOHmin, expmupos, expmuneg, vsigma!,x1
+    use csys, only: pHs, expmuHplus, expmuOHmin, expmupos, expmuneg, vcpol, sigma,csalt!,x1
     use pore, only: avpol, qtot, xh, xpos, xneg, xHplus, xOHmin, fdis, psi!, fdis!, fdis2
-    integer, intent(in) :: ipH, isigma
-    real(kind=8) :: pH, sigma
+    integer, intent(in) :: ipH, icpol
+    real(kind=8) :: pH, cpol
     character(len=5) :: title
 !    character(len=17) :: outfile
     character(len=30) :: format_string, filename
@@ -24,8 +24,9 @@ subroutine save_data(ipH,isigma)
     print*, "Saving data..."
 ! GUARDAR! usar savetodisk
         pH=pHs(ipH)
-        sigma=vsigma(isigma)*delta/vsol
-    print*, 'SIGMA: ', sigma
+        cpol=vcpol(icpol)
+!    print*, 'SIGMA: ', pH, cpol, csalt, dimR, sigma
+    write(325,*) cpol, sigma
 # if CHAIN != 0
 ! Polimero
       title = 'avpol'
@@ -108,4 +109,3 @@ subroutine save_data(ipH,isigma)
     close(45)
 #endif 
 end subroutine save_data
-

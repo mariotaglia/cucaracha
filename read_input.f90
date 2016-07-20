@@ -21,9 +21,17 @@ subroutine read_input
 
       read(8, *), basura
       read(8, *), eps1     ! Interaccion Pol-Sup 
-! Salt and polymer concentration
+! Salt concentration
       read(8, *), basura
-      read(8, *), csalt, cpol  ! Bulk Salt concentration
+      read(8, *), ncsalt   ! Salt Concentration
+      allocate(vcsalt(ncsalt)) 
+      read(8, *), (vcsalt(i), i=1, ncsalt)
+        csalt=vcsalt(1) ! Me quedo con la primeer sal!
+! polymer concentration
+      read(8, *), basura
+      read(8, *), ncpol   ! Monomer of pol Concentration
+      allocate(vcpol(ncpol)) 
+      read(8, *), (vcpol(i), i=1, ncpol)
 
       read(8, *), basura
       read(8, *), pKawall ! Eq. Const. wall charge

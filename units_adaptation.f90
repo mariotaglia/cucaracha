@@ -9,7 +9,7 @@ subroutine units_adaptation
 ! Here we use vsol/delta because this is size independent?
 ! be carefull sigmaq is charge/surface as a function of solvent 
 ! size and discretization size
-    vsigma(:) = vsigma(:) *vsol/ delta ! La superficie de referencia es vsol/delta
+   vsigma(:) = vsigma(:) *vsol/ delta ! La superficie de referencia es vsol/delta
    sigmaq = sigmaq *vsol/delta ! Funciona! ver energia pong o 9.0 Electrostatic
 
 ! Electrostatic
@@ -18,15 +18,8 @@ subroutine units_adaptation
 ! Chemical Equilibrium
     Ka=10**(-pKa)
     Kb=10**(-pKb)
-
     K_Cl=10**(-pK_Cl)
     Kwall=10**(-pKawall)
-print*, "Kwall, K_Cl, Ka, Kb : " , Kwall, K_Cl, Ka, Kb
-! Volume fraction second salt in mol/l, csalt2=0! Check!
-    xsalt=(csalt*Na/(1.0d24))*(vsalt*vsol)   
-!      xsalt2=(csalt2*Na/(1.0d24))*(vsalt2*vsol)   
-# if CHAIN == 1 && MUPOL == 1
-    xpolbulk =(cpol*Na/(1.0d24))*(vpol*vsol)   
-#endif
+    print*, "Kwall, K_Cl, Ka, Kb : " , Kwall, K_Cl, Ka, Kb
     print*, 'Units adaptation OK!'
 end subroutine
