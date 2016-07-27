@@ -24,12 +24,12 @@ module csys
         longporo, &
         movpos, movneg, movHplus, movOHmin,&  ! Mobilities
         st
-
 ! Bulk values
     real(kind=8) :: cHplus, cOHmin, &
                     pOHbulk, xposbulk, xnegbulk, xsolbulk, &
                     xHplusbulk, xOHminbulk, &
                     expmupol, expmupos, expmuneg, expmuHplus, expmuOHmin
+    real(kind=8), dimension(:),allocatable :: eps   
     real(kind=8), dimension(:), allocatable :: pHs, vsigma, vcsalt, vcpol ! list of bulk pHs
     real(kind=8), dimension(:,:), allocatable :: Xu
     real(kind=8), dimension(:,:,:), allocatable :: in1 ! guarda las configuraciones de cadena 

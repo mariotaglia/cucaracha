@@ -21,6 +21,7 @@ subroutine read_input
 
       read(8, *), basura
       read(8, *), eps1     ! Interaccion Pol-Sup 
+
 ! Salt concentration
       read(8, *), basura
       read(8, *), ncsalt   ! Salt Concentration

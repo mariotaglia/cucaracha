@@ -19,10 +19,13 @@ real(kind=dp) :: q, shift ! este valor puede ser MUY grande
 !real(kind=16) :: q, shift ! este valor puede ser MUY grande
 real(kind=dp) :: infinity ! este valor puede ser MUY grande
 real(kind=8) :: fdisbulk!,aux=0.0
-
-    log_q=0.0 ! elefante!
-
 !integer, dimension(dimR,nmon) :: n_exp 
+
+
+    !log_q=0.0 ! elefante!
+
+    eps(:) = 0.0
+    eps(dimR) = eps1
 
 infinity=HUGE(q)
 # ifdef fdebug    
@@ -48,8 +51,8 @@ do iR=1,dimR
   xOHmin(iR) = expmuOHmin*xh(iR) *dexp(psi(iR))           ! OH-  volume fraction
 
 #if MUPOL == 1
-! Para monocapas en superficie interna del nanocanal
-  sigma = expmupol *(delta/vsol) * exp(log_q)
+!!! Para monocapas en superficie interna del nanocanal
+!  sigma = expmupol *(delta/vsol) * exp(log_q)
 #endif
 
 !  fdis(iR) = dissos_degree(1,iR)
@@ -147,7 +150,8 @@ do iR = 1, dimR
 !    xpot(iR) = (xh(iR)**vpol) !/ (1-fdis(iR))
 #else
     ! Para polimero con regulacion de carga (cargado positivamente) 
-    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk)
+    !xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk)
+    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) * exp(-eps(iR)) 
     !xpot(iR) = (xh(iR)**vpol)*exp(-psi(iR)*zpol) /(1-fdis(iR)-fdis2(iR) )
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
 #endif
@@ -232,7 +236,8 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 ! pR devuelve en que layer se encuentra el monómero j del polímero i.
      ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
 
-       avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR) ! cilindro, ver notas
+       avpol(aR) = avpol(aR) + pro(i)*expmupol*vpol*factorcurv(aR) ! cilindro, ver notas
+       !avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR) ! cilindro, ver notas
 
 ! ver eq:factorcurv in mis_apuntes.lyx
 !       bR = pR(i, j+1)
@@ -277,12 +282,18 @@ enddo ! End loop over chains/configurations
     enddo
 !    print*, "pro(:): ", pro(:)
 !    call printstate("L105 set_pore_distrib")
-    do iR=1, dimR            ! norma avpol
-        avpol(iR) = avpol(iR)/ q
+    
+    sigma = expmupol*(q/shift)*delta/vsol ! norma sigma
+
+!    do iR=1, dimR            ! norma avpol
+!        avpol(iR) = avpol(iR)/ q
+
 !        avpoln(iR) = avpoln(iR) / q
 !        avpolp(iR) = avpolp(iR) / q 
 !         avpol(iR) = avpoln(iR) + avpolp(iR)
-    enddo
+!    enddo
+
+
 ! Chequeo avpol
 !     temp2=0.0
 !     do iR=1,dimR

@@ -11,15 +11,15 @@ subroutine fkfun(x,f,ier)
     use globales 
     use csys
     use pore
-    use mpmodule
+!    use mpmodule
 !    use interface_checknumber
     implicit none 
 
     real(KIND=8), intent(in), dimension(2*dimR) :: x ! son variables de salida también
     real(KIND=8), intent(out), dimension(2*dimR) :: f ! son variables de salida también
     integer(KIND=8), intent(out) :: ier
-!    real(KIND=8) :: norma
-    type (mp_real) norma ! este valor puede ser MUY grande
+    real(KIND=8) :: norma
+!    type (mp_real) norma ! este valor puede ser MUY grande
     integer :: i, iR
 
 ! Recupera xh y psi desde x()
@@ -86,16 +86,16 @@ subroutine fkfun(x,f,ier)
     
     iter = iter + 1
 ! Kinsol minimizes norma. ideally norma = 0.
-!    norma = 0.0
-    norma = '0.0'
+    norma = 0.0
+!    norma = '0.0'
     do i = 1, 2*dimR
         norma = norma +(f(i))**2
 !        call checknumber(norma,'norma en fkfun') ! if NaN or Infinity checknumber stops the program
 !        call Rchecknumber(norma, 'norma en fkfun') ! if NaN or Infinity checknumber stops the program
     enddo
 !    print*, "fkfun67: iter, norma, q", iter, norma
-    write(10,'(A14,I4,A8)', advance='no') "fkfun95: iter ", iter, " norma: "
-    call mpwrite(10,norma)
+    write(10,'(A14,I4,A8,F7.2)', advance='no') "fkfun95: iter ", iter, " norma: ", norma
+!    call mpwrite(10,norma)
     ier = 0
    
     return

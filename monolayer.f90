@@ -49,7 +49,7 @@ program nanochannel
     call kai ! Calcula los parametros de L-J 
 #endif
 #endif
-    call mpinit(15) ! Initial working precision, number of digits =15
+   ! call mpinit(15) ! Initial working precision, number of digits =15
     
 
 !    write(11,*) "set_pore_distrib 109: q "
