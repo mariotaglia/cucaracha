@@ -49,7 +49,7 @@ program nanochannel
     call kai ! Calcula los parametros de L-J 
 #endif
 #endif
-    call mpinit(15) ! Initial working precision, number of digits =15
+   ! call mpinit(15) ! Initial working precision, number of digits =15
     
 
 !    write(11,*) "set_pore_distrib 109: q "
@@ -61,10 +61,11 @@ program nanochannel
 !         if (ipH.eq.1) then 
 !         endif
 ! IMPORTANT: DEFINE INITIAL GUESS -> SUBROUTINE!
-    ipH=1;
+    ipH=1;icsalt=1;icpol=1
 ! Setup bulk properties before setup initial guess ocurre en fkfun! (?)
 ! bulk properties without polymer
-    call set_bulk_properties(pHs(ipH)) 
+    print*, "vcpol(icpol): ", vcpol(icpol)
+    call set_bulk_properties(pHs(ipH),vcsalt(icsalt),vcpol(icpol)) 
 ! Inside nanochannel set x1
     call set_initial_guess(0) ! 0 - bulk solution as initial guess
     
@@ -80,19 +81,20 @@ program nanochannel
      ! Actualizo las condiciones de bulk se repite solo para ipH=1
         print*, 'pH bulk =', pHs(ipH), 'ipH/npH:', ipH, '/', npH
         call open_files(1,ipH) ! Open files to save data? how to do that?
-        call set_bulk_properties(pHs(ipH)) 
+     !   call set_bulk_properties(pHs(ipH)) 
 
-#ifdef fdebug
-        call printstate("fdebug Aloop L82") ! Report of State
-#endif
 !        call set_pore_distrib !Not necesarry this function is inside fkfun
 
 ! Resolution of the equations
         ier=0
         !print*, "Solucion inicial x1: ", x1(:)
-        isigma = 1
-        do while (isigma <= nsigma)  ! Start principal Loop
-            sigma = vsigma(isigma)
+        icpol = 1
+        do while (icpol <= ncpol)  ! Start principal Loop
+            print*, 'Cpol bulk =', vcpol(icpol), 'ipH/npH:', icpol, '/', ncpol
+            call set_bulk_properties(pHs(ipH),vcsalt(icsalt),vcpol(icpol)) 
+# ifdef fdebug
+            call printstate("fdebug Aloop L94") ! Report of State
+# endif
             call call_kinsol(x1, ier)
              
             write(10,*), " " ! para formatear fort.10
@@ -108,7 +110,7 @@ program nanochannel
         if ( check_run(ipH,ier) ) then
 !       Si hubo un error entonces imprimir alguna informacion y terminar
             print*, "funcion check run: Mal run!"
-            print*, "sigma: ", vsigma(isigma)
+            print*, "cpol: ", vcpol(icpol)
             stop
         ! Mean value between the last good value and the actual wrong value        
         !        goto 257 (abajo de 255(no calculapHbulk))
@@ -116,7 +118,9 @@ program nanochannel
         else
 !            print*, " funcion check run: " // "RUN OK!"
 !  Si no exploto guardar xflag! (input para la proxima iteracion)
-            if ( isigma==1  ) then
+            if ( icpol==1  ) then
+! Esto es solo para la primer iteracion por que se supone 
+! esta solución es "cercana" a la proxima iteracion de ph
                 select case (2)
                     case ( 0 )  ! Bulk solution
                     case ( 1 )  ! Save to file 
@@ -133,7 +137,7 @@ program nanochannel
                 end select
             endif
 ! Se escribe el output 
-!            call save_data(ipH,isigma) ! Saving data
+            call save_data(ipH,icpol) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
             call calc_mean_values(pHs(ipH)) ! Rmedio
 !            call calc_adsorvedchains(pHs(ipH)) !Nro de cadenas adsorvidas en el poro
@@ -141,7 +145,7 @@ program nanochannel
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
 !            call calc_conductance(pHs(ipH))
         endif
-        isigma= isigma +1
+        icpol= icpol +1
         enddo ! loop over sigma
        
         call open_files(0) ! Closing all files

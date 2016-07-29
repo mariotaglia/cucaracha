@@ -1,11 +1,15 @@
 ! Here all variables related with bulk
 
-subroutine set_bulk_properties(pHbulk)
+subroutine set_bulk_properties(pHbulk, csaltbulk, cpolbulk)
 #   include "control_run.h"
     use globales
     use csys
     implicit none
-    real(KIND=8), intent(in) :: pHbulk
+    real(KIND=8), intent(in) :: pHbulk, csaltbulk, cpolbulk
+
+
+! Volume fraction salt in mol/l 
+    xsalt=(csaltbulk*Na/(1.0d24))*(vsalt*vsol)   
 
 cHplus = 10**(-pHbulk) ! concentration H+ in bulk
 xHplusbulk = (cHplus*Na/(1.0d24))*(vsol)  ! volume fraction H+ in bulk vH+=vsol
@@ -25,15 +29,18 @@ else                  ! pH >7
     xnegbulk=-xsalt/zneg
 endif
 
+# if CHAIN == 1 && MUPOL == 1
+! Volume fraction pol
+    xpolbulk=(cpolbulk/long)*(Na/1.0d24)*(vpol*vsol)
+    xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk - xpolbulk
+# else
 ! En bulk no hay polimero.
          xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk !- xposbulk2
 
-! Totalmente add-hoc y util solo para calcular mupol 11-6-2015
-xpolbulk = (cpol*Na/(1.0d24))*vpol ! mupol 11-6-2015
-!!#if MUPOL == 0
-! Polymer Chemical potential in bulk
-! xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk -xpolbulk ! mupol 11-6-2015
-expmupol = ( cpol*0.602*vsol/( xsolbulk**(vpol*long) ) )            ! mupol 11-6-2015
+#endif
+
+expmupol = xpolbulk/(long*vpol) / xsolbulk**(long*vpol) /cuantas
+
 
 ! Ojo Kw y Ka estan en mol/l mientras que vsol y xsolbulk estan en nm3
 ! 1.0d24 factor de conversion de volumen de litro a nm3  1nm3 = 10^-24 l = 10^-24 dm3
@@ -44,6 +51,7 @@ expmupol = ( cpol*0.602*vsol/( xsolbulk**(vpol*long) ) )            ! mupol 11-6
 !ojo! expmuHplus ya tiene el signo menos!!
          expmuHplus = xHplusbulk / xsolbulk**vHplus   ! vsol = vHplus
          expmuOHmin = xOHminbulk / xsolbulk**vOHmin  ! vsol = vOHmin
+
 ! intrinstic equilibruim constants in mol/nm3
             Ka0 = (Ka*vsol/xsolbulk)*(Na/1.0d24)
             Kb0 = (Kb*vsol/xsolbulk)*(Na/1.0d24)
