@@ -217,6 +217,9 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
         stop 2 
     endif
     enddo
+! Ahora considero el peso del sigmapol
+            pro(i) = pro(i)**(sigma/delta) ! elefante!
+
 ! q es la suma de todas las probabilidades
     q=q+pro(i)
 !    q=q+pro(i)/shift ! Divido q por shift!
