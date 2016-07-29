@@ -21,9 +21,6 @@ real(kind=dp) :: infinity ! este valor puede ser MUY grande
 real(kind=8) :: fdisbulk!,aux=0.0
 !integer, dimension(dimR,nmon) :: n_exp 
 
-
-    !log_q=0.0 ! elefante!
-
     eps(:) = 0.0
     eps(dimR) = eps1
 
@@ -192,7 +189,7 @@ enddo
 
   !shift = shift_f
     !shift = (1-fdisbulk)**long
-    shift = 1.0
+    shift = 1.0*10**5
 # endif
 
 avpol(:)= 0.0 ! line important to probability calculus
@@ -204,7 +201,7 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 # ifdef fdebug_set_pore_distrib
         print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
 #endif
-    pro(i)=1.0!*shift
+    pro(i)=1.0*shift
 !      do j=1,long, 2 ! (long=28) ! Here you choose the type of the first segment
     do j=1,long ! (long=28)
         aR = pR(i, j)
@@ -228,6 +225,8 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
         stop 1 
     endif
     enddo
+
+    pro(i) = pro(i)**(sigma/delta) ! elefante!
 ! q es la suma de todas las probabilidades
     q=q+pro(i)
 !    q=q+pro(i)/shift ! Divido q por shift!
@@ -236,7 +235,7 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 ! pR devuelve en que layer se encuentra el monómero j del polímero i.
      ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
 
-       avpol(aR) = avpol(aR) + pro(i)*expmupol*vpol*factorcurv(aR) ! cilindro, ver notas
+       avpol(aR) = avpol(aR) + (pro(i)/shift)*expmupol*vpol*factorcurv(aR) ! cilindro, ver notas
        !avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR) ! cilindro, ver notas
 
 ! ver eq:factorcurv in mis_apuntes.lyx
