@@ -91,7 +91,7 @@ enddo
 ! 10. Pol-Sup
     F_eps = 0.0
 #if CHAIN != 0
-!    F_eps = fpol_sup() 
+    F_eps = fpol_sup() 
 !    if(eps1.ne.0.0) then
 !        print*, 'EPS should be 0 or correct free energy!'
 !        stop

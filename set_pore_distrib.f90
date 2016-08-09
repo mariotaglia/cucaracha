@@ -24,6 +24,10 @@ real(kind=8) :: fdisbulk!,aux=0.0
 
 !integer, dimension(dimR,nmon) :: n_exp 
 
+eps(:) = 0
+eps(dimR) = eps1
+
+
 infinity=HUGE(q)
 # ifdef fdebug    
     call printstate("set_pore_distrib L21")
@@ -49,7 +53,7 @@ do iR=1,dimR
 
 #if MUPOL == 1
 ! Para monocapas en superficie interna del nanocanal
-  sigma = expmupol *(delta/vsol) * exp(log_q)
+  sigma = expmupol *(1/vsol) * exp(log_q) ! Preguntar elefante!
 #endif
 
 !  fdis(iR) = dissos_degree(1,iR)
@@ -147,7 +151,7 @@ do iR = 1, dimR
 !    xpot(iR) = (xh(iR)**vpol) !/ (1-fdis(iR))
 #else
     ! Para polimero con regulacion de carga (cargado positivamente) 
-    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk)
+    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) * exp(eps(iR))
     !xpot(iR) = (xh(iR)**vpol)*exp(-psi(iR)*zpol) /(1-fdis(iR)-fdis2(iR) )
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
 #endif
@@ -232,7 +236,7 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 ! pR devuelve en que layer se encuentra el monómero j del polímero i.
      ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
 
-       avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR) ! cilindro, ver notas
+       avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR)!/delta ! cilindro, ver notas
 
 ! ver eq:factorcurv in mis_apuntes.lyx
 !       bR = pR(i, j+1)
