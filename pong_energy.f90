@@ -1,7 +1,7 @@
 function pong_energy()
 #   include "control_run.h"
-    use globales, only: delta, radio, dimR, vsalt, vsol, vpol, pi, zwall
-    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, sigmaq, K_CL0
+    use globales, only: delta, radio, dimR, vsalt, vsol, vpol, pi, zwall, long
+    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, sigma, sigmaq, K_CL0
 #ifdef PAHCL
     use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot, fdis, fdis2,avpol!, fdiswall
 #else  
@@ -9,7 +9,7 @@ function pong_energy()
 #endif
     implicit none
 
-    real(kind=8) :: pong_energy, sumpi, sumrho, sumel!, sum_disos
+    real(kind=8) :: pong_energy, sumpi, sumrho, sumel, sumpol!, sum_disos
     integer :: iR
 
 ! Energía segun Pong:
@@ -19,6 +19,7 @@ function pong_energy()
     sumpi = 0.0 ! sumpi :: osmotic pressure contribution (solvent expression)
     sumrho=0.0  ! sumrho:: density of free ions contribution
     sumel=0.0   ! sumel :: No considered superficial charge distributio
+    sumpol=0.0  ! sumpol :: comes from polymer chain when they are free (not used when grafted chains)
 
 !**********************************************************************************
 ! El calculo de esta energia es la diferencia entre la energia total del sistema 
@@ -38,18 +39,22 @@ function pong_energy()
 !                            - xposbulk2/vsalt2 & ! sum over  rho_i i=+,-,si
                           ) /vsol *delta*(dfloat(iR)-0.5)*delta/Radio
 ! electrostatic part free energy
-        sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5)*delta/Radio 
+        sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5)*delta/Radio
+
 #if CHAIN != 0
 ! Writing output in std_mupol.dat ! Not clear that this line work! 
   !      write(202,*) iR, dlog(avpol(iR)/vpol)
 #endif
+
     enddo
+!  free polymer chain density
+        sumpol = sumpol - sigma*delta/vsol
 
 
 !    print*, "surface charge: ", sigmaq*psi(dimR)/2.0
 !    print*, " sumpi ", sumpi, " sumrho ", sumrho, " sumel ", sumel        
 ! output.aux
 !    write(324,*) sumpi, sumrho, sumel 
-    pong_energy = sumpi + sumrho + sumel 
+    pong_energy = sumpi + sumrho + sumel + sumpol 
 
 end function pong_energy

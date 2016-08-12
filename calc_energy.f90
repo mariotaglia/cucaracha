@@ -7,7 +7,7 @@ subroutine calc_energy(pHbulk)
 #   include "control_run.h"
     use globales, only: delta, vsol, vsalt, radio, dimR , pi, lb, zwall
     use pore, only: qtot, psi, fdiswall
-    use csys, only: eps1, log_q, sigma, sigmaq!, constq
+    use csys, only: eps1, log_q, cpol, sigma, sigmaq, expmupol!, constq
     use FreeEnergy
     use mpmodule
     implicit none
@@ -35,13 +35,13 @@ subroutine calc_energy(pHbulk)
 ! ******************************************************************
     F_Conf = 0.0
 # if CHAIN != 0 
-    F_Conf = fconf_pol() *(sigma*delta/vsol)
+    F_Conf = fconf_pol() *sigma *delta/vsol ! elefante por que quitar el delta/vsol?
 # endif
     Free_Energy = Free_Energy + F_Conf
 !    print*, "E + F_Fconf" , Free_energy
  
     !std_mupol = std_mupol + F_conf ! just the sum: P*log(P) (viejo)
-    std_mupol = -log_q
+    std_mupol = dlog(sigma) - log_q
 
 ! 7. Chemical Equilibria
 ! ******************************************************************
@@ -98,6 +98,11 @@ enddo
 !    endif
 #endif
     Free_Energy = Free_Energy + F_eps
+
+! Entropía traslacional del polímero
+    Free_Energy =  Free_Energy + sigma *(dlog(sigma)-1-log(expmupol) )
+
+
  ! 11. Osmotic-Pressure!? should be zero. this is a check of the packing constraint
     F_ospi =0.0 
 !    F_ospi = fospi()
@@ -115,7 +120,7 @@ enddo
 !*******************************************************************
     Free_Energy2 = 0.0
     suma_pong = pong_energy() ! pong_energy(): considera la carga superficial sigmaq
-    Free_Energy2 = suma_pong - (delta/vsol)*sigma*log_q - F_vdW !&
+    Free_Energy2 = suma_pong - F_vdW - (delta/vsol)*sigma*log_q !&
 !*********************************************************************************
 ! La siguiente definicion no coincide con la condicion de contorno psi(dimR+1)
 !    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 & 
@@ -135,25 +140,25 @@ enddo
     Print*, "diff", Free_Energy -  Free_Energy2
 
 ! Guarda energia libre
-         write(311,*) sigma*delta/vsol, F_electro
-         write(312,*) sigma*delta/vsol, Free_energy2, suma_pong
-         write(301,*) sigma*delta/vsol, Free_energy
-         write(302,*) sigma*delta/vsol, F_Mix_s 
-         write(303,*) sigma*delta/vsol, F_Mix_pos
-         write(304,*) sigma*delta/vsol, F_Mix_neg
-         write(305,*) sigma*delta/vsol, F_Mix_Hplus
-         write(306,*) sigma*delta/vsol, F_Mix_OHmin
-         write(308,*) sigma*delta/vsol, F_Eq
-         write(319,*) sigma*delta/vsol, F_Eq_wall
-         write(202,*) sigma*delta/vsol, std_mupol
+         write(311,*) cpol, F_electro
+         write(312,*) cpol, Free_energy2, suma_pong
+         write(301,*) cpol, Free_energy, Free_energy2, Free_Energy - Free_Energy2
+         write(302,*) cpol, F_Mix_s 
+         write(303,*) cpol, F_Mix_pos
+         write(304,*) cpol, F_Mix_neg
+         write(305,*) cpol, F_Mix_Hplus
+         write(306,*) cpol, F_Mix_OHmin
+         write(308,*) cpol, F_Eq
+         write(319,*) cpol, F_Eq_wall
+         write(202,*) cpol, std_mupol
 #ifdef VDW
-         write(309,*) sigma*delta/vsol, F_vdW
+         write(309,*) cpol, F_vdW
 #endif
 # if CHAIN != 0
-         write(307,*) sigma*delta/vsol, F_Conf
-         write(310,*) sigma*delta/vsol, F_eps
+         write(307,*) cpol, F_Conf
+         write(310,*) cpol, F_eps
 # endif
-         write(201,*) sigma*delta/vsol, F_ospi
+         write(201,*) cpol, F_ospi
 
 !c--------------------------- FIN DE ENERGIA LIBRE -----------------
 

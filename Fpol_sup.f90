@@ -1,5 +1,5 @@
 function fpol_sup()
-    use globales, only: delta, radio, dimR, vpol, vsol
+    use globales, only: delta, radio, dimR, vpol, vsol, long
     use csys, only: eps1, eps
     use pore, only: avpol
 !    use FreeEnergy, only: checknumber
@@ -15,7 +15,8 @@ function fpol_sup()
 !            fpol_sup = fpol_sup - eps(iR)*avpol(iR)*delta*(dfloat(iR)-0.5)*delta/radio
 !    enddo
         ! Check avpol(iR) expression, here we need rho_pol
-        fpol_sup = eps(dimR)*avpol(dimR)/vpol
+
+        fpol_sup = eps(dimR)*avpol(dimR)/vpol/vsol*delta
     print*, "fpol_sup L16: " , fpol_sup 
 !    print*, "f_vdW llama checknumber: f_vdW", f_vdW
     call checknumber(fpol_sup,'fpol_sup')

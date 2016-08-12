@@ -51,10 +51,6 @@ do iR=1,dimR
 !  xOHmin(iR) = expmuOHmin*(xh(iR)**vOHmin) *dexp(-psi(iR)*zOH) ! OH- volume fraction
   xOHmin(iR) = expmuOHmin*xh(iR) *dexp(psi(iR))           ! OH-  volume fraction
 
-#if MUPOL == 1
-! Para monocapas en superficie interna del nanocanal
-  sigma = expmupol *(1/vsol) * exp(log_q) ! Preguntar elefante!
-#endif
 
 !  fdis(iR) = dissos_degree(1,iR)
 # if CHAIN != 0 
@@ -231,12 +227,21 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 ! q es la suma de todas las probabilidades
     q=q+pro(i)
 !    q=q+pro(i)/shift ! Divido q por shift!
+enddo
+
+!    log_q = dlog(q/shift)
+#if MUPOL == 1
+! Para monocapas en superficie interna del nanocanal
+  sigma = expmupol * exp(log_q) !*(delta/vsol)! Si saco el log_q entonces no tengo que normalizar avpol!
+#endif
+
+do i=1,chaintot ! i enumerate configurations (configurations ensamble)
     do j = 1,long
         aR = pR(i, j) 
 ! pR devuelve en que layer se encuentra el monómero j del polímero i.
      ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
 
-       avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR)!/delta ! cilindro, ver notas
+       avpol(aR) = avpol(aR) + pro(i)*(sigma)*(vpol)*factorcurv(aR)!/delta ! cilindro, ver notas
 
 ! ver eq:factorcurv in mis_apuntes.lyx
 !       bR = pR(i, j+1)
@@ -287,6 +292,7 @@ enddo ! End loop over chains/configurations
 !        avpolp(iR) = avpolp(iR) / q 
 !         avpol(iR) = avpoln(iR) + avpolp(iR)
     enddo
+
 ! Chequeo avpol
 !     temp2=0.0
 !     do iR=1,dimR

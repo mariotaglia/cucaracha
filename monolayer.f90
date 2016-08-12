@@ -90,6 +90,7 @@ program nanochannel
         !print*, "Solucion inicial x1: ", x1(:)
         icpol = 1
         do while (icpol <= ncpol)  ! Start principal Loop
+            cpol=vcpol(icpol)
             print*, 'Cpol bulk =', vcpol(icpol), 'ipH/npH:', icpol, '/', ncpol
             call set_bulk_properties(pHs(ipH),vcsalt(icsalt),vcpol(icpol)) 
 # ifdef fdebug
