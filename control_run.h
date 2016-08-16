@@ -48,7 +48,7 @@
 /* This lines prints information in standard output */
 
 # undef fdebug /*Imprime cadenas*/
-# define fdebug_set_pore_distrib
+# undef fdebug_set_pore_distrib
 # undef fdebug_pxs
 
 # undef fdebug_rota36
