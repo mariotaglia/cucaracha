@@ -142,7 +142,7 @@ enddo
 ! Guarda energia libre
          write(311,*) cpol, F_electro
          write(312,*) cpol, Free_energy2, suma_pong
-         write(301,*) cpol, Free_energy, Free_energy2, Free_Energy - Free_Energy2
+         write(301,*) cpol, Free_energy, Free_energy2
          write(302,*) cpol, F_Mix_s 
          write(303,*) cpol, F_Mix_pos
          write(304,*) cpol, F_Mix_neg
