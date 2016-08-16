@@ -40,6 +40,7 @@ endif
 #endif
 
 expmupol = xpolbulk/vpol / xsolbulk**(long*vpol) /cuantas
+! OJO! Podria aparecer una constantes (1-fdisbulk)**long  la excluimos a proposito. (libertad de constante en energía?)
 
 ! Ojo Kw y Ka estan en mol/l mientras que vsol y xsolbulk estan en nm3
 ! 1.0d24 factor de conversion de volumen de litro a nm3  1nm3 = 10^-24 l = 10^-24 dm3
