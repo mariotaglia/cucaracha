@@ -1,7 +1,7 @@
 subroutine set_pore_distrib
 ! To control the code to be included in the compilation
 #   include "control_run.h" 
-use mpmodule
+!use mpmodule
 use globales
 use csys
 use pore
@@ -19,9 +19,6 @@ real(kind=dp) :: q, shift ! este valor puede ser MUY grande
 !real(kind=16) :: q, shift ! este valor puede ser MUY grande
 real(kind=dp) :: infinity ! este valor puede ser MUY grande
 real(kind=8) :: fdisbulk!,aux=0.0
-
-    log_q=0.0 ! elefante!
-
 !integer, dimension(dimR,nmon) :: n_exp 
 
 eps(:) = 0
@@ -147,7 +144,7 @@ do iR = 1, dimR
 !    xpot(iR) = (xh(iR)**vpol) !/ (1-fdis(iR))
 #else
     ! Para polimero con regulacion de carga (cargado positivamente) 
-    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) * exp(eps(iR))
+    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) * exp(-eps(iR))
     !xpot(iR) = (xh(iR)**vpol)*exp(-psi(iR)*zpol) /(1-fdis(iR)-fdis2(iR) )
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
 #endif
@@ -186,9 +183,13 @@ enddo
 !  if (xpot(dimR) > 200 ) shift = 1.0d-150
 !  print*, " if (xpot(dimR) > 200 ) shift = 1.0d-150" 
 
-  !shift = shift_f
     !shift = (1-fdisbulk)**long
     shift = 1.0
+# ifdef fdebug_set_pore_distrib
+    print*, "se usa?: shift = (1-fdisbulk)**long = "  , shift
+    print*, "se usa?: shift_f= ", shift_f  
+#endif
+
 # endif
 
 avpol(:)= 0.0 ! line important to probability calculus
@@ -200,7 +201,7 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 # ifdef fdebug_set_pore_distrib
         print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
 #endif
-    pro(i)=1.0!*shift
+    pro(i)=1.0*shift*shift_f
 !      do j=1,long, 2 ! (long=28) ! Here you choose the type of the first segment
     do j=1,long ! (long=28)
         aR = pR(i, j)
@@ -221,18 +222,23 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 #endif
     if (pro(i) > infinity) then 
      write(0,'(63a)'), "pro(i) > infinity, Try decreasing the value of shift in fort.8!!" ! stderr
+     write(0,'(63a)'), "pro(i) > infinity, Try decreasing the value of shift_f in fort.8!!" ! stderr
         stop 1 
     endif
     enddo
+
+!    pro(i) = pro(i)**(sigma/delta) ! elefante!
 ! q es la suma de todas las probabilidades
     q=q+pro(i)
 !    q=q+pro(i)/shift ! Divido q por shift!
 enddo
+    write(11, *), q/shift_f/shift!, q, shift
+    log_q = dlog(q/shift_f/shift)
 
-!    log_q = dlog(q/shift)
 #if MUPOL == 1
 ! Para monocapas en superficie interna del nanocanal
   sigma = expmupol * exp(log_q) !*(delta/vsol)! Si saco el log_q entonces no tengo que normalizar avpol!
+    print*, sigma , "<- sigma"
 #endif
 
 do i=1,chaintot ! i enumerate configurations (configurations ensamble)
@@ -242,6 +248,10 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
      ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
 
        avpol(aR) = avpol(aR) + pro(i)*(sigma)*(vpol)*factorcurv(aR)!/delta ! cilindro, ver notas
+! Sigma es adimencional la superficie de referencia es delta/vsol (que se simplifico con los factores que venian
+! de el factor de curvatura (definicion del n(r;r',alpha) y la integral en volumen (2*pi*L*R)
+
+
 
 ! ver eq:factorcurv in mis_apuntes.lyx
 !       bR = pR(i, j+1)
@@ -264,18 +274,19 @@ enddo ! End loop over chains/configurations
         print*, "spd L177: End Loop over configurations"
 #endif
 
-# if POL == 0 /* PAH */ 
-#   ifdef PAHCL
-    write(11, *), q/shift!, q, shift
-    log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
-#   else
-    write(11, *), q/shift/(1-fdisbulk)**long !, q, shift
-    log_q = dlog(q/shift)-long*log(1-fdisbulk) ! Variable clave en el calculo de energias! MPLOG
-#   endif
-# else
-    write(11, *), q/shift!, q, shift
-    log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
-# endif
+!!  # if POL == 0 /* PAH */ 
+!!  #   ifdef PAHCL
+!!      write(11, *), q/shift!, q, shift
+!!      log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
+!!  #   else
+!!      write(11, *), q/shift/(1-fdisbulk)**long !, q, shift
+!!      log_q = dlog(q/shift)-long*log(1-fdisbulk) ! Variable clave en el calculo de energias! MPLOG
+!!  #   endif
+!!  # else
+!!      write(11, *), q/shift!, q, shift
+!!      log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
+!!  # endif
+
 !    call mpwrite(11,q/shift)
     !call mpwrite(11,q)
     !log_q = log(q) ! Variable clave en el calculo de energias! MPLOG
