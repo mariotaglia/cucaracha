@@ -3,7 +3,7 @@
 ! 2015-08-12 FMG: Conductance output is in S units
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine calc_conductance(pHbulk)
+subroutine calc_conductance(pHbulk,cpolbulk)
 #   include "control_run.h"
 !
 ! Calculo de conductancia !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -107,14 +107,14 @@ Gporo_coefDOHmin = Gporo_coefDOHmin / longporo * 2*pi * delta**2
 
 Grel_coefD = Gporo_coefD/Gvacio
 
-write(315,*) sigma*delta/vsol, Gporo, Gporo_coefD
-write(316,*) sigma*delta/vsol, Gvacio
-write(317,*) sigma*delta/vsol, Grel, Grel_coefD
+write(315,*) cpolbulk, Gporo, Gporo_coefD
+write(316,*) cpolbulk, Gvacio
+write(317,*) cpolbulk, Grel, Grel_coefD
 
-write(320,*) sigma*delta/vsol, Gporopos, Gporo_coefDpos
-write(321,*) sigma*delta/vsol, Gporoneg, Gporo_coefDneg
-write(322,*) sigma*delta/vsol, GporoHplus, Gporo_coefDplus
-write(323,*) sigma*delta/vsol, GporoOHmin, Gporo_coefDOHmin
+write(320,*) cpolbulk, Gporopos, Gporo_coefDpos
+write(321,*) cpolbulk, Gporoneg, Gporo_coefDneg
+write(322,*) cpolbulk, GporoHplus, Gporo_coefDplus
+write(323,*) cpolbulk, GporoOHmin, Gporo_coefDOHmin
 ! output.aux
-    write(324,*) sigma*delta/vsol, (Gporo - Gvacio), 7.352*(sigmaq*delta/vsol)*(3.141592*dimR/12000)/(6.02*1.0d7)
+    write(324,*) cpolbulk, (Gporo - Gvacio), 7.352*(sigmaq*delta/vsol)*(3.141592*dimR/12000)/(6.02*1.0d7)
 end subroutine calc_conductance
