@@ -140,11 +140,11 @@ program nanochannel
 ! Se escribe el output 
             call save_data(ipH,icpol) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
-            call calc_mean_values(pHs(ipH)) ! Rmedio
+            call calc_mean_values(pHs(ipH),vcpol(icpol)) ! Rmedio
 !            call calc_adsorvedchains(pHs(ipH)) !Nro de cadenas adsorvidas en el poro
 !            call calc_pkas() 
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
-!            call calc_conductance(pHs(ipH))
+!            call calc_conductance(pHs(ipH),vcpol(icpol))
         endif
         icpol= icpol +1
         enddo ! loop over sigma
