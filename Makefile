@@ -94,7 +94,7 @@ OBJS = $(SRC:.f90=.o)
 ##        Fchem_eq.o \
 ##        pong_energy.o
 
-!objs_mpfun90 = mpfun90.o mpmod90.o mpmodm90.o mpmodx90.o
+#objs_mpfun90 = mpfun90.o mpmod90.o mpmodm90.o mpmodx90.o
 
 .SUFFIXES:            # this deletes the default suffixes 
 .SUFFIXES: .f90 .o    # this defines the extensions I want
