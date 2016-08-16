@@ -188,18 +188,19 @@ enddo
 # ifdef fdebug_set_pore_distrib
     print*, "se usa?: shift = (1-fdisbulk)**long = "  , shift
     print*, "se usa?: shift_f= ", shift_f  
+    
 #endif
 
 # endif
 
 avpol(:)= 0.0 ! line important to probability calculus
-
+print*, "sigma: ", sigma
 !**************************************************************
 ! Calculo de la densidad de probabilidad de cada configuracion
 ! Estos Do's estan bien, siempre dejar la coma a la izquierda.
 do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 # ifdef fdebug_set_pore_distrib
-        print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
+!elefante        print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
 #endif
     pro(i)=1.0*shift*shift_f
 !      do j=1,long, 2 ! (long=28) ! Here you choose the type of the first segment
@@ -217,8 +218,11 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 ! monomers, A - B - A - B - etc
 !            pro(i) = pro(i) * xpot_neg(aR) * xpot_pos(bR)
 # ifdef fdebug_set_pore_distrib
-        print*, "spd L206", i, j, aR, xpot(aR), pro(i)
+!elefante        print*, "spd L206", i, j, aR, xpot(aR), pro(i)
 !        print*, "spd L206, i, j, aR=pR(i,j), xpot(ar), pro(i): ", i, j, aR, xpot(aR), pro(i)
+    if (j==1 .or. j==long) then 
+        print*, "spd L206", i, j, aR, xpot(aR), pro(i)
+    endif
 #endif
     if (pro(i) > infinity) then 
      write(0,'(63a)'), "pro(i) > infinity, Try decreasing the value of shift in fort.8!!" ! stderr
@@ -248,7 +252,7 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
      ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
 
        avpol(aR) = avpol(aR) + pro(i)*(sigma)*(vpol)*factorcurv(aR)!/delta ! cilindro, ver notas
-! Sigma es adimencional la superficie de referencia es delta/vsol (que se simplifico con los factores que venian
+! Sigma es adimensional la superficie de referencia es delta/vsol (que se simplifico con los factores que venian
 ! de el factor de curvatura (definicion del n(r;r',alpha) y la integral en volumen (2*pi*L*R)
 
 
