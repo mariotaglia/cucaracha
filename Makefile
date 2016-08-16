@@ -2,6 +2,7 @@
 
 # Parameters
 numv = 1.3.4
+# name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
 
