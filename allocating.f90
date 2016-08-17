@@ -76,7 +76,6 @@ subroutine allocating(m)
                      xneg(dimR),  &
                      xHplus(dimR),&
                      xOHmin(dimR),&
-                     eps(dimR),&
 # ifdef VDW
                      xtotal(dimR),&
 #endif /* VDW */

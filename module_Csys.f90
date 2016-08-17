@@ -29,13 +29,8 @@ module csys
     real(kind=8) :: cHplus, cOHmin, &
                     pOHbulk, xposbulk, xnegbulk, xsolbulk, &
                     xHplusbulk, xOHminbulk, &
-<<<<<<< HEAD
                     std_mupol, expmupos, expmuneg, expmuHplus, expmuOHmin
     real(kind=8), dimension(:), allocatable :: eps
-=======
-                    expmupol, expmupos, expmuneg, expmuHplus, expmuOHmin
-    real(kind=8), dimension(:),allocatable :: eps   
->>>>>>> f642ae46750e152e200bce4e9d13cfba4d7b7dc4
     real(kind=8), dimension(:), allocatable :: pHs, vsigma, vcsalt, vcpol ! list of bulk pHs
     real(kind=8), dimension(:,:), allocatable :: Xu
     real(kind=8), dimension(:,:,:), allocatable :: in1 ! guarda las configuraciones de cadena 
