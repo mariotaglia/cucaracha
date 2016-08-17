@@ -1,11 +1,7 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-<<<<<<< HEAD
-numv = 1.3.4
-=======
 numv = 1.3.5
->>>>>>> f642ae46750e152e200bce4e9d13cfba4d7b7dc4
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
@@ -98,11 +94,7 @@ OBJS = $(SRC:.f90=.o)
 ##        Fchem_eq.o \
 ##        pong_energy.o
 
-<<<<<<< HEAD
 #objs_mpfun90 = mpfun90.o mpmod90.o mpmodm90.o mpmodx90.o
-=======
-!objs_mpfun90 = mpfun90.o mpmod90.o mpmodm90.o mpmodx90.o
->>>>>>> f642ae46750e152e200bce4e9d13cfba4d7b7dc4
 
 .SUFFIXES:            # this deletes the default suffixes 
 .SUFFIXES: .f90 .o    # this defines the extensions I want
