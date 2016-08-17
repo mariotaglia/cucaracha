@@ -9,7 +9,7 @@ subroutine calc_energy(pHbulk)
     use pore, only: qtot, psi, fdiswall
     use csys, only: eps1, log_q, cpol, sigma, sigmaq, std_mupol!, constq
     use FreeEnergy
-    use mpmodule
+!    use mpmodule
     implicit none
     real(kind=8), intent(in) :: pHbulk
     real(kind=8) :: suma_pong, sys_mupol!, aux_mp
