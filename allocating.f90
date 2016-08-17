@@ -69,6 +69,7 @@ subroutine allocating(m)
             allocate(xh(dimR),    &  
                      xpot(dimR),  &
                      qtot(dimR),  &
+                     eps(dimR),  &
                      psi(0:dimR+1), &
                      xpos(dimR),  &
 !                     xpos2(dimR), &

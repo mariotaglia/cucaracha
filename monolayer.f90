@@ -50,7 +50,6 @@ program nanochannel
 #endif
 #endif
     !call mpinit(15) ! Initial working precision, number of digits =15
-    
 
 !    write(11,*) "set_pore_distrib 109: q "
 

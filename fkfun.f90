@@ -11,7 +11,7 @@ subroutine fkfun(x,f,ier)
     use globales 
     use csys
     use pore
-    use mpmodule
+!    use mpmodule
 !    use interface_checknumber
     implicit none 
 

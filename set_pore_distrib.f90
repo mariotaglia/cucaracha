@@ -50,7 +50,6 @@ do iR=1,dimR
 !  xOHmin(iR) = expmuOHmin*(xh(iR)**vOHmin) *dexp(-psi(iR)*zOH) ! OH- volume fraction
   xOHmin(iR) = expmuOHmin*xh(iR) *dexp(psi(iR))           ! OH-  volume fraction
 
-
 !  fdis(iR) = dissos_degree(1,iR)
 # if CHAIN != 0 
 #   if POL == 0 /* PAH */
@@ -146,7 +145,7 @@ do iR = 1, dimR
 !    xpot(iR) = (xh(iR)**vpol) !/ (1-fdis(iR))
 #else
     ! Para polimero con regulacion de carga (cargado positivamente) 
-    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) * exp(-eps(iR))
+    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) / exp(eps(iR))
     !xpot(iR) = (xh(iR)**vpol)*exp(-psi(iR)*zpol) /(1-fdis(iR)-fdis2(iR) )
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
 #endif
@@ -255,8 +254,6 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
        avpol(aR) = avpol(aR) + pro(i)*(sigma)*(vpol)*factorcurv(aR)!/delta ! cilindro, ver notas
 ! Sigma es adimensional la superficie de referencia es delta/vsol (que se simplifico con los factores que venian
 ! de el factor de curvatura (definicion del n(r;r',alpha) y la integral en volumen (2*pi*L*R)
-
-
 
 ! ver eq:factorcurv in mis_apuntes.lyx
 !       bR = pR(i, j+1)
