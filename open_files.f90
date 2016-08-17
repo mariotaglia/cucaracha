@@ -69,9 +69,9 @@ subroutine open_files(m,ipH)
             write(name_319,'(A9, A9)') 'F_eqwall_', pH_dat_str
             open(unit=319, file=name_319)
             !open(unit=319, file='F_eqwall.dat')
-            write(name_202,'(A10, A9)') 'std_mupol_', pH_dat_str
+            write(name_202,'(A10, A9)') 'sys_mupol_', pH_dat_str
             open(unit=202, file=name_202)
-            !open(unit=202, file='std_mupol.dat')
+            !open(unit=202, file='sys_mupol.dat')
 
             write(name_203,'(A16, A9)') 'adsorved_chains_', pH_dat_str
             open(unit=203, file=name_203)
@@ -141,7 +141,7 @@ subroutine open_files(m,ipH)
         case ( 0 )
         ! Energy
             close(201) ! F_ospi(?) 
-            close(202) ! std_mupol
+            close(202) ! sys_mupol
             close(203) ! adsorved_chains
             close(301) ! F_tot 
             close(302) ! F_mixs
