@@ -11,7 +11,7 @@ subroutine calc_conductance(pHbulk,cpolbulk)
 use globales
 use pore
 use csys
-real(kind=8), intent(in) :: pHbulk
+real(kind=8), intent(in) :: pHbulk, cpolbulk
 real(kind=8) :: Gvacio, Grel, Gporo, Gporopos, Gporoneg, GporoOHmin, GporoHplus
 real(kind=8) :: Grel_coefD, Gporo_coefD, Gporo_coefDpos, Gporo_coefDneg, Gporo_coefDOHmin, Gporo_coefDHplus
 integer :: iR

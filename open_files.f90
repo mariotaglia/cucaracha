@@ -73,8 +73,8 @@ subroutine open_files(m,ipH)
             open(unit=202, file=name_202)
             !open(unit=202, file='sys_mupol.dat')
 
-            write(name_203,'(A16, A9)') 'adsorved_chains_', pH_dat_str
-            open(unit=203, file=name_203)
+!            write(name_203,'(A16, A9)') 'adsorved_chains_', pH_dat_str
+!            open(unit=203, file=name_203)
             !open(unit=203, file='adsorved_chains.dat')
 # ifdef VDW
             write(name_309,'(A6, A9)') 'F_vdW_', pH_dat_str
@@ -102,8 +102,8 @@ subroutine open_files(m,ipH)
 #else            
             write(313,*) '# pHbulk, fdiswall, qwall'
 #endif
-            write(name_314,'(A5, A9)') 'pKas_', pH_dat_str
-            open(unit=314, file=name_314)
+!            write(name_314,'(A5, A9)') 'pKas_', pH_dat_str
+!            open(unit=314, file=name_314)
             !open(unit=314, file='pKas')
             write(name_318,'(A7, A9)') 'Rmedio_', pH_dat_str
             open(unit=318, file=name_318)
@@ -142,7 +142,7 @@ subroutine open_files(m,ipH)
         ! Energy
             close(201) ! F_ospi(?) 
             close(202) ! sys_mupol
-            close(203) ! adsorved_chains
+           ! close(203) ! adsorved_chains
             close(301) ! F_tot 
             close(302) ! F_mixs
             close(303) ! F_mixpos
@@ -160,7 +160,7 @@ subroutine open_files(m,ipH)
 
         ! Conductance and mean values (313 - 323)
             close(313) ! fmedio 
-            close(314) ! pKas
+            !close(314) ! pKas
             close(315) ! Gporo
             close(316) ! Gvacio 
             close(317) ! Grel

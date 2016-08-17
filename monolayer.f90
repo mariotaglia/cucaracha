@@ -143,7 +143,7 @@ program nanochannel
 !            call calc_adsorvedchains(pHs(ipH)) !Nro de cadenas adsorvidas en el poro
 !            call calc_pkas() 
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
-!            call calc_conductance(pHs(ipH),vcpol(icpol))
+            call calc_conductance(pHs(ipH),vcpol(icpol))
         endif
         icpol= icpol +1
         enddo ! loop over sigma
