@@ -18,13 +18,9 @@ real(kind=8) :: temp2, denon  ! it is  multiplicative factor in pro(cuantas)
 real(kind=dp) :: q, shift ! este valor puede ser MUY grande
 !real(kind=16) :: q, shift ! este valor puede ser MUY grande
 real(kind=dp) :: infinity ! este valor puede ser MUY grande
-<<<<<<< HEAD
-real(kind=8) :: fdisbulk!,aux=0.0
-=======
 
 !    log_q=0.0 ! elefante!
 
->>>>>>> solucionando_convergencia
 !integer, dimension(dimR,nmon) :: n_exp 
 
 eps(:) = 0
