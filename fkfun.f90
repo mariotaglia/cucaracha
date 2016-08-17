@@ -18,7 +18,7 @@ subroutine fkfun(x,f,ier)
     real(KIND=8), intent(in), dimension(2*dimR) :: x ! son variables de salida también
     real(KIND=8), intent(out), dimension(2*dimR) :: f ! son variables de salida también
     integer(KIND=8), intent(out) :: ier
-    real(KIND=8) :: norma
+    real(KIND=dp) :: norma
 !    type (mp_real) norma ! este valor puede ser MUY grande
     integer :: i, iR
 
@@ -94,8 +94,9 @@ subroutine fkfun(x,f,ier)
 !        call Rchecknumber(norma, 'norma en fkfun') ! if NaN or Infinity checknumber stops the program
     enddo
 !    print*, "fkfun67: iter, norma, q", iter, norma
-    write(10,'(A14,I4,A8,F7.2)', advance='no') "fkfun95: iter ", iter, " norma: ", norma
+!    write(10,'(A14,I4,A8)', advance='no') "fkfun95: iter ", iter, " norma: "
 !    call mpwrite(10,norma)
+    write(10,'(A14,I4,A8,ES14.7)', advance='yes') "fkfun95: iter ", iter, " norma: ", norma
     ier = 0
    
     return

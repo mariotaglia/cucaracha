@@ -1,7 +1,7 @@
 subroutine set_pore_distrib
 ! To control the code to be included in the compilation
 #   include "control_run.h" 
-use mpmodule
+!use mpmodule
 use globales
 use csys
 use pore
@@ -18,14 +18,14 @@ real(kind=8) :: temp2, denon  ! it is  multiplicative factor in pro(cuantas)
 real(kind=dp) :: q, shift ! este valor puede ser MUY grande
 !real(kind=16) :: q, shift ! este valor puede ser MUY grande
 real(kind=dp) :: infinity ! este valor puede ser MUY grande
-real(kind=8) :: fdisbulk!,aux=0.0
+
+!    log_q=0.0 ! elefante!
+
 !integer, dimension(dimR,nmon) :: n_exp 
 
+eps(:) = 0
+eps(dimR) = eps1
 
-    !log_q=0.0 ! elefante!
-
-    eps(:) = 0.0
-    eps(dimR) = eps1
 
 infinity=HUGE(q)
 # ifdef fdebug    
@@ -49,11 +49,6 @@ do iR=1,dimR
 
 !  xOHmin(iR) = expmuOHmin*(xh(iR)**vOHmin) *dexp(-psi(iR)*zOH) ! OH- volume fraction
   xOHmin(iR) = expmuOHmin*xh(iR) *dexp(psi(iR))           ! OH-  volume fraction
-
-#if MUPOL == 1
-!!! Para monocapas en superficie interna del nanocanal
-!  sigma = expmupol *(delta/vsol) * exp(log_q)
-#endif
 
 !  fdis(iR) = dissos_degree(1,iR)
 # if CHAIN != 0 
@@ -150,8 +145,7 @@ do iR = 1, dimR
 !    xpot(iR) = (xh(iR)**vpol) !/ (1-fdis(iR))
 #else
     ! Para polimero con regulacion de carga (cargado positivamente) 
-    !xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk)
-    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) * exp(-eps(iR)) 
+    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) / exp(eps(iR))
     !xpot(iR) = (xh(iR)**vpol)*exp(-psi(iR)*zpol) /(1-fdis(iR)-fdis2(iR) )
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
 #endif
@@ -190,21 +184,26 @@ enddo
 !  if (xpot(dimR) > 200 ) shift = 1.0d-150
 !  print*, " if (xpot(dimR) > 200 ) shift = 1.0d-150" 
 
-  !shift = shift_f
     !shift = (1-fdisbulk)**long
     shift = 1.0
+# ifdef fdebug_set_pore_distrib
+    print*, "se usa?: shift = (1-fdisbulk)**long = "  , shift
+    print*, "se usa?: shift_f= ", shift_f  
+    
+#endif
+
 # endif
 
 avpol(:)= 0.0 ! line important to probability calculus
-
+print*, "sigma: ", sigma
 !**************************************************************
 ! Calculo de la densidad de probabilidad de cada configuracion
 ! Estos Do's estan bien, siempre dejar la coma a la izquierda.
 do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 # ifdef fdebug_set_pore_distrib
-        print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
+!elefante        print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
 #endif
-    pro(i)=1.0!*shift
+    pro(i)=1.0*shift*shift_f
 !      do j=1,long, 2 ! (long=28) ! Here you choose the type of the first segment
     do j=1,long ! (long=28)
         aR = pR(i, j)
@@ -220,27 +219,41 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 ! monomers, A - B - A - B - etc
 !            pro(i) = pro(i) * xpot_neg(aR) * xpot_pos(bR)
 # ifdef fdebug_set_pore_distrib
-        print*, "spd L206", i, j, aR, xpot(aR), pro(i)
+!elefante        print*, "spd L206", i, j, aR, xpot(aR), pro(i)
 !        print*, "spd L206, i, j, aR=pR(i,j), xpot(ar), pro(i): ", i, j, aR, xpot(aR), pro(i)
+    if (j==1 .or. j==long) then 
+        print*, "spd L206", i, j, aR, xpot(aR), pro(i)
+    endif
 #endif
     if (pro(i) > infinity) then 
      write(0,'(63a)'), "pro(i) > infinity, Try decreasing the value of shift in fort.8!!" ! stderr
-        stop 2 
+     write(0,'(63a)'), "pro(i) > infinity, Try decreasing the value of shift_f in fort.8!!" ! stderr
+        stop 1 
     endif
     enddo
-! Ahora considero el peso del sigmapol
-            pro(i) = pro(i)**(sigma/delta) ! elefante!
 
+!    pro(i) = pro(i)**(sigma/delta) ! elefante!
 ! q es la suma de todas las probabilidades
     q=q+pro(i)
 !    q=q+pro(i)/shift ! Divido q por shift!
+enddo
+    write(11, *), q/shift_f/shift!, q, shift
+    log_q = dlog(q/shift_f/shift)
+
+#if MUPOL == 1
+! Para monocapas en superficie interna del nanocanal
+  sigma = exp( std_mupol + log_q ) !*(delta/vsol)! Si saco el log_q entonces no tengo que normalizar avpol!
+#endif
+
+do i=1,chaintot ! i enumerate configurations (configurations ensamble)
     do j = 1,long
         aR = pR(i, j) 
 ! pR devuelve en que layer se encuentra el monómero j del polímero i.
      ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
 
-       avpol(aR) = avpol(aR) + pro(i)*expmupol*vpol*factorcurv(aR) ! cilindro, ver notas
-       !avpol(aR) = avpol(aR) + pro(i)*sigma*vpol*factorcurv(aR) ! cilindro, ver notas
+       avpol(aR) = avpol(aR) + pro(i)*(sigma)*(vpol)*factorcurv(aR)!/delta ! cilindro, ver notas
+! Sigma es adimensional la superficie de referencia es delta/vsol (que se simplifico con los factores que venian
+! de el factor de curvatura (definicion del n(r;r',alpha) y la integral en volumen (2*pi*L*R)
 
 ! ver eq:factorcurv in mis_apuntes.lyx
 !       bR = pR(i, j+1)
@@ -263,38 +276,36 @@ enddo ! End loop over chains/configurations
         print*, "spd L177: End Loop over configurations"
 #endif
 
-# if POL == 0 /* PAH */ 
-#   ifdef PAHCL
-    write(11, *), q/shift!, q, shift
-    log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
-#   else
-    write(11, *), q/shift/(1-fdisbulk)**long !, q, shift
-    log_q = dlog(q/shift)-long*log(1-fdisbulk) ! Variable clave en el calculo de energias! MPLOG
-#   endif
-# else
-    write(11, *), q/shift!, q, shift
-    log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
-# endif
+!!  # if POL == 0 /* PAH */ 
+!!  #   ifdef PAHCL
+!!      write(11, *), q/shift!, q, shift
+!!      log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
+!!  #   else
+!!      write(11, *), q/shift/(1-fdisbulk)**long !, q, shift
+!!      log_q = dlog(q/shift)-long*log(1-fdisbulk) ! Variable clave en el calculo de energias! MPLOG
+!!  #   endif
+!!  # else
+!!      write(11, *), q/shift!, q, shift
+!!      log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
+!!  # endif
+
 !    call mpwrite(11,q/shift)
-    !log_q = log(q) ! Variable clave en el calculo de energias! MPLOG
-!    log_q = log(q)-log(shift) ! Variable clave en el calculo de energias! MPLOG
-! log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
+!    log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
+    write(11,*) "q, log_q: ", q, log_q
+
     do i=1,chaintot 
         pro(i) = pro(i)/q
     enddo
+
 !    print*, "pro(:): ", pro(:)
 !    call printstate("L105 set_pore_distrib")
-    
-    sigma = expmupol*(q/shift)*delta/vsol ! norma sigma
 
-!    do iR=1, dimR            ! norma avpol
-!        avpol(iR) = avpol(iR)/ q
-
+    do iR=1, dimR            ! norma avpol
+        avpol(iR) = avpol(iR)/ q
 !        avpoln(iR) = avpoln(iR) / q
 !        avpolp(iR) = avpolp(iR) / q 
 !         avpol(iR) = avpoln(iR) + avpolp(iR)
-!    enddo
-
+    enddo
 
 ! Chequeo avpol
 !     temp2=0.0

@@ -49,8 +49,7 @@ program nanochannel
     call kai ! Calcula los parametros de L-J 
 #endif
 #endif
-   ! call mpinit(15) ! Initial working precision, number of digits =15
-    
+    !call mpinit(15) ! Initial working precision, number of digits =15
 
 !    write(11,*) "set_pore_distrib 109: q "
 
@@ -90,6 +89,7 @@ program nanochannel
         !print*, "Solucion inicial x1: ", x1(:)
         icpol = 1
         do while (icpol <= ncpol)  ! Start principal Loop
+            cpol=vcpol(icpol)
             print*, 'Cpol bulk =', vcpol(icpol), 'ipH/npH:', icpol, '/', ncpol
             call set_bulk_properties(pHs(ipH),vcsalt(icsalt),vcpol(icpol)) 
 # ifdef fdebug
@@ -139,11 +139,11 @@ program nanochannel
 ! Se escribe el output 
             call save_data(ipH,icpol) ! Saving data
             call calc_energy(pHs(ipH)) ! CALCULO DE ENERGIAS!
-            call calc_mean_values(pHs(ipH)) ! Rmedio
+            call calc_mean_values(pHs(ipH),vcpol(icpol)) ! Rmedio
 !            call calc_adsorvedchains(pHs(ipH)) !Nro de cadenas adsorvidas en el poro
 !            call calc_pkas() 
 ! Calculo magnitudes derivadas: Gporo, Gneg, Gpos, fmedio, Rmedio,etc.
-!            call calc_conductance(pHs(ipH))
+!            call calc_conductance(pHs(ipH),vcpol(icpol))
         endif
         icpol= icpol +1
         enddo ! loop over sigma

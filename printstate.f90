@@ -138,7 +138,7 @@ subroutine printstate(marca)
     write(1984,*), " xnegbulk   :", xnegbulk
     write(1984,*), " xHplusbulk :", xHplusbulk
     write(1984,*), " xOHminbulk :", xOHminbulk
-    write(1984,*), "expmupol   :", expmupol
+    write(1984,*), "std_mupol   :", std_mupol
     write(1984,*), "expmupos   :", expmupos
     write(1984,*), "expmuneg   :", expmuneg
     write(1984,*), "expmuHplus :", expmuHplus

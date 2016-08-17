@@ -40,6 +40,7 @@ subroutine allocating(m)
                      xneg,  &
                      xHplus,&
                      xOHmin,&
+                     eps,&
 # ifdef VDW
                      xtotal,&
 #endif /* VDW */
