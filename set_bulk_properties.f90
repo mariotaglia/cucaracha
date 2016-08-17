@@ -7,7 +7,6 @@ subroutine set_bulk_properties(pHbulk, csaltbulk, cpolbulk)
     implicit none
     real(KIND=8), intent(in) :: pHbulk, csaltbulk, cpolbulk
 
-
 ! Volume fraction salt in mol/l 
     xsalt=(csaltbulk*Na/(1.0d24))*(vsalt*vsol)   
 
@@ -39,9 +38,6 @@ endif
 
 #endif
 
-expmupol = xpolbulk/vpol / xsolbulk**(long*vpol) /cuantas
-! OJO! Podria aparecer una constantes (1-fdisbulk)**long  la excluimos a proposito. (libertad de constante en energía?)
-
 ! Ojo Kw y Ka estan en mol/l mientras que vsol y xsolbulk estan en nm3
 ! 1.0d24 factor de conversion de volumen de litro a nm3  1nm3 = 10^-24 l = 10^-24 dm3
 
@@ -59,4 +55,26 @@ expmupol = xpolbulk/vpol / xsolbulk**(long*vpol) /cuantas
 #ifdef PAHCL
           K_Cl0 = (K_Cl*vsol/xsolbulk)*(Na/1.0d24)
 #endif 
+
+! Polymer Bulk Properties
+# if CHAIN != 0 
+#   if POL == 0 /* PAH */
+#       ifdef PAHCL
+#       else
+        fdisbulk = Ka0 / (( xOHminbulk/xsolbulk)  + Ka0   ) ! PAH using fdiswall symmetry
+#       endif
+#   elif POL == 1 /* PMEP */
+#   elif POL == 2 /*Neutral Polymer*/
+#   endif /* POL */
+# endif /* CHAIN */
+
+!print*, fdisbulk, ":fdisbulk"
+!Q_bulk = cuantas * xsolbulk**(long*vpol) /(1.0-fdisbulk)**long
+!print*, "Q_bulk , cuantas *xsolbulk**(long*vpol), (1-fdisbulk)**long, log(1-fdisbulk)", &
+!         Q_bulk , cuantas *xsolbulk**(long*vpol), (1-fdisbulk)**long,long*log(1.0-fdisbulk)
+!expmupol = xpolbulk/vpol / Q_bulk
+
+! std_mupol : bulk equation
+  std_mupol = dlog(xpolbulk/vpol) - log(1.0*cuantas) - vpol*long*dlog(xsolbulk)+long*dlog(1-fdisbulk)
+
 end subroutine set_bulk_properties

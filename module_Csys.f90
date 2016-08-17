@@ -16,8 +16,9 @@ module csys
 !    use globales !  implicit none esta en globales
 
 ! System Variables inputs
-    real(KIND=8) :: sigma, sigmaq, constq, &
-        cpol, xpolbulk, &
+    real(kind=dp) :: Q_bulk
+    real(kind=8) :: sigma, sigmaq, constq, &
+        cpol, xpolbulk, fdisbulk, &
         csalt, csalt2=0.0, xsalt, xsalt2,& ! Salt concentration
         pKawall, kwall, Kwall0, pKa, Ka, Ka0, pKb, Kb, Kb0, pK_Cl, K_Cl, K_Cl0,& ! chemical equilibrium
         eps1, & ! Electrostatic potential
@@ -29,7 +30,7 @@ module csys
     real(kind=8) :: cHplus, cOHmin, &
                     pOHbulk, xposbulk, xnegbulk, xsolbulk, &
                     xHplusbulk, xOHminbulk, &
-                    expmupol, expmupos, expmuneg, expmuHplus, expmuOHmin
+                    std_mupol, expmupos, expmuneg, expmuHplus, expmuOHmin
     real(kind=8), dimension(:), allocatable :: eps
     real(kind=8), dimension(:), allocatable :: pHs, vsigma, vcsalt, vcpol ! list of bulk pHs
     real(kind=8), dimension(:,:), allocatable :: Xu

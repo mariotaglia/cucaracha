@@ -18,9 +18,8 @@ real(kind=8) :: temp2, denon  ! it is  multiplicative factor in pro(cuantas)
 real(kind=dp) :: q, shift ! este valor puede ser MUY grande
 !real(kind=16) :: q, shift ! este valor puede ser MUY grande
 real(kind=dp) :: infinity ! este valor puede ser MUY grande
-real(kind=8) :: fdisbulk!,aux=0.0
 
-    log_q=0.0 ! elefante!
+!    log_q=0.0 ! elefante!
 
 !integer, dimension(dimR,nmon) :: n_exp 
 
@@ -200,7 +199,7 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 # ifdef fdebug_set_pore_distrib
         print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
 #endif
-    pro(i)=1.0!*shift
+    pro(i)=1.0*shift*shift_f
 !      do j=1,long, 2 ! (long=28) ! Here you choose the type of the first segment
     do j=1,long ! (long=28)
         aR = pR(i, j)
@@ -229,10 +228,10 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 !    q=q+pro(i)/shift ! Divido q por shift!
 enddo
 
-!    log_q = dlog(q/shift)
+    log_q = dlog(q/shift_f/shift)
 #if MUPOL == 1
 ! Para monocapas en superficie interna del nanocanal
-  sigma = expmupol * exp(log_q) !*(delta/vsol)! Si saco el log_q entonces no tengo que normalizar avpol!
+  sigma = exp( std_mupol + log_q ) !*(delta/vsol)! Si saco el log_q entonces no tengo que normalizar avpol!
 #endif
 
 do i=1,chaintot ! i enumerate configurations (configurations ensamble)
@@ -264,28 +263,30 @@ enddo ! End loop over chains/configurations
         print*, "spd L177: End Loop over configurations"
 #endif
 
-# if POL == 0 /* PAH */ 
-#   ifdef PAHCL
-    write(11, *), q/shift!, q, shift
-    log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
-#   else
-    write(11, *), q/shift/(1-fdisbulk)**long !, q, shift
-    log_q = dlog(q/shift)-long*log(1-fdisbulk) ! Variable clave en el calculo de energias! MPLOG
-#   endif
-# else
-    write(11, *), q/shift!, q, shift
-    log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
-# endif
+!!  # if POL == 0 /* PAH */ 
+!!  #   ifdef PAHCL
+!!      write(11, *), q/shift!, q, shift
+!!      log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
+!!  #   else
+!!      write(11, *), q/shift/(1-fdisbulk)**long !, q, shift
+!!      log_q = dlog(q/shift)-long*log(1-fdisbulk) ! Variable clave en el calculo de energias! MPLOG
+!!  #   endif
+!!  # else
+!!      write(11, *), q/shift!, q, shift
+!!      log_q = dlog(q/shift) ! Variable clave en el calculo de energias! MPLOG
+!!  # endif
+
 !    call mpwrite(11,q/shift)
-    !call mpwrite(11,q)
-    !log_q = log(q) ! Variable clave en el calculo de energias! MPLOG
-!    log_q = log(q)-log(shift) ! Variable clave en el calculo de energias! MPLOG
-! log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
+!    log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
+    write(11,*) "q, log_q: ", q, log_q
+
     do i=1,chaintot 
         pro(i) = pro(i)/q
     enddo
+
 !    print*, "pro(:): ", pro(:)
 !    call printstate("L105 set_pore_distrib")
+
     do iR=1, dimR            ! norma avpol
         avpol(iR) = avpol(iR)/ q
 !        avpoln(iR) = avpoln(iR) / q
