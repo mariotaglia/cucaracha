@@ -150,9 +150,9 @@ do iR = 1, dimR
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
 #endif
 #   elif POL == 1 /* PMEP */
-    xpot(iR) = (xh(iR)**vpol)/(1.0-fdis(iR)-fdis2(iR) ) 
+    xpot(iR) = (xh(iR)**vpol)/(1.0-fdis(iR)-fdis2(iR) ) / exp(eps(iR))
 #   elif POL == 2 /* Neutral Polymer */
-    xpot(iR) = (xh(iR)**vpol) ! Polimero neutro ! For Neutral Polymers OK!
+    xpot(iR) = (xh(iR)**vpol) / exp(eps(iR))! Polimero neutro ! For Neutral Polymers OK!
 #   endif /* PAH || PMEP */
 # ifdef fdebug_set_pore_distrib
 print*, "spd L149", iR, fdisbulk, xpot(iR), fdis(iR), xh(iR)
