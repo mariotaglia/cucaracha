@@ -133,7 +133,7 @@ print*, "set_pore_distrib L99 fdiswall, fdis(iR), xh(iR): ", fdiswall, fdis(:), 
 # if CHAIN != 0
 !!!!!! AQUI FALTA ACTUALIZAR xH! debe tomar el valor de  x1
 # ifdef fdebug_set_pore_distrib
-print*, "spd L127 L149 iR, xpot(iR), fdis(iR), xh(iR): "
+print*, "spd L127 L149 iR, fdisbulk, xpot(iR), fdis(iR), xh(iR): "
 #endif
 do iR = 1, dimR
 ! (xh(iR)**vpol): viene de reemplazar la presion osmotica por 
@@ -155,7 +155,7 @@ do iR = 1, dimR
     xpot(iR) = (xh(iR)**vpol) ! Polimero neutro ! For Neutral Polymers OK!
 #   endif /* PAH || PMEP */
 # ifdef fdebug_set_pore_distrib
-print*, "spd L149", iR, xpot(iR), fdis(iR), xh(iR)
+print*, "spd L149", iR, fdisbulk, xpot(iR), fdis(iR), xh(iR)
 !print*, "set_pore_distrib L115 iR, xpot(iR), fdis(iR), xh(iR): ", iR, xpot(iR), fdis(iR), xh(iR)
 #endif
 # ifdef VDW

@@ -1,21 +1,21 @@
 #Unix makefile for fortran-file	
 
 # Parameters
-numv = 1.3.5
+numv = 1.4
 # name of the target program here
 MAKEFILE = Makefile
 EXE = monolayer${numv}
 
 
-#FC = mpif90 #${F90}
-FC = gfortran
+FC = mpif90 #${F90}
+#FC = gfortran
 #FC = /shared/software/openmpi-1.6.1/bin/mpif77
 #FC = /shared/software/openmpi-1.6.1/bin/mpif90
 
 # This flags are used in the compilation stage (name should be CFLAGS)
 # To debug:
 #FFLAGS= -cpp -g -p -fbacktrace -fcheck=all -fchekbounds -Wall -D_VERSION=\"$(GIT_VERSION)\" 
-FFLAGS= -cpp -g -p -fbacktrace  -fbounds-check -Wall -D_VERSION=\"$(GIT_VERSION)\" 
+#FFLAGS= -cpp -g -p -fbacktrace  -fbounds-check -Wall -D_VERSION=\"$(GIT_VERSION)\" 
 ## -g produce debugging information in the operating system's native format.
 ## -pg generate extra code to write profile information suitable for the analysis program gprof
 # To run
@@ -23,7 +23,7 @@ FFLAGS= -cpp -g -p -fbacktrace  -fbounds-check -Wall -D_VERSION=\"$(GIT_VERSION)
 #FFLAGS= -cpp -O2 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
 #GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
-#FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
+FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 
 SRC = module_globales.f90 \
       module_Csys.f90 \
@@ -116,15 +116,15 @@ SHELL = /bin/bash
  LDFLAGS+= -L/lib/../lib  
  LDFLAGS+= -lsundials_fkinsol -lsundials_fnvecserial -lsundials_kinsol -lsundials_nvecserial -lm
  
-# LFLAGS=  -L/shared/software/sundials-2.5.0-openmpi/lib 
+ LFLAGS=  -L/shared/software/sundials-2.5.0-openmpi/lib 
 
-# LFLAGS+= -lsundials_fkinsol -lsundials_fnvecserial -lsundials_kinsol -lsundials_nvecserial -lm 
-# LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu 
-# LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib 
-# LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.6/../../.. -lgfortran -lm -lgcc_s -lquadmath
-# LFLAGS+= -L/usr/lib/../lib 
-# LFLAGS+= -L/lib/x86_64-linux-gnu  
-# LFLAGS+= -L/usr/local/share/lib 
+ LFLAGS+= -lsundials_fkinsol -lsundials_fnvecserial -lsundials_kinsol -lsundials_nvecserial -lm 
+ LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu 
+ LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib 
+ LFLAGS+= -L/usr/lib/gcc/x86_64-linux-gnu/4.6/../../.. -lgfortran -lm -lgcc_s -lquadmath
+ LFLAGS+= -L/usr/lib/../lib 
+ LFLAGS+= -L/lib/x86_64-linux-gnu  
+ LFLAGS+= -L/usr/local/share/lib 
 
 
 # Actions

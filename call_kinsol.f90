@@ -57,7 +57,7 @@ integer :: globalstrat, maxl, maxlrst, maxiter
     msbpre  = 10 ! Default value: elefante
 !    msbpre  = 10 ! (FACUNDO)
 
-    maxiter = 300 ! Maximum number of non-linear iterations (Default=200)
+    maxiter = 400 ! Maximum number of non-linear iterations (Default=200)
 !    maxiter = 200 ! Maximum number of non-linear iterations (Default=200)
 
     fnormtol = 1.0d-8 ! Function-norm stopping tolerance

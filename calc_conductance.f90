@@ -7,7 +7,7 @@ subroutine calc_conductance(pHbulk,cpolbulk)
 #   include "control_run.h"
 !
 ! Calculo de conductancia !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!
+! 
 use globales
 use pore
 use csys

@@ -1,5 +1,5 @@
 function fconf_pol()
-    use mpmodule
+!    use mpmodule
     use globales, only: chaintot, delta, vsol
     use csys, only: dp, log_q, pro, sigma
 !    use FreeEnergy, only: checknumber
