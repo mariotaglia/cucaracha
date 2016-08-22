@@ -16,10 +16,10 @@ function pong_energy()
 ! Esta energia se obtiene lugeo de reemplazar las expresiones 
 ! que se obtienen luego de minimizar la energía libre. 
 
-    sumpi = 0.0 ! sumpi :: osmotic pressure contribution (solvent expression)
-    sumrho=0.0  ! sumrho:: density of free ions contribution
-    sumel=0.0   ! sumel :: No considered superficial charge distributio
-    sumpol=0.0  ! sumpol :: comes from polymer chain when they are free (not used when grafted chains)
+    sumpi  = 0.0 ! sumpi :: osmotic pressure contribution (solvent expression)
+    sumrho = 0.0  ! sumrho:: density of free ions contribution
+    sumel  = 0.0   ! sumel :: No considered superficial charge distributio
+    sumpol = 0.0  ! sumpol :: comes from polymer chain when they are free (not used when grafted chains)
 
 !**********************************************************************************
 ! El calculo de esta energia es la diferencia entre la energia total del sistema 

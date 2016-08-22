@@ -22,8 +22,8 @@ function fmix()
     do iR = 1, dimR
         rdrR = delta*(dfloat(iR)-0.5)*delta/Radio
        
-        fmixs = fmixs + rdrR* ( xh(iR) /vsol) *( dlog(xh(iR)) -1.0) 
-        fmixs = fmixs - rdrR* (xsolbulk/vsol) *(dlog(xsolbulk)-1.0)
+        fmixs = fmixs + ( xh(iR) /vsol) *( dlog(xh(iR)) -1.0) *rdrR 
+        fmixs = fmixs - (xsolbulk/vsol) *(dlog(xsolbulk)-1.0) *rdrR
         ! H+
         fmixHplus = fmixHplus + (xHplus(iR)/vsol)*(dlog(xHplus(iR))-1.0 -dlog(expmuHplus)) *rdrR
         fmixHplus = fmixHplus - (xHplusbulk/vsol)*(dlog(xHplusbulk)-1.0 -dlog(expmuHplus)) *rdrR
@@ -38,10 +38,10 @@ function fmix()
         fmixneg = fmixneg + (xneg(iR)/(vsalt*vsol)) *(dlog(xneg(iR)/vsalt) -1.0 -dlog(expmuneg) ) *rdrR
         fmixneg = fmixneg - (xnegbulk/(vsalt*vsol)) *(dlog(xnegbulk/vsalt) -1.0 -dlog(expmuneg) ) *rdrR
         ! Polymer
-        fmixpol = fmixpol - (xpolbulk/(long*vpol*vsol) ) *(dlog(xpolbulk/(long*vpol)) -1.0 - std_mupol ) *rdrR
+        !fmixpol = fmixpol - (xpolbulk/(long*vpol*vsol) ) *(dlog(xpolbulk/(long*vpol)) -1.0 - std_mupol ) *rdrR
     enddo
         
-        fmixpol = fmixpol + sigma*delta/vsol *(dlog(sigma) -1.0 - std_mupol)
+        !fmixpol = fmixpol + sigma*delta/vsol *(dlog(sigma) -1.0 - std_mupol)
        
          fmix = fmixs + fmixHplus + fmixOHmin + fmixpos + fmixneg + fmixpol
 !    print*, "fmixs llama checknumber: fmixs", fmixs
