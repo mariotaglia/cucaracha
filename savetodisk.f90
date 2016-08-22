@@ -2,14 +2,14 @@
 !
 !
 
-subroutine savetodisk(array, title, sigma, pHbulk, counter2)
+subroutine savetodisk(array, title, cpol, pHbulk, counter2)
     use globales
 !    use csys, only: pHs
     implicit none
      
     real(KIND=8), dimension(dimR), intent(in) :: array
     character(len=5), intent(in) :: title 
-    real(kind=8), intent(in) :: pHbulk, sigma
+    real(kind=8), intent(in) :: pHbulk, cpol
     integer, intent(in) :: counter2
     
     character(len=36) :: format_string, filename
@@ -19,11 +19,11 @@ subroutine savetodisk(array, title, sigma, pHbulk, counter2)
     
 ! Un character(len=6) + character(len=1)+integer(len=3) with zeros on the left + character(len=1) ...
 !    format_string='(A6, A1, I3.3, A1, I3.3, A4)'
-    format_string='(A6,A1,F5.3,A1,I2.2,F0.2,A1,I3.3,A4)'
+    format_string='(A6,A1,F6.4,A1,I2.2,F0.2,A1,I3.3,A4)'
 
     titlez = title // 'z'
     ! Construye el array filename
-    write(filename,format_string) titlez,'_', sigma ,'_', int(pHbulk) , pHbulk-int(pHbulk), '_',counter2, '.dat'
+    write(filename,format_string) titlez,'_', cpol ,'_', int(pHbulk) , pHbulk-int(pHbulk), '_',counter2, '.dat'
     ! Abre el archivo y guarda la informacion 
     open(unit=45, file=filename)
 !        do iR=1, dimR
