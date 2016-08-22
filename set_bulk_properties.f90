@@ -31,7 +31,7 @@ endif
 # if CHAIN == 1 && MUPOL == 1
 ! Volume fraction pol
     xpolbulk=(cpolbulk/long)*(Na/1.0d24)*(vpol*vsol)
-    xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk - xpolbulk
+    xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk - xpolbulk*long
 # else
 ! En bulk no hay polimero.
          xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk !- xposbulk2
