@@ -30,48 +30,48 @@ subroutine save_data(ipH,icpol)
 # if CHAIN != 0
 ! Polimero
       title = 'avpol'
-      call savetodisk(avpol, title, sigma, pH ,ipH)
+      call savetodisk(avpol, title, cpol, pH ,ipH)
 ! fdis
       title = 'fdis1'
-      call savetodisk(fdis, title, sigma, pH, ipH)
+      call savetodisk(fdis, title, cpol, pH, ipH)
 
 !! ! fdis2
 !!       title = 'fdis2'
-!!       call savetodisk(fdis2, title, sigma, pH, ipH)
+!!       call savetodisk(fdis2, title, cpol, pH, ipH)
 
 #endif /* CHAIN != 0 */
 ! Total Charge
       title = 'qtodo'
-      call savetodisk(qtot, title, sigma, pH ,ipH)
+      call savetodisk(qtot, title, cpol, pH ,ipH)
 
 ! Solvente
       title = 'avsol'
-      call savetodisk(xh, title, sigma, pH, ipH)
+      call savetodisk(xh, title, cpol, pH, ipH)
 
 ! Cationes
       title = 'avpos'
-      call savetodisk(xpos, title, sigma, pH, ipH)
+      call savetodisk(xpos, title, cpol, pH, ipH)
 
 ! Cationes2
 !      title = 'avpo2'
-!      call savetodisk(xpos2, title, sigma, pH, ipH)
+!      call savetodisk(xpos2, title, cpol, pH, ipH)
 
 ! Aniones
       title = 'avneg'
-      call savetodisk(xneg, title, sigma, pH, ipH)
+      call savetodisk(xneg, title, cpol, pH, ipH)
 
 ! H+
       title = 'avHpl'
-      call savetodisk(xHplus, title, sigma, pH, ipH)
+      call savetodisk(xHplus, title, cpol, pH, ipH)
 
 ! OH-
       title = 'avOHm'
-      call savetodisk(xOHmin, title, sigma, pH,ipH)
+      call savetodisk(xOHmin, title, cpol, pH,ipH)
 
 ! Potencial electrostatico
 !        call printstate('save_data L71')
       title = 'poten'
-      call savetodisk(psi, title, sigma, pH, ipH)
+      call savetodisk(psi, title, cpol, pH, ipH)
 
 # ifdef debug
     format_string = '(A5,A1,I2.2,F0.2,A1,I3.3,A4)'
