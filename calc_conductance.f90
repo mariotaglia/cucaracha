@@ -116,5 +116,5 @@ write(321,*) cpolbulk, Gporoneg, Gporo_coefDneg
 write(322,*) cpolbulk, GporoHplus, Gporo_coefDplus
 write(323,*) cpolbulk, GporoOHmin, Gporo_coefDOHmin
 ! output.aux
-    write(324,*) cpolbulk, (Gporo - Gvacio), 7.352*(sigmaq*delta/vsol)*(3.141592*dimR/12000)/(6.02*1.0d7)
+!    write(324,*) cpolbulk, (Gporo - Gvacio), 7.352*(sigmaq*delta/vsol)*(3.141592*dimR/12000)/(6.02*1.0d7)
 end subroutine calc_conductance

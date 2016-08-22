@@ -1,6 +1,6 @@
 
 module FreeEnergy
-    real(kind=8) :: F_Mix, F_Mix_s, F_Mix_pos, F_Mix_neg, F_Mix_Hplus, F_Mix_OHmin, &
+    real(kind=8) :: F_Mix, F_Mix_s, F_Mix_pos, F_Mix_neg, F_Mix_Hplus, F_Mix_OHmin, F_Mix_pol,&
                     F_Conf, F_Eq, F_Eq_wall, F_vdW, F_electro, F_ospi, F_eps
     real(kind=8) :: Free_Energy, Free_Energy2
 ! En contains va el codigo de cada funcion!

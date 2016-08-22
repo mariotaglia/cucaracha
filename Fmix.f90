@@ -1,22 +1,22 @@
 function fmix()
-    use globales, only: dimR, Radio, delta, vsol, vsalt
+    use globales, only: dimR, Radio, delta, vsol, vsalt, vpol, long
     use csys, only: xsolbulk, expmuHplus, xHplusbulk, expmuOHmin, xOHminbulk &
-                            , expmupos, xposbulk, expmuneg, xnegbulk
+                            , expmupos, xposbulk, expmuneg, xnegbulk, sigma, std_mupol, xpolbulk
     use pore, only: xh, xHplus, xOHmin, xpos, xneg
-    use FreeEnergy, only: F_Mix_s, F_Mix_pos,  F_Mix_neg,  F_Mix_Hplus,  F_Mix_OHmin
+    use FreeEnergy, only: F_Mix_s, F_Mix_pos,  F_Mix_neg,  F_Mix_Hplus,  F_Mix_OHmin, F_Mix_pol
  
     implicit none
-    real(kind=8) :: fmix, fmixs, fmixHplus, fmixOHmin, fmixpos, fmixneg
+    real(kind=8) :: fmix, fmixs, fmixHplus, fmixOHmin, fmixpos, fmixneg, fmixpol
     real(kind=8) :: rdrR
     integer :: iR
 ! El output de la funcion es la suma de todo esto
-    fmix=0
-    fmixs=0
-    fmixHplus=0
-    fmixOHmin=0
-    fmixpos=0
-    fmixneg=0
-    
+    fmix=0.0
+    fmixs=0.0
+    fmixHplus=0.0
+    fmixOHmin=0.0
+    fmixpos=0.0
+    fmixneg=0.0
+    fmixpol=0.0 
 
 ! Siempre se calcula la energia respecto de la de bulk
     do iR = 1, dimR
@@ -37,8 +37,13 @@ function fmix()
         ! Cl-
         fmixneg = fmixneg + (xneg(iR)/(vsalt*vsol)) *(dlog(xneg(iR)/vsalt) -1.0 -dlog(expmuneg) ) *rdrR
         fmixneg = fmixneg - (xnegbulk/(vsalt*vsol)) *(dlog(xnegbulk/vsalt) -1.0 -dlog(expmuneg) ) *rdrR
+        ! Polymer
+        fmixpol = fmixpol - (xpolbulk/(long*vpol*vsol) ) *(dlog(xpolbulk/(long*vpol)) -1.0 - std_mupol ) *rdrR
     enddo
-        fmix = fmixs + fmixHplus + fmixOHmin + fmixpos + fmixneg
+        
+        fmixpol = fmixpol + sigma*delta/vsol *(dlog(sigma) -1.0 - std_mupol)
+       
+         fmix = fmixs + fmixHplus + fmixOHmin + fmixpos + fmixneg + fmixpol
 !    print*, "fmixs llama checknumber: fmixs", fmixs
 !    call checknumber(fmixs,'fmixs')
 !    call checknumber(fmixHplus, 'Energia fmixHplus')
@@ -50,6 +55,7 @@ function fmix()
     F_Mix_neg   = fmixOHmin
     F_Mix_Hplus = fmixpos
     F_Mix_OHmin = fmixneg
+    F_Mix_pol   = fmixpol
     return
     contains 
         subroutine checknumber(var, arg)

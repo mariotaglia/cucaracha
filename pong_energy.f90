@@ -1,7 +1,7 @@
 function pong_energy()
 #   include "control_run.h"
     use globales, only: delta, radio, dimR, vsalt, vsol, vpol, pi, zwall, long
-    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, sigma, sigmaq, K_CL0
+    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, xpolbulk, sigma, sigmaq, K_CL0
 #ifdef PAHCL
     use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot, fdis, fdis2,avpol!, fdiswall
 #else  
@@ -41,6 +41,8 @@ function pong_energy()
 ! electrostatic part free energy
         sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5)*delta/Radio
 
+! Bulk polymer chain density
+        sumpol = sumpol - (- xpolbulk / (long*vpol) )/vsol *delta*(dfloat(iR)-0.5)*delta/Radio 
 #if CHAIN != 0
 ! Writing output in std_mupol.dat ! Not clear that this line work! 
   !      write(202,*) iR, dlog(avpol(iR)/vpol)
@@ -50,11 +52,10 @@ function pong_energy()
 !  free polymer chain density
         sumpol = sumpol - sigma*delta/vsol
 
-
 !    print*, "surface charge: ", sigmaq*psi(dimR)/2.0
 !    print*, " sumpi ", sumpi, " sumrho ", sumrho, " sumel ", sumel        
 ! output.aux
-!    write(324,*) sumpi, sumrho, sumel 
+    write(324,*) sumpi, sumrho, sumel, sumpol 
     pong_energy = sumpi + sumrho + sumel + sumpol 
 
 end function pong_energy

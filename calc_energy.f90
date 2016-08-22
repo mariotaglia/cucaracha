@@ -125,7 +125,7 @@ enddo
 !*******************************************************************
     Free_Energy2 = 0.0
     suma_pong = pong_energy() ! pong_energy(): considera la carga superficial sigmaq
-    Free_Energy2 = suma_pong - F_vdW - (delta/vsol)*sigma*log_q !&
+    Free_Energy2 = suma_pong - F_vdW !- (delta/vsol)*sigma*log_q !&
 !*********************************************************************************
 ! La siguiente definicion no coincide con la condicion de contorno psi(dimR+1)
 !    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 & 
@@ -153,6 +153,7 @@ enddo
          write(304,*) cpol, F_Mix_neg
          write(305,*) cpol, F_Mix_Hplus
          write(306,*) cpol, F_Mix_OHmin
+         write(206,*) cpol, F_Mix_pol
          write(308,*) cpol, F_Eq
          write(319,*) cpol, F_Eq_wall
          write(202,*) cpol, sys_mupol, std_mupol

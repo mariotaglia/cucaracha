@@ -11,6 +11,7 @@ subroutine open_files(m,ipH)
     character(len=18) :: name_304
     character(len=16) :: name_305
     character(len=17) :: name_306
+    character(len=18) :: name_206
     character(len=16) :: name_307
     character(len=14) :: name_308
     character(len=18) :: name_319
@@ -60,6 +61,9 @@ subroutine open_files(m,ipH)
             write(name_306,'(A8, A9)') 'F_mixOH_', pH_dat_str
             open(unit=306, file=name_306)
             !open(unit=306, file='F_mixOH.dat')
+            write(name_206,'(A9, A9)') 'F_mixpol_', pH_dat_str
+            open(unit=206, file=name_206)
+            !open(unit=206, file='F_mixOH.dat')
             write(name_307,'(A7, A9)') 'F_conf_', pH_dat_str
             open(unit=307, file=name_307)
             !open(unit=307, file='F_conf.dat')
@@ -149,6 +153,7 @@ subroutine open_files(m,ipH)
             close(304) ! F_mixneg
             close(305) ! F_mixH
             close(306) ! F_mixOH
+            close(206) ! F_mixpol
             close(307) ! F_conf
             close(308) ! F_eq
 #       ifdef VDW
