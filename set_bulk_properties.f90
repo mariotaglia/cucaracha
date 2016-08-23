@@ -75,6 +75,6 @@ endif
 !expmupol = xpolbulk/vpol / Q_bulk
 
 ! std_mupol : bulk equation
-  std_mupol = dlog(xpolbulk/vpol) - log(1.0*cuantas) - vpol*long*dlog(xsolbulk)+long*dlog(1-fdisbulk)
+  std_mupol = dlog(xpolbulk/(long*vpol) ) - log(1.0*cuantas) - vpol*long*dlog(xsolbulk)+long*dlog(1-fdisbulk)
 
 end subroutine set_bulk_properties
