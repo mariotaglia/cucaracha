@@ -1,7 +1,7 @@
 function pong_energy()
 #   include "control_run.h"
     use globales, only: delta, radio, dimR, vsalt, vsol, vpol, pi, zwall, long
-    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, xpolbulk, sigma, sigmaq, K_CL0
+    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, xpolbulk, sigma, sigmaq, K_CL0, cpol
 #ifdef PAHCL
     use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot, fdis, fdis2,avpol!, fdiswall
 #else  
@@ -55,7 +55,7 @@ function pong_energy()
 !    print*, "surface charge: ", sigmaq*psi(dimR)/2.0
 !    print*, " sumpi ", sumpi, " sumrho ", sumrho, " sumel ", sumel        
 ! output.aux
-    write(324,*) sumpi, sumrho, sumel, sumpol 
+    write(324,*) cpol, sumpi, sumrho, sumel, sumpol 
     pong_energy = sumpi + sumrho + sumel + sumpol 
 
 end function pong_energy
