@@ -237,12 +237,12 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
     q=q+pro(i)
 !    q=q+pro(i)/shift ! Divido q por shift!
 enddo
-    write(11, *), q/shift_f/shift!, q, shift
+    !write(11, *), q/shift_f/shift!, q, shift
     log_q = dlog(q/shift_f/shift)
 
 #if MUPOL == 1
 ! Para monocapas en superficie interna del nanocanal
-  sigma = exp( std_mupol + log_q ) !*(delta/vsol)! Si saco el log_q entonces no tengo que normalizar avpol!
+  sigma = exp( std_mupol + log_q )/delta !*(delta/vsol)! Si saco el log_q entonces no tengo que normalizar avpol!
 #endif
 
 do i=1,chaintot ! i enumerate configurations (configurations ensamble)
@@ -291,7 +291,9 @@ enddo ! End loop over chains/configurations
 
 !    call mpwrite(11,q/shift)
 !    log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
-    write(11,*) "q, log_q: ", q, log_q
+
+!    write(11,*) "q, log_q: "
+    write(11,*)  q, log_q
 
     do i=1,chaintot 
         pro(i) = pro(i)/q
