@@ -28,7 +28,8 @@ subroutine calc_energy(pHbulk)
     F_Mix = 0.0
     F_Mix = fmix() ! Calcula las entropías de mezcla por separado y devuelve el total
                    ! (cada contribucion es guardada en una variable individual)
-    Free_Energy =  Free_Energy + F_Mix
+    Free_Energy =  Free_Energy - F_Mix 
+! Antes se sumaba pero creo que es un error de signo que había en la entropía. 23-08-2016
 
 ! ********************* POLYMER ************************************
 ! 6. Entropia interna polimero + Eq. Quimico (cambiar?)
@@ -102,7 +103,7 @@ enddo
     Free_Energy = Free_Energy + F_eps
 
 ! Entropía traslacional del polímero
-! lokking on set_pore_distrib.f90:
+! looking on set_pore_distrib.f90:
 !       sigma = exp( std_mupol + log_q )
 !old    Free_Energy =  Free_Energy + sigma *(dlog(sigma)-1-std_mupol )
     Free_Energy =  Free_Energy + sigma*(delta/vsol) *( log_q -1 )
@@ -132,6 +133,7 @@ enddo
     
     Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 &
                                 + F_Eq_wall
+    !write(324,*) "c", cpol, -F_vdW, sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0, F_Eq_wall 
 !
 ! Aunque la expresion para la carga superficial aparece en todas mis deducciones 
 ! aparentemente no hace falta. Es un termino constante. 
