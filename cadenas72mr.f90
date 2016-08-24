@@ -162,7 +162,7 @@ subroutine cadenas72mr(chains,ncha)
       do 400 i=1,300
          test='S'
          call rota36(xend,xendr,long,test)
-# ifdef BMu_const
+# if MUPOL == 1
 # else
          if (test.eq.'N') goto 400
 # endif
@@ -176,7 +176,7 @@ subroutine cadenas72mr(chains,ncha)
           do jj=1,dimR ! Mueve por layers
             test='S'
             call transla(jj,xendr, xendt,test)
-# ifdef BMu_const
+# if MUPOL == 1
 # else
             if (test.eq.'N') cycle ! Mueve por layers
 # endif
