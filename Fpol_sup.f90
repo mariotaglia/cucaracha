@@ -16,7 +16,8 @@ function fpol_sup()
 !    enddo
         ! Check avpol(iR) expression, here we need rho_pol
 
-        fpol_sup = eps(dimR)*avpol(dimR)/vpol/vsol*delta
+        fpol_sup = eps(dimR)*avpol(dimR)/vpol/vsol*delta*(dfloat(dimR)-0.5)*delta/radio
+
     print*, "fpol_sup L16: " , fpol_sup 
 !    print*, "f_vdW llama checknumber: f_vdW", f_vdW
     call checknumber(fpol_sup,'fpol_sup')

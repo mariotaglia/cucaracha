@@ -40,7 +40,7 @@ function fmix()
         ! Polymer
         !fmixpol = fmixpol - (xpolbulk/(long*vpol*vsol) ) *(dlog(xpolbulk/(long*vpol)) -1.0 - std_mupol ) *rdrR
     enddo
-        
+
         !fmixpol = fmixpol + sigma*delta/vsol *(dlog(sigma) -1.0 - std_mupol)
        
          fmix = fmixs + fmixHplus + fmixOHmin + fmixpos + fmixneg + fmixpol
@@ -51,10 +51,10 @@ function fmix()
 !    call checknumber(fmixpos, 'fmixpos')
 !    call checknumber(fmixneg, 'fmixneg')
     F_Mix_s     = fmixs 
-    F_Mix_pos   = fmixHplus
-    F_Mix_neg   = fmixOHmin
-    F_Mix_Hplus = fmixpos
-    F_Mix_OHmin = fmixneg
+    F_Mix_Hplus   = fmixHplus
+    F_Mix_OHmin   = fmixOHmin
+    F_Mix_pos = fmixpos
+    F_Mix_neg = fmixneg
     F_Mix_pol   = fmixpol
     return
     contains 
