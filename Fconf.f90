@@ -1,7 +1,7 @@
 function fconf_pol()
 !    use mpmodule
     use globales, only: chaintot, delta, vsol
-    use csys, only: dp, log_q, pro, sigma
+    use csys, only: dp, log_q, pro, sigma, weight
 !    use FreeEnergy, only: checknumber
     implicit none
     real(kind=8) :: aux_mp
@@ -15,7 +15,7 @@ function fconf_pol()
 !        aux_mp = log(pro(i)) - log_q
 !        fconf_pol = fconf_pol + (pro(i)/q)*aux_mp /vsol*delta*sigma
 !        fconf_pol = fconf_pol + sigma*delta*pro(i)*log(pro(i))/vsol
-        fconf_pol = fconf_pol + (pro(i))*dlog(pro(i)) 
+        if(weight(i).ne.0.0)fconf_pol = fconf_pol + (pro(i))*dlog(pro(i)) 
         !fconf_pol = fconf_pol + (pro(i)/q)*dlog((pro(i))/q)  /vsol*delta*sigma
     enddo
 ! Aca mp deneroa janer ima coreccion? elefante

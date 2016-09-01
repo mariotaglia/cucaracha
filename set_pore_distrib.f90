@@ -204,7 +204,9 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
 # ifdef fdebug_set_pore_distrib
 !elefante        print*, "spd L188 L206 i j aR=pR(i,j) xpot(ar) pro(i):"
 #endif
-    pro(i)=1.0*shift*shift_f
+
+    pro(i)=1.0*shift*shift_f*weight(i)
+
 !      do j=1,long, 2 ! (long=28) ! Here you choose the type of the first segment
     do j=1,long ! (long=28)
         aR = pR(i, j)
