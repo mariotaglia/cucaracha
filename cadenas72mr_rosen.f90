@@ -126,8 +126,8 @@ subroutine cadenas72mr_rosen(chains,ncha)
 ! Selfavoiding entre segmentos
  
       dista=0.0
-      do 300 ive=4,long
-         do 310 jve=1,ive-3
+      do ive=4,long
+         do jve=1,ive-3
             dista=(xend(1,jve)-xend(1,ive))**(2.0)
             dista=dista+(xend(2,jve)-xend(2,ive))**(2.0)
             dista=dista+(xend(3,jve)-xend(3,ive))**(2.0)
@@ -136,11 +136,11 @@ subroutine cadenas72mr_rosen(chains,ncha)
 !cccccccccwrite(2,*)'noself-a.',k
                goto 222
             endif
- 310     continue
- 300  continue
+        enddo
+        enddo
 
       ncha=0
-      do 400 i=1,300
+      do i=1,300
          test='S'
          call rota36(xend,xendr,long,test)
             ncha=ncha+1
@@ -151,9 +151,9 @@ subroutine cadenas72mr_rosen(chains,ncha)
                chains(3,j,ncha)=xendr(3,j) ! z
             enddo
 
-         if (ncha.eq.25) goto 402
- 400  continue
- 402  if (ncha.eq.0) goto 223
+         if (ncha.eq.25)exit
+       enddo
+      if (ncha.eq.0) goto 223
 
       return
 end subroutine cadenas72mr_rosen
