@@ -32,6 +32,7 @@ subroutine creador ! crea cadenas
     do while (il.lt.cuantas)
         call cadenas72mr_rosen(chains,ncha, wchains) ! ncha: number of generated chains
 !        call cadenas72mr(chains,ncha,wchains) ! ncha: number of generated chains
+!        print*, ncha, wchains(1)
         do i=1,ncha
             il = il + 1
             if(il.gt.cuantas) exit
@@ -39,6 +40,7 @@ subroutine creador ! crea cadenas
                 in1(il,j,1)=chains(1,j,i)
                 in1(il,j,2)=chains(2,j,i)
                 in1(il,j,3)=chains(3,j,i)
+!                print*, il, j, in1(il,j,1),  in1(il,j,2)
             end do           
                 inw(il) = wchains(i)
         end do

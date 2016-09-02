@@ -99,7 +99,6 @@ subroutine cadenas72mr_rosen(chains,ncha, wchains)
        enddo ! state
      
        sumexpu = sum(expu) !   
-   
        if(sumexpu.eq.0.0) then  ! dead end... we should differentiate here if all possible choinces are drop due to collisions with the wall, because in that case the chain should be counted in bulk
        goto 222
        endif
@@ -133,12 +132,18 @@ subroutine cadenas72mr_rosen(chains,ncha, wchains)
        xend(3,i)=xend(3,i-1)+x(3)
 
       utot =  utot -log(expenergy(xend,i)) ! exp(-energy) of a segment a position xpot
-      wrosen = wrosen * expenergy(xend,i)/3.0 ! rosenbluth weight up to first segment   
-
+      wrosen = wrosen * sumexpu/3.0 ! rosenbluth weight up to first segment   
+     
  enddo ! i
 
-      wchains(1) = float(3**long)*exp(-utot)/wrosen
       ncha=1
+            do j=1,long
+               chains(1,j,ncha)=xend(1,j) ! y
+               chains(2,j,ncha)=xend(2,j) ! x
+               chains(3,j,ncha)=xend(3,j) ! z
+            enddo
+
+      wchains(1) = 3.0**float(long)*exp(-utot)/wrosen
 return
 end subroutine 
 

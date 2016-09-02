@@ -187,7 +187,7 @@ enddo
 !  print*, " if (xpot(dimR) > 200 ) shift = 1.0d-150" 
 
     !shift = (1-fdisbulk)**long
-    shift = 1.0
+    shift = 1.0/sum(weight)
 # ifdef fdebug_set_pore_distrib
     print*, "se usa?: shift = (1-fdisbulk)**long = "  , shift
     print*, "se usa?: shift_f= ", shift_f  

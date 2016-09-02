@@ -26,6 +26,7 @@ subroutine pxs
                 pR(chaintot,j)=1 ! pR tiene la celda donde cae el segmento j de la conf. i
             else
                 pR(chaintot,j)=int(vect/delta)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
+!                print*, chaintot, j , pR(chaintot,j), in1(i,j,1), in1(i,j,2)
             endif
 # else
 ! **************************************************************************************
@@ -44,6 +45,7 @@ subroutine pxs
 # endif
         enddo
 !         print*, j, pR(10, j)
+!    print*, i, weight(i)
     enddo
 !#ifdef fdebug_pxs
     print* , "long, cuantas, chaintot: ", long, cuantas, chaintot
