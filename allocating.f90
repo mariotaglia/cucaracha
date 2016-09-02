@@ -61,7 +61,7 @@ subroutine allocating(m)
 # ifdef PAHCL /* used with PAH */ 
                       fdis2(dimR),&
 # endif
-                      pR(cuantas,long), in1(cuantas,long,3),&
+                      pR(cuantas,long), in1(cuantas,long,3),inw(cuantas), &
                       Xu(dimR,dimR),pro(cuantas), weight(cuantas) )
 #           endif
             if ( var1 /= 0 ) print*, "There is no sufficient memory for variables: x1, xflag" 

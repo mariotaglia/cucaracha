@@ -10,11 +10,12 @@ subroutine creador ! crea cadenas
     use csys
     implicit none
     interface
-        subroutine cadenas72mr_rosen(cha, ncha)
+        subroutine cadenas72mr_rosen(cha, ncha, wcha)
             use globales
             integer :: ncha
 !            real(kind=8), dimension(3,200,100), intent(out) :: cha
             real(kind=8), dimension(3,200,130), intent(out) :: cha
+            real(kind=8), dimension(200), intent(out) :: wcha
         endsubroutine
         subroutine imprimir_cadenas()
         endsubroutine
@@ -22,13 +23,15 @@ subroutine creador ! crea cadenas
 !    REAL(KIND=8)  indax, inday, indaz, rands
 !    REAL(KIND=8), dimension(3,200,100) :: chains ! en un modulo especial?
     REAL(KIND=8), dimension(3,200,130) :: chains ! en un modulo especial?
+    REAL(KIND=8), dimension(200) :: wchains ! en un modulo especial?
     INTEGER :: i, il, j, ncha
 
     ncha=0
     il=0
 
     do while (il.lt.cuantas)
-        call cadenas72mr_rosen(chains,ncha) ! ncha: number of generated chains
+        call cadenas72mr_rosen(chains,ncha, wchains) ! ncha: number of generated chains
+!        call cadenas72mr(chains,ncha,wchains) ! ncha: number of generated chains
         do i=1,ncha
             il = il + 1
             if(il.gt.cuantas) exit
@@ -37,6 +40,7 @@ subroutine creador ! crea cadenas
                 in1(il,j,2)=chains(2,j,i)
                 in1(il,j,3)=chains(3,j,i)
             end do           
+                inw(il) = wchains(i)
         end do
     end do
 

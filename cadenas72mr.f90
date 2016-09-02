@@ -4,7 +4,7 @@
 ! luego rota36 la acomoda en el nanocanal.
 !
 
-subroutine cadenas72mr(chains,ncha)
+subroutine cadenas72mr(chains,ncha, wchains)
 #   include "control_run.h"
     use globales, only: lseg, long, pi,dimR, delta!, radio
     use csys
@@ -13,6 +13,7 @@ subroutine cadenas72mr(chains,ncha)
     integer :: ncha
 !    REAL(KIND=8), intent(out) :: chains(3,200,100)
     REAL(KIND=8), intent(out) :: chains(3,200,130)
+    REAL(KIND=8), intent(out) :: wchains(200)
     
     real*8 rn,rands,state1,dista!, vect
     real*8 sitheta,cotheta,siphip,cophip
@@ -24,6 +25,8 @@ subroutine cadenas72mr(chains,ncha)
 # endif
     integer i,state,ii,j,ive,jve
     character*1 test
+
+    wchains = 1.0
 
     sitheta=sin(68.0*pi/180.0)
     cotheta=cos(68.0*pi/180.0)
