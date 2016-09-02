@@ -28,7 +28,7 @@ subroutine creador ! crea cadenas
     il=0
 
     do while (il.lt.cuantas)
-        call cadenas72mr(chains,ncha) ! ncha: number of generated chains
+        call cadenas72mr_rosen(chains,ncha) ! ncha: number of generated chains
         do i=1,ncha
             il = il + 1
             if(il.gt.cuantas) exit
