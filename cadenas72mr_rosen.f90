@@ -5,7 +5,6 @@
 !
 
 subroutine cadenas72mr_rosen(chains,ncha)
-#   include "control_run.h"
     use globales, only: lseg, long, pi,dimR, delta!, radio
     use csys
     use translators
@@ -18,10 +17,6 @@ subroutine cadenas72mr_rosen(chains,ncha)
     real*8 sitheta,cotheta,siphip,cophip
     real*8 m(3,3),mm(3,3),tt(3,3),tp(3,3),tm(3,3)
     real*8 x(3),xend(3,200),xendr(3,200)
-# if CRITERIO == 3 
-    real*8 xendt(3,200)
-    integer jj
-# endif
     integer i,state,ii,j,ive,jve
     character*1 test
 
@@ -91,7 +86,7 @@ subroutine cadenas72mr_rosen(chains,ncha)
       xend(2,2)=x(2)
       xend(3,2)=x(3)
       
-      do 10 i=3,long
+      do i=3,long
          
 ! 123     rn=rands(seed)
          rn=rands(seed)
@@ -103,30 +98,17 @@ subroutine cadenas72mr_rosen(chains,ncha)
          if (state.eq.0) then
             
             call mrrrr(m,tt,mm)
-            do 30 ii=1,3
-               do 40 j=1,3
-                  m(ii,j)=mm(ii,j)
- 40            continue
- 30         continue
-            
+            m=mm
             
          elseif (state.eq.1) then
             
             call mrrrr(m,tp,mm)
-            do 31 ii=1,3
-               do 41 j=1,3
-                  m(ii,j)=mm(ii,j)
- 41            continue
- 31         continue
+            m=mm
 
          elseif (state.eq.2) then
             
             call mrrrr(m,tm,mm)
-            do 32 ii=1,3
-               do 42 j=1,3
-                  m(ii,j)=mm(ii,j)
- 42            continue
- 32         continue
+            m=mm
             
          endif
          
@@ -137,8 +119,7 @@ subroutine cadenas72mr_rosen(chains,ncha)
          xend(1,i)=xend(1,i-1)+x(1)
          xend(2,i)=xend(2,i-1)+x(2)
          xend(3,i)=xend(3,i-1)+x(3)
-         
- 10   continue
+ enddo        
       
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Chequea cadenas
@@ -162,45 +143,8 @@ subroutine cadenas72mr_rosen(chains,ncha)
       do 400 i=1,300
          test='S'
          call rota36(xend,xendr,long,test)
-# if MUPOL == 1
-# else
-         if (test.eq.'N') goto 400
-# endif
-# if CRITERIO == 3 
-!Criterio 3 Le agrega un grado de libertad a las configuraciones de polimero
-!         do 403 jj=1,3000 ! Mueve por layers al azar.
-!            test='S'
-!            call transla(jj,xendr,test)
-!            if (test.eq.'N') go to 403 ! Mueve por layers tambien al azar.
-
-          do jj=1,dimR ! Mueve por layers
-            test='S'
-            call transla(jj,xendr, xendt,test)
-# if MUPOL == 1
-# else
-            if (test.eq.'N') cycle ! Mueve por layers
-# endif
-
-# endif
             ncha=ncha+1
             
-# if CRITERIO == 3 
-            do j=1,long
-               chains(1,j,ncha)=xendt(1,j) ! y
-               chains(2,j,ncha)=xendt(2,j) ! x
-               chains(3,j,ncha)=xendt(3,j) ! z
-            enddo
-
-         !if (ncha.eq.25) goto 402
-         if (ncha.eq.125) goto 402
-
-# ifdef fdebug
-         print*, " WARNING! (L180, cadenas72) Esto supone un sesgo en las configuraciones: if (ncha.eq.25) goto 402 "
-         print*, " WARNING! (L181, cadenas72) Para radios grandes hay que pensar otra cosa."
-# endif
-!403     continue
-        enddo ! 403     continue
-# else
             do j=1,long
                chains(1,j,ncha)=xendr(1,j) ! y
                chains(2,j,ncha)=xendr(2,j) ! x
@@ -208,7 +152,6 @@ subroutine cadenas72mr_rosen(chains,ncha)
             enddo
 
          if (ncha.eq.25) goto 402
-# endif
  400  continue
  402  if (ncha.eq.0) goto 223
 
