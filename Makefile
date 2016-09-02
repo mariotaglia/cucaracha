@@ -42,7 +42,7 @@ SRC = module_globales.f90 \
       printstate.f90\
       check_run.f90 \
       creador.f90 pxs.f90 kai.f90 \
-      cadenas72mr.f90 rota36.f90 \
+      cadenas72mr.f90 cadenas72mr_rosen.f90 rota36.f90 \
       mrrrr.f90 rands.f90 \
       call_kinsol.f90 fkfun.f90 factorcurv.f90 \
       fkpset.f90 fkpsol.f90 \

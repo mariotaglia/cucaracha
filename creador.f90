@@ -10,7 +10,7 @@ subroutine creador ! crea cadenas
     use csys
     implicit none
     interface
-        subroutine cadenas72mr(cha, ncha)
+        subroutine cadenas72mr_rosen(cha, ncha)
             use globales
             integer :: ncha
 !            real(kind=8), dimension(3,200,100), intent(out) :: cha
