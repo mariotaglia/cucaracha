@@ -75,7 +75,11 @@ subroutine cadenas72mr_rosen(chains,ncha, wchains)
       utot = -log(expenergy(xend,1)) ! exp(-energy) of a segment a position xpot
       wrosen = expenergy(xend,1) ! rosenbluth weight up to first segment    
 
-      call randommatrix(m) ! random direction
+      call randommatrix2(m) ! random direction
+
+!      print*, m
+!      call randommatrix(m) ! random direction
+!      print*,'!', m
 
       do i = 2,long ! loop over segments
       do state = 1,3 ! three RIS positions
@@ -224,4 +228,51 @@ subroutine randommatrix(m)
 
       return
 end subroutine
+subroutine randommatrix2(m)
+      use csys
+      use globales
+      implicit none
+      real*8 m(3,3)
+      real*8 :: rands
+      real*8 u,v,w,alfa,phi,tetha, x(3)
+      integer i, j
+ 
+      u=rands(seed)
+      v=rands(seed)
+      w=rands(seed)
 
+! http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToMatrix/      
+! http://mathworld.wolfram.com/SphericalCoordinates.html
+! http://mathworld.wolfram.com/SpherePointPicking.html
+
+      alfa = 2.0*pi*w
+      tetha = 2.0*pi*u 
+      phi = acos(2.0*v-1.0)
+
+      x(1) = cos(tetha)*sin(phi)
+      x(2) = sin(tetha)*sin(phi)
+      x(3) = cos(phi)
+
+      m = 0.0
+
+      do i = 1, 3
+       m(i,i) = cos(alfa)
+      enddo
+       
+    do i = 1, 3
+    do j = 1, 3
+      m(i,j) = m(i,j) + (1.0 - cos(alfa))*x(i)*x(j)
+    enddo
+    enddo
+
+    m(1,2) = m(1,2) + sin(alfa) * (-x(3))
+    m(1,3) = m(1,3) + sin(alfa) * (x(2))
+    m(2,1) = m(2,1) + sin(alfa) * (x(3))
+    m(2,3) = m(2,3) + sin(alfa) * (-x(1))
+    m(3,1) = m(3,1) + sin(alfa) * (-x(2))
+    m(3,2) = m(3,2) + sin(alfa) * (x(1))
+
+    m = m / sqrt(3.0)
+
+      return
+end
