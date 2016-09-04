@@ -74,7 +74,7 @@ endif
 !         Q_bulk , cuantas *xsolbulk**(long*vpol), (1-fdisbulk)**long,long*log(1.0-fdisbulk)
 !expmupol = xpolbulk/vpol / Q_bulk
 
-expmupol = xpolbulk/(long*vpol) / xsolbulk**(long*vpol) /cuantas * (fdisbulk)**long
+expmupol = xpolbulk/(long*vpol) / xsolbulk**(long*vpol) /sumallweight * (fdisbulk)**long
 
 ! std_mupol : bulk equation
   std_mupol = dlog(xpolbulk/(long*vpol) ) - log(1.0*cuantas) - vpol*long*dlog(xsolbulk)+long*dlog(fdisbulk)

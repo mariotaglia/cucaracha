@@ -38,6 +38,7 @@ module csys
     real(kind=8), dimension(:), allocatable :: x1, xg1, xflag
     real(kind=dp),dimension(:), allocatable ::  pro !  list of probability 
     real(kind=dp),dimension(:), allocatable ::  weight !  list of probability 
+    real(kind=dp) sumallweight
 !    type(mp_real),dimension(:), allocatable ::  pro !  list of probability 
     integer, dimension(:,:), allocatable :: pR ! pR stores the position of the segment j from conf. i . 
 !    integer, dimension(:,:)dimension(cuantas,long)  :: pR ! pR stores the position of the segment j from conf. i . 

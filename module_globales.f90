@@ -4,6 +4,10 @@
 module globales
 #   include "control_run.h"
     implicit none
+! rosenbluth
+    integer rosen
+    real*8 eps_rosen
+
 ! System Parameters, constant, etc
     real(KIND=8), parameter :: &
         Na=6.02d23, & ! Avogadro Number

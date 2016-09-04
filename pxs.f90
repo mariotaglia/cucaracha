@@ -14,16 +14,19 @@ subroutine pxs
     print* , "long, cuantas, chaintot: ", long, cuantas, chaintot
 #endif
     chaintot=0
+    sumallweight = 0.0
     do i=1,cuantas
         chaintot =chaintot+1
         weight(chaintot) = 1.0/inw(chaintot)
+        sumallweight = sumallweight + weight(chaintot)
         do j=1,long ! 1 = y, 2 = x, 3 = z... z no se usa...)
             vect = sqrt((in1(i,j,1))**2 + in1(i,j,2)**2) ! distancia del centro al segmento
 # if MUPOL == 1
 !            print*, i,j,vect, (int(vect/delta)+1), dimR
             if( (int(vect/delta)+1).gt.dimR) then
-                weight(chaintot) = 0.0
-                pR(chaintot,j)=1 ! pR tiene la celda donde cae el segmento j de la conf. i
+!                weight(chaintot) = 0.0
+                chaintot = chaintot - 1
+                exit                
             else
                 pR(chaintot,j)=int(vect/delta)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
 !                print*, chaintot, j , pR(chaintot,j), in1(i,j,1), in1(i,j,2)

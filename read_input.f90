@@ -1,6 +1,6 @@
 subroutine read_input
 #   include "control_run.h"
-    use globales, only: cuantas, dimR, long, radio, delta, neq
+    use globales, only: cuantas, dimR, long, radio, delta, neq, rosen, eps_rosen
     use csys
     use pore, only: shift_f
     implicit none
@@ -65,6 +65,10 @@ subroutine read_input
 
       read(8, *), basura
       read(8, *), movpos, movneg, movHplus, movOHmin, longporo ! [(m^2)*mS/M], longporo in micrometers
+
+      read(8, *), basura
+      read(8, *), rosen, eps_rosen
+
     close(unit=8)
 
 # if CHAIN != 0

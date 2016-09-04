@@ -149,20 +149,18 @@ end subroutine
 
 
 function expenergy(xend,pos)
-use globales, only: delta, radio, lseg
+use globales, only: delta, radio, lseg, eps_rosen
 implicit none
 real*8 expenergy
 real*8 dista
 real*8 xend(3,200)
 integer pos, ive, jve
-real*8 eps ! interaction with wall
 
-eps = 1.0 ! kBT per monomer
 expenergy = 1.0 
 dista = sqrt(xend(1,pos)**2 + xend(2,pos)**2)
 
 if(dista.gt.radio)expenergy = 0.0 ! out-of-pore
-if((dista.lt.radio).and.(dista.gt.(radio-delta)))expenergy = exp(-eps)
+if((dista.lt.radio).and.(dista.gt.(radio-delta)))expenergy = exp(-eps_rosen)
 
  
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
