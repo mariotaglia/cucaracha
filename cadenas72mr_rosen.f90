@@ -159,7 +159,7 @@ integer pos, ive, jve
 expenergy = 1.0 
 dista = sqrt(xend(1,pos)**2 + xend(2,pos)**2)
 
-if(dista.gt.radio)expenergy = 0.0 ! out-of-pore
+!if(dista.gt.radio)expenergy = 0.0 ! out-of-pore
 if((dista.lt.radio).and.(dista.gt.(radio-delta)))expenergy = exp(-eps_rosen)
 
  

@@ -1,7 +1,7 @@
 function pong_energy()
 #   include "control_run.h"
-    use globales, only: delta, radio, dimR, vsalt, vsol, vpol, pi, zwall, long
-    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, xpolbulk, sigma, sigmaq, K_CL0, cpol
+    use globales, only: delta, radio, dimR, vsalt, vsol, vpol, pi, zwall, long, chaintot
+    use csys, only: xsolbulk, xHplusbulk, xOHminbulk, xnegbulk, xposbulk, xpolbulk, sigma, sigmaq, K_CL0, cpol, pro, weight, sigma
 #ifdef PAHCL
     use pore, only: xh, xHplus, xOHmin, xpos, xneg, psi, qtot, avpol, xpot, fdis, fdis2,avpol!, fdiswall
 #else  
@@ -9,8 +9,8 @@ function pong_energy()
 #endif
     implicit none
 
-    real(kind=8) :: pong_energy, sumpi, sumrho, sumel, sumpol!, sum_disos
-    integer :: iR
+    real(kind=8) :: pong_energy,sumweight, sumpi, sumrho, sumel, sumpol!, sum_disos
+    integer :: iR, i
 
 ! Energía segun Pong:
 ! Esta energia se obtiene lugeo de reemplazar las expresiones 
@@ -20,11 +20,18 @@ function pong_energy()
     sumrho = 0.0  ! sumrho:: density of free ions contribution
     sumel  = 0.0   ! sumel :: No considered superficial charge distributio
     sumpol = 0.0  ! sumpol :: comes from polymer chain when they are free (not used when grafted chains)
+    sumweight = 0.0
 
 !**********************************************************************************
 ! El calculo de esta energia es la diferencia entre la energia total del sistema 
 ! y la energia del bulk. Por eso aparecen las magnitudes en bulk. 
 !**********************************************************************************
+
+    do i = 1, chaintot
+      sumweight = sumweight + sigma* pro(i)*log(weight(i))
+    enddo
+
+
     do iR=1,dimR
         sumpi = sumpi+dlog(xh(iR))/vsol *delta*(dfloat(iR)-0.5)*delta/Radio     
         sumpi = sumpi-dlog(xsolbulk)/vsol *delta*(dfloat(iR)-0.5)*delta/Radio  
@@ -56,6 +63,6 @@ function pong_energy()
 !    print*, " sumpi ", sumpi, " sumrho ", sumrho, " sumel ", sumel        
 ! output.aux
     write(324,*) cpol, sumpi, sumrho, sumel !, sumpol 
-    pong_energy = sumpi + sumrho + sumel ! + sumpol 
+    pong_energy = sumpi + sumrho + sumel + sumweight
 
 end function pong_energy

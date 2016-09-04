@@ -50,7 +50,7 @@ subroutine pxs
 !         print*, j, pR(10, j)
 !    print*, i, weight(i)
     enddo
-!#ifdef fdebug_pxs
+!!#ifdef fdebug_pxs
     print* , "long, cuantas, chaintot: ", long, cuantas, chaintot
-!#endif
+!!#endif
 end subroutine pxs
