@@ -22,12 +22,13 @@ subroutine cadenas72mr_rosen(chains,ncha, wchains)
     real*8 rn,rands,state1,dista!, vect
     real*8 sumexpu
     real*8 sitheta,cotheta,siphip,cophip
-    real*8 m(3,3),mm(3,3),tt(3,3),tp(3,3),tm(3,3)
+    real*8 m(3,3),mm(3,3),tt(3,3),tp(3,3),tm(3,3), m0(3,3)
     real*8 x(3),xend(3,200),xendt(3,200)
     integer i,state,ii,j,ive,jve
     real*8 expu(3), wrosen, utot
     real*8 tmp
     real*8 expenergy
+    integer ipos ! position of the initial segment
 
     sitheta=sin(68.0*pi/180.0)
     cotheta=cos(68.0*pi/180.0)
@@ -68,20 +69,21 @@ subroutine cadenas72mr_rosen(chains,ncha, wchains)
 
 
 ! first segment 
- 222   xend(1,1)=radio-delta/2 ! first segment is on the wall
-       xend(2,1)=0.0
-       xend(3,1)=0.0
+ 222  ipos = int(rands(seed)*float(long))+1 ! position of the first segment
+!      print*, seed,ipos
 
-      utot = -log(expenergy(xend,1)) ! exp(-energy) of a segment a position xpot
-      wrosen = expenergy(xend,1) ! rosenbluth weight up to first segment    
+       xend(1,ipos)=radio-delta/2 ! first segment is on the wall
+       xend(2,ipos)=0.0
+       xend(3,ipos)=0.0
 
-      call randommatrix2(m) ! random direction
+      utot = -log(expenergy(xend,ipos,ipos,ipos)) ! exp(-energy) of a segment a position xpot
+      wrosen = expenergy(xend,ipos,ipos,ipos) ! rosenbluth weight up to first segment    
 
-!      print*, m
-!      call randommatrix(m) ! random direction
-!      print*,'!', m
+      call randommatrix2(m0) ! random direction
 
-      do i = 2,long ! loop over segments
+!!!! GROWTH FOWARD
+      m = m0
+      do i = ipos+1,long ! loop over segments
       do state = 1,3 ! three RIS positions
       select case (state)
         case(1)
@@ -99,14 +101,13 @@ subroutine cadenas72mr_rosen(chains,ncha, wchains)
          xendt = xend
          xendt(:,i) = xendt(:,i-1) + x(:) ! trial position 
 
-         expu(state) = expenergy(xendt, i) ! boltzmann factor of segment(state), energy must consider repulsions with other segments and wall
+         expu(state) = expenergy(xendt, i, ipos, i) ! boltzmann factor of segment(state), energy must consider repulsions with other segments and wall
        enddo ! state
      
        sumexpu = sum(expu) !   
        if(sumexpu.eq.0.0) then  ! dead end... we should differentiate here if all possible choinces are drop due to collisions with the wall, because in that case the chain should be counted in bulk
        goto 222
        endif
-    
 
        expu = expu/sumexpu ! probability of selecting segment state from 0 to 1
        rn = rands(seed)
@@ -135,11 +136,74 @@ subroutine cadenas72mr_rosen(chains,ncha, wchains)
        xend(2,i)=xend(2,i-1)+x(2) 
        xend(3,i)=xend(3,i-1)+x(3)
 
-      utot =  utot -log(expenergy(xend,i)) ! exp(-energy) of a segment a position xpot
+      utot =  utot -log(expenergy(xend,i,ipos,i)) ! exp(-energy) of a segment a position xpot
       wrosen = wrosen * sumexpu/3.0 ! rosenbluth weight up to first segment   
      
  enddo ! i
 
+!!!! GROWTH BACKWARDS
+      m = m0
+      do i = ipos-1,1,-1 ! loop over segments
+      do state = 1,3 ! three RIS positions
+      select case (state)
+        case(1)
+         call mrrrr(m,tt,mm)
+        case(2)
+         call mrrrr(m,tp,mm)
+        case(3)
+         call mrrrr(m,tp,mm)
+       endselect ! mm contains the rotated matrix
+
+         x(1)=-mm(1,1)*lseg
+         x(2)=-mm(2,1)*lseg
+         x(3)=-mm(3,1)*lseg
+ 
+         xendt = xend
+         xendt(:,i) = xendt(:,i+1) + x(:) ! trial position 
+
+         expu(state) = expenergy(xendt, i, i, long) ! boltzmann factor of segment(state), energy must consider repulsions with other segments and wall
+       enddo ! state
+     
+       sumexpu = sum(expu) !  
+       if(sumexpu.eq.0.0) then  ! dead end... we should differentiate here if all possible choinces are drop due to collisions with the wall, because in that case the chain should be counted in bulk
+       goto 222
+       endif
+
+       expu = expu/sumexpu ! probability of selecting segment state from 0 to 1
+       rn = rands(seed)
+       tmp = 0.0
+       do state = 1, 3
+         tmp = tmp + expu(state)
+         if(tmp.gt.rn)exit ! pick state
+       enddo
+        
+        select case (state)
+        case(1)
+         call mrrrr(m,tt,mm)
+        case(2)
+         call mrrrr(m,tp,mm)
+        case(3)
+         call mrrrr(m,tp,mm)
+       endselect ! mm contains the rotated matrix
+
+       m=mm
+
+       x(1)=-m(1,1)*lseg
+       x(2)=-m(2,1)*lseg
+       x(3)=-m(3,1)*lseg
+  
+       xend(1,i)=xend(1,i+1)+x(1)
+       xend(2,i)=xend(2,i+1)+x(2) 
+       xend(3,i)=xend(3,i+1)+x(3)
+
+      utot =  utot -log(expenergy(xend,i,i, long)) ! exp(-energy) of a segment a position xpot
+      wrosen = wrosen * sumexpu/3.0 ! rosenbluth weight up to first segment   
+     
+ enddo ! i
+
+      call print_ent(xend)
+!      print*, ipos
+!      stop
       ncha=1
             do j=1,long
                chains(1,j,ncha)=xend(1,j) ! y
@@ -152,13 +216,13 @@ return
 end subroutine 
 
 
-function expenergy(xend,pos)
+function expenergy(xend,pos,ipos, fpos)
 use globales, only: delta, radio, lseg, eps_rosen
 implicit none
 real*8 expenergy
 real*8 dista
 real*8 xend(3,200)
-integer pos, ive, jve
+integer ipos, fpos,pos, ive, jve
 
 expenergy = 1.0 
 dista = sqrt(xend(1,pos)**2 + xend(2,pos)**2)
@@ -171,18 +235,40 @@ if((dista.lt.radio).and.(dista.gt.(radio-delta)))expenergy = exp(-eps_rosen)
 ! Chequea cadenas
 ! Selfavoiding entre segmentos
  
+!         print*, pos,'i',ipos,'f', fpos
       dista=0.0
-      do ive=4,pos
-         do jve=1,ive-3
+      ive=pos
+!         do ive=ipos,fpos
+         if((ive+2).le.fpos) then
+         do jve=ive+2,fpos ! check all pairs between ipos and fpos
             dista=(xend(1,jve)-xend(1,ive))**(2.0)
             dista=dista+(xend(2,jve)-xend(2,ive))**(2.0)
             dista=dista+(xend(3,jve)-xend(3,ive))**(2.0)
             dista=sqrt(dista)
+!            print*, ive,jve,'1'
             if (dista.lt.lseg) then
                expenergy = 0.0
             endif
         enddo
+        endif
+         if((ive-2).ge.ipos) then
+         do jve=ive-2,ipos,-1 ! check all pairs between ipos and fpos
+            dista=(xend(1,jve)-xend(1,ive))**(2.0)
+            dista=dista+(xend(2,jve)-xend(2,ive))**(2.0)
+            dista=dista+(xend(3,jve)-xend(3,ive))**(2.0)
+            dista=sqrt(dista)
+!            print*, ive,jve,'2'
+!            print*, ive,jve,dista,'2'
+            if (dista.lt.lseg) then
+               expenergy = 0.0
+            endif
         enddo
+        endif
+
+!print*, pos,ipos,fpos,expenergy
+
+
+!        enddo
 
 end function
 
@@ -272,7 +358,7 @@ subroutine randommatrix2(m)
     m(3,1) = m(3,1) + sin(alfa) * (-x(2))
     m(3,2) = m(3,2) + sin(alfa) * (x(1))
 
-    m = m / sqrt(3.0)
+!    m = m / sqrt(3.0)
 
       return
 end

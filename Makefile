@@ -23,8 +23,8 @@ FC = mpif90 #${F90}
 #FFLAGS= -cpp -O2 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
 GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags)
 #GFLAGS=-cpp -D_VERSION=\"$(GIT_VERSION)\"
-#FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
-FFLAGS= -cpp -g -p -fbacktrace  -fbounds-check -D_VERSION=\"$(GIT_VERSION)\" 
+FFLAGS= -cpp -O3 -fno-toplevel-reorder -D_VERSION=\"$(GIT_VERSION)\"
+#FFLAGS= -cpp -g -p -fbacktrace  -fbounds-check -D_VERSION=\"$(GIT_VERSION)\" 
 
 SRC = module_globales.f90 \
       module_Csys.f90 \
@@ -59,7 +59,8 @@ SRC = module_globales.f90 \
       Fchem_eq.f90 \
       Fchem_eq_wall.f90 \
       pong_energy.f90 \
-      calc_adsorvedchains.f90 
+      calc_adsorvedchains.f90 \
+      print_cadenas.f90 
 ##      F_vdW.f90\
 
 OBJS = $(SRC:.f90=.o)

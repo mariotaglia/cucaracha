@@ -69,6 +69,8 @@ subroutine read_input
       read(8, *), basura
       read(8, *), rosen, eps_rosen
 
+      read(8, *), basura
+      read(8, *), seed
     close(unit=8)
 
 # if CHAIN != 0
