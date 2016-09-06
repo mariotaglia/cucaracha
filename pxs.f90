@@ -53,4 +53,7 @@ subroutine pxs
 !!#ifdef fdebug_pxs
     print* , "long, cuantas, chaintot: ", long, cuantas, chaintot
 !!#endif
+
+    if(rosen.eq.-1) pR(chaintot,:) = dimR
+
 end subroutine pxs
