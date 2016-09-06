@@ -201,7 +201,7 @@ subroutine cadenas72mr_rosen(chains,ncha, wchains)
      
  enddo ! i
 
-      call print_ent(xend)
+!      call print_ent(xend)
 !      print*, ipos
 !      stop
       ncha=1
