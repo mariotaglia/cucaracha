@@ -25,11 +25,12 @@ subroutine creador ! crea cadenas
     REAL(KIND=8), dimension(3,200,130) :: chains ! en un modulo especial?
     REAL(KIND=8), dimension(200) :: wchains ! en un modulo especial?
     INTEGER :: i, il, j, ncha
+    real*8 inw, in1(long,3)
 
     ncha=0
-    il=0
-
-    do while (il.lt.cuantas)
+    sumallweight = 0.0
+    chaintot = 0
+    do while (chaintot.lt.cuantas)
         if(rosen.eq.1) then
         call cadenas72mr_rosen(chains,ncha, wchains) ! ncha: number of generated chains
         else
@@ -37,21 +38,20 @@ subroutine creador ! crea cadenas
         endif
 !        print*, ncha, wchains(1)
         do i=1,ncha
-            il = il + 1
-            if(il.gt.cuantas) exit
+            if(chaintot.gt.cuantas) exit
             do j=1,long         
-                in1(il,j,1)=chains(1,j,i)
-                in1(il,j,2)=chains(2,j,i)
-                in1(il,j,3)=chains(3,j,i)
-!                print*, il, j, in1(il,j,1),  in1(il,j,2)
+                in1(j,1)=chains(1,j,i)
+                in1(j,2)=chains(2,j,i)
+                in1(j,3)=chains(3,j,i)
             end do           
-                inw(il) = wchains(i)
+                inw = wchains(i)
+                call pxs(in1,inw)
         end do
     end do
 
 # ifdef fdebug
     print*, "creador.f90 L42: imprimo cadenas"
-    call imprimir_cadenas
+    call imprimir_cadenas(in1)
 #endif
  100  return
 end subroutine creador

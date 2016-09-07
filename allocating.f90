@@ -23,7 +23,7 @@ subroutine allocating(m)
 # ifdef PAHCL /* used with PAH */ 
                         fdis2, &
 # endif
-                        pR, in1, Xu,pro,stat=var1 )
+                        pR, Xu,pro,stat=var1 )
 #           endif                              
                 
             if ( var1 /= 0 ) print*, "There was an error in  memory deallocation. See last lines in main program. "
@@ -61,7 +61,7 @@ subroutine allocating(m)
 # ifdef PAHCL /* used with PAH */ 
                       fdis2(dimR),&
 # endif
-                      pR(cuantas,long), in1(cuantas,long,3),inw(cuantas), &
+                      pR(cuantas,long),&
                       Xu(dimR,dimR),pro(cuantas), weight(cuantas) )
 #           endif
             if ( var1 /= 0 ) print*, "There is no sufficient memory for variables: x1, xflag" 
