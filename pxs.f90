@@ -16,6 +16,7 @@ subroutine pxs(in1,ww)
     chaintot =chaintot+1
     weight(chaintot) = 1.0/ww
     sumallweight = sumallweight + weight(chaintot)
+    print*, chaintot
     do j=1,long ! 1 = y, 2 = x, 3 = z... z no se usa...)
             vect = sqrt((in1(j,1))**2 + in1(j,2)**2) ! distancia del centro al segmento
 # if MUPOL == 1

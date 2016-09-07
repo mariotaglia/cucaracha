@@ -49,6 +49,7 @@ subroutine creador ! crea cadenas
         end do
     end do
 
+    print*, 'sumall weight = ', sumallweight
 # ifdef fdebug
     print*, "creador.f90 L42: imprimo cadenas"
     call imprimir_cadenas(in1)
