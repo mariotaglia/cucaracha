@@ -48,6 +48,7 @@ subroutine creador ! crea cadenas
                 call pxs(in1,inw)
         end do
     end do
+    if(rosen.eq.-1) pR(chaintot,:) = dimR
 
     print*, 'sumall weight = ', sumallweight
 # ifdef fdebug
