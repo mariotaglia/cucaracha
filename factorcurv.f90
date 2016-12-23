@@ -8,7 +8,7 @@ function factorcurv (i)
     integer, intent(in) :: i
     double precision :: factorcurv
 
-    factorcurv = radio/((dfloat(i) - 0.5d0)*delta) ! /(2*pi*longporo) <- este termino se cancela con el que 
+    factorcurv = radio/((dfloat(i) - 0.5d0)*delta+radio) ! /(2*pi*longporo) <- este termino se cancela con el que 
                                                    ! aparece en la expresion para la densidad de monomeros avpol
 
     return

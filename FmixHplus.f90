@@ -8,8 +8,8 @@ real(kind=8) function fmixHplus()
     fmixHplus=0
 ! Siempre se calcula la energia respecto de la de bulk!
     do iR = 1, dimR
-        fmixHplus = fmixHplus + (xHplus(iR)/vsol)*(dlog(xHplus(iR))-1.0 -dlog(expmuHplus)) *delta*(dfloat(iR)-0.5)*delta/Radio
-        fmixHplus = fmixHplus - (xHplusbulk/vsol)*(dlog(xHplusbulk)-1.0 -dlog(expmuHplus)) *delta*(dfloat(iR)-0.5)*delta/Radio
+        fmixHplus = fmixHplus + (xHplus(iR)/vsol)*(dlog(xHplus(iR))-1.0 -dlog(expmuHplus)) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
+        fmixHplus = fmixHplus - (xHplusbulk/vsol)*(dlog(xHplusbulk)-1.0 -dlog(expmuHplus)) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
     enddo
 !    print*, "fmixHplus llama checknumber: fmixHplus: ", fmixHplus
     call checknumber(fmixHplus, 'Energia fmixHplus')

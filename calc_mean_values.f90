@@ -21,27 +21,27 @@ print*, "Calculating mean values... "
 sumcharge = 0.0
 
 do iR = 1, dimR
-    sumpol = sumpol + avpol(iR)*(dfloat(iR)-0.5) ! suma de avpol*r (falta constante)
+    sumpol = sumpol + avpol(iR)*(dfloat(iR)-0.5+radio/delta) ! suma de avpol*r (falta constante)
 !sumpolp = sumpolp + avpolp(iR)*(dfloat(iR)-0.5) ! suma de avpolp*r (falta constante)
 !sumpoln = sumpoln + avpoln(iR)*(dfloat(iR)-0.5) ! suma de avpoln*r (falta constante)
 
 !   suma de avpol*r^2 (falta constante)
-    Rmedio = Rmedio + avpol(iR)*(((dfloat(iR)-0.5)*delta)**2) 
+    Rmedio = Rmedio + avpol(iR)*(((dfloat(iR)-0.5+radio/delta)*delta)**2) 
 !   suma de frdis*avpol*r (falta constante)
-    fmedio = fmedio + fdis(iR)*avpol(iR)*(dfloat(iR)-0.5) 
+    fmedio = fmedio + fdis(iR)*avpol(iR)*(dfloat(iR)-0.5+radio/delta) 
 
 ! suma de frdis*avpoln*r (falta constante)
 !    fmedio = fmedio + fdis(iR)*avpoln(iR)*(dfloat(iR)-0.5) 
 #ifdef PAHCL
-    fmedio2 = fmedio2 + fdis2(iR)*avpol(iR)*(dfloat(iR)-0.5) 
+    fmedio2 = fmedio2 + fdis2(iR)*avpol(iR)*(dfloat(iR)-0.5+radio/delta) 
 #endif
 # if POL == 0 || POL == 2/* PAH */
-    sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpol(iR)/(vpol*vsol))*zpos *(fdis(iR))
+    sumcharge=sumcharge + (dfloat(iR)-0.5+radio/delta)*(avpol(iR)/(vpol*vsol))*zpos *(fdis(iR))
 # elif POL == 1 /* PMEP */
   ! suma de frdis*avpol*r (falta constante)
-    fmedio2 = fmedio2 + fdis2(iR)*avpol(iR)*(dfloat(iR)-0.5) 
+    fmedio2 = fmedio2 + fdis2(iR)*avpol(iR)*(dfloat(iR)-0.5+radio/delta) 
 !    fmedio2 = fmedio2 + fdis2(iR)*avpolp(iR)*(dfloat(iR)-0.5) 
-    sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpol(iR)/(vpol*vsol))*zpos &
+    sumcharge=sumcharge + (dfloat(iR)-0.5+radio/delta)*(avpol(iR)/(vpol*vsol))*zpos &
                                           *(fdis(iR)+2*fdis2(iR))
 !  sumcharge=sumcharge + (dfloat(iR)-0.5)*(avpoln(iR)/vpol)*fdis(iR)*zneg &
 !                      + (dfloat(iR)-0.5)*avpolp(iR)*fdis2(iR)*zpos ! para switterion

@@ -4,7 +4,7 @@ subroutine read_input
     use csys
     use pore, only: shift_f
     implicit none
-    integer :: i
+    integer :: i, RdimR
     character :: basura
 
     open(8,status='old', action='read' )
@@ -59,8 +59,8 @@ subroutine read_input
 ! st parameter is for vdW interaction on/off ?
       read(8, *), basura
 !      read(8, *), st
-      read(8, *), cuantas, dimR, long, shift_f  ! radio size
-        radio=dimR*delta
+      read(8, *), cuantas, dimR, RdimR, long, shift_f  ! radio size
+        radio=RdimR*delta
         neq=2*dimR
 
       read(8, *), basura

@@ -12,7 +12,7 @@ real(kind=8) function fospi()
         fospi = fospi + ( xOHmin(iR) + xHplus(iR) + xh(iR) &
                       +  (xneg(iR) + xpos(iR) ) &
                       + avpol(iR) - 1.0 ) &
-                      *(dlog(xh(iR))/vsol) *delta*(dfloat(iR)-0.5)*delta/Radio
+                      *(dlog(xh(iR))/vsol) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
     enddo
 
 !    print*, "fmixOHmin llama checknumber: fmixOHmin", fmixOHmin

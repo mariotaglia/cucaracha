@@ -9,9 +9,9 @@ real(kind=8) function fmixneg()
 ! Siempre se calcula la energia respecto de la de bulk!
     do iR = 1, dimR
        fmixneg = fmixneg + (xneg(iR)/(vsalt*vsol)) &
-                    *(dlog(xneg(iR)/vsalt) -1.0 - dlog(expmuneg/vsalt) ) *delta*(dfloat(iR)-0.5)*delta/Radio
+                    *(dlog(xneg(iR)/vsalt) -1.0 - dlog(expmuneg/vsalt) ) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
        fmixneg = fmixneg - (xnegbulk/(vsalt*vsol)) &
-                    *(dlog(xnegbulk/vsalt) -1.0 - dlog(expmuneg/vsalt) ) *delta*(dfloat(iR)-0.5)*delta/Radio
+                    *(dlog(xnegbulk/vsalt) -1.0 - dlog(expmuneg/vsalt) ) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
 ! Mi forma 
 !       fmixneg = fmixneg + (xneg(iR)/(vsalt*vsol)) *(dlog(xneg(iR)) -1.0 - dlog(expmuneg) ) *delta*(dfloat(iR)-0.5)*delta/Radio
 !       fmixneg = fmixneg - (xnegbulk/(vsalt*vsol)) *(dlog(xnegbulk) -1.0 - dlog(expmuneg) ) *delta*(dfloat(iR)-0.5)*delta/Radio

@@ -19,11 +19,11 @@ subroutine pxs
         do j=1,long ! 1 = y, 2 = x, 3 = z... z no se usa...)
             vect = sqrt((in1(i,j,1))**2 + in1(i,j,2)**2) ! distancia del centro al segmento
 # ifdef BMu_const
-            if( (int(vect/delta)+1).gt.dimR) then
+            if(vect.lt.radio) then
                 chaintot=chaintot-1
                 exit
             else
-                pR(chaintot,j)=int(vect/delta)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
+                pR(chaintot,j)=int((vect-radio)/delta)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
             endif
 # else
 ! **************************************************************************************
@@ -31,7 +31,7 @@ subroutine pxs
 ! KIND=1 => 1 byte! = 2^8 = 256 enteros
 ! viejo       pR(i,j)=int(vect/delta,1)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
 ! **************************************************************************************
-            pR(i,j)=int(vect/delta)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
+            pR(i,j)=int((vect-radio)/delta)+1 ! pR tiene la celda donde cae el segmento j de la conf. i
 #       ifdef fdebug_pxs
             print*, "pxs L22: i, j, pR(i,j), vect, in1(i,j,1), in1(i,j,2) ", i, j, pR(i,j), vect, in1(i,j,1), in1(i,j,2)
 #       endif

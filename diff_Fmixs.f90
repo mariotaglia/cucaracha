@@ -9,8 +9,8 @@ function fmixs()
     integer :: iR
     fmixs=0
     do iR = 1, dimR
-        fmixs = fmixs + xh(iR)*(dlog(xh(iR))-1.0)*(dfloat(iR)-0.5)*delta/Radio 
-        fmixs = fmixs - xsolbulk*(dlog(xsolbulk)-1.0)*(dfloat(iR)-0.5)*delta/Radio
+        fmixs = fmixs + xh(iR)*(dlog(xh(iR))-1.0)*(dfloat(iR)-0.5+radio/delta)*delta/Radio 
+        fmixs = fmixs - xsolbulk*(dlog(xsolbulk)-1.0)*(dfloat(iR)-0.5+radio/delta)*delta/Radio
     enddo
 
 !    print*, "fmixs llama checknumber: fmixs", fmixs

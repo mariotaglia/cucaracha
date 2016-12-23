@@ -26,20 +26,20 @@ function pong_energy()
 ! y la energia del bulk. Por eso aparecen las magnitudes en bulk. 
 !**********************************************************************************
     do iR=1,dimR
-        sumpi = sumpi+dlog(xh(iR))/vsol *delta*(dfloat(iR)-0.5)*delta/Radio     
-        sumpi = sumpi-dlog(xsolbulk)/vsol *delta*(dfloat(iR)-0.5)*delta/Radio  
+        sumpi = sumpi+dlog(xh(iR))/vsol *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio     
+        sumpi = sumpi-dlog(xsolbulk)/vsol *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio  
         
        sumrho = sumrho + ( - xh(iR) -xHplus(iR) -xOHmin(iR) &
                             -(xpos(iR)+xneg(iR))/vsalt &
 !                            - xpos2(iR)/vsalt2 & ! sum over  rho_i i=+,-,si
-                          ) /vsol *delta*(dfloat(iR)-0.5)*delta/Radio
+                          ) /vsol *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
 ! Bulk sumrho
         sumrho = sumrho - ( - xsolbulk -xHplusbulk -xOHminbulk &
                             -(xposbulk+xnegbulk)/vsalt &
 !                            - xposbulk2/vsalt2 & ! sum over  rho_i i=+,-,si
-                          ) /vsol *delta*(dfloat(iR)-0.5)*delta/Radio
+                          ) /vsol *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
 ! electrostatic part free energy
-        sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5)*delta/Radio
+        sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
 
 #if CHAIN != 0
 ! Writing output in std_mupol.dat ! Not clear that this line work! 

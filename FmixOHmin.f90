@@ -8,8 +8,8 @@ real(kind=8) function fmixOHmin()
     fmixOHmin=0
 ! Siempre se calcula la energia respecto de la de bulk!
     do iR = 1, dimR
-        fmixOHmin = fmixOHmin + (xOHmin(iR)/vsol)*(dlog(xOHmin(iR))-1.0 -dlog(expmuOHmin)) *delta*(dfloat(iR)-0.5)*delta/Radio
-        fmixOHmin = fmixOHmin - (xOHminbulk/vsol)*(dlog(xOHminbulk)-1.0 -dlog(expmuOHmin)) *delta*(dfloat(iR)-0.5)*delta/Radio
+        fmixOHmin = fmixOHmin + (xOHmin(iR)/vsol)*(dlog(xOHmin(iR))-1.0 -dlog(expmuOHmin)) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
+        fmixOHmin = fmixOHmin - (xOHminbulk/vsol)*(dlog(xOHminbulk)-1.0 -dlog(expmuOHmin)) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
 ! No deberia llevar un delta mas como aca: (?)
 !        fmixOHmin = fmixOHmin + xOHmin(iR)*(dlog(xOHmin(iR))-1.0 -dlog(expmuOHmin)) *delta*(dfloat(iR)-0.5)*delta/Radio
 !        fmixOHmin = fmixOHmin - xOHminbulk*(dlog(xOHminbulk)-1.0 -dlog(expmuOHmin)) *delta*(dfloat(iR)-0.5)*delta/Radio

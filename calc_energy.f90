@@ -73,7 +73,7 @@ subroutine calc_energy(pHbulk)
 F_electro = 0.0    
 do iR  = 1, dimR
     F_electro = F_electro &
-                + psi(iR)*(qtot(iR))/2.0 *(delta)*(dfloat(iR)-0.5)*delta/Radio
+                + psi(iR)*(qtot(iR))/2.0 *(delta)*(dfloat(iR)-0.5+radio/delta)*delta/Radio
 enddo
 ! La siguiente opcion no tiene el mismo sigmaq 
 ! que esta en la condicion de borde de psi(dimR+1)

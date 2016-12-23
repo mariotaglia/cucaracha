@@ -31,7 +31,7 @@ subroutine savetodisk(array, title, sigma, pHbulk, counter2)
 !        enddo
 
         do iR=1,dimR
-            write(45,*)(iR-0.5)*delta,array(iR)
+            write(45,*)(iR-0.5+radio/delta)*delta,array(iR)
         enddo
     close(45)
 

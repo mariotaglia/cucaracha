@@ -20,7 +20,7 @@ function fmix()
 
 ! Siempre se calcula la energia respecto de la de bulk
     do iR = 1, dimR
-        rdrR = delta*(dfloat(iR)-0.5)*delta/Radio
+        rdrR = delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
        
         fmixs = fmixs + rdrR* ( xh(iR) /vsol) *( dlog(xh(iR)) -1.0) 
         fmixs = fmixs - rdrR* (xsolbulk/vsol) *(dlog(xsolbulk)-1.0)

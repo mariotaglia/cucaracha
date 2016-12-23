@@ -11,7 +11,7 @@ function fvdW()
 
     do iR = 1, dimR
         do j = 1, dimR
-            fvdW = fvdW - 0.5000*delta*xtotal(iR)*xtotal(j)*Xu(iR,j) *(dfloat(iR)-0.5)*delta/radio
+            fvdW = fvdW - 0.5000*delta*xtotal(iR)*xtotal(j)*Xu(iR,j) *(dfloat(iR)-0.5+radio/delta)*delta/radio
         enddo
     enddo
 

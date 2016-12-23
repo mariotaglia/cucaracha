@@ -10,9 +10,9 @@ real(kind=8) function fmixpos()
     do iR = 1, dimR
 ! Con los volumenes camibados (MARIO~)
         fmixpos = fmixpos + (xpos(iR)/(vsalt*vsol)) &
-                  *(dlog(xpos(iR)/vsalt) -1.0 - dlog(expmupos/vsalt) ) *delta*(dfloat(iR)-0.5)*delta/Radio
+                  *(dlog(xpos(iR)/vsalt) -1.0 - dlog(expmupos/vsalt) ) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
         fmixpos = fmixpos - (xposbulk/(vsalt*vsol)) &
-                  *(dlog(xposbulk/vsalt) -1.0 - dlog(expmupos/vsalt) ) *delta*(dfloat(iR)-0.5)*delta/Radio
+                  *(dlog(xposbulk/vsalt) -1.0 - dlog(expmupos/vsalt) ) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
 !        fmixpos = fmixpos + (xpos(iR)/(vsalt*vsol))*(dlog(xpos(iR)) -1.0 - dlog(expmupos) ) *delta*(dfloat(iR)-0.5)*delta/Radio
 !        fmixpos = fmixpos - (xposbulk/(vsalt*vsol))*(dlog(xposbulk) -1.0 - dlog(expmupos) ) *delta*(dfloat(iR)-0.5)*delta/Radio
 ! MI version 

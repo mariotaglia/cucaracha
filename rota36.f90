@@ -39,7 +39,7 @@ subroutine rota36(xend,xendr,n_in,test)
 ! Preparo los valores iniciales para buscar el maximo
       dist_ymin=xend(1,2)*(cbe*cal*sga+sal*cga)+ xend(2,2)*(cbe*cal*cga-sal*sga)-xend(3,2)*sbe*cal
 # if CRITERIO ==1
-      rmax=0.0
+      rmax=huge
       xmax=0.0
       ymax=0.0
       int_ymin = 1
@@ -65,8 +65,8 @@ subroutine rota36(xend,xendr,n_in,test)
 # if CRITERIO == 1         
 ! Busco el rmax
          rmaxaux = sqrt( xendr(1,i)**2 + xendr(2,i)**2 ) 
-         if ( rmaxaux > rmax ) then 
-            ! here the polar coordinates of the farest monomer from the center of the nanochannel.
+         if ( rmaxaux.lt.rmax ) then 
+            ! here the polar coordinates of the nearest monomer from the center of the rod.
               int_ymin = i
               rmax = rmaxaux        
               tmax = atan(xendr(2,i)/xendr(1,i)) ! This is the angle
@@ -83,7 +83,7 @@ subroutine rota36(xend,xendr,n_in,test)
 ! a la pared derecha del poro. El y se deja en y=0. ( todas las conf. superpuestas)
         rmaxaux = xendr(1,i) ! Maxima coordenada X
 !        rmaxaux = sqrt( xendr(1,i)**2 + xendr(2,i)**2 ) 
-        if ( rmaxaux > xmax ) then 
+        if ( rmaxaux.lt.xmax ) then 
             xmax = rmaxaux     
             int_ymin = i   
             ymax = xendr(2,i) ! Coordenada Y correspondiente a la maxima coordenada X 
@@ -121,10 +121,10 @@ subroutine rota36(xend,xendr,n_in,test)
 !*!         xendr(2, i) = xendr(2,i) - radio + dist_ymin + 1e-5 ! cambia el origen del eje x, ahora el 0 esta en el centro del poro
 #   if CRITERIO == 1
 ! Acerco el segmento con el rmax, manteniendo el angulo.
-         xendr(1, i) = xendr(1,i) -xmax + (radio-0.01)*xmax /rmax  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
-         xendr(2, i) = xendr(2,i) -ymax + (radio-0.01)*ymax /rmax  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
+         xendr(1, i) = xendr(1,i) -xmax + (radio+0.01)*xmax /rmax  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
+         xendr(2, i) = xendr(2,i) -ymax + (radio+0.01)*ymax /rmax  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
 #   elif CRITERIO == 2 
-         xendr(1, i) = xendr(1,i) - xmax + radio - 1e-5  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
+         xendr(1, i) = xendr(1,i) - xmax + radio + 1e-5  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del rod
          xendr(2, i) = xendr(2,i) - ymax ! lleva la cordenada y del xmax a cero, y=0 corresponde al eje que cruza al xmax
 !         xendr(1, i) = xendr(1,i) + ( sqrt( radio**2 - dist_ymin **2) - rmax - 1e-5)  ! lleva la cordenada y del xmax a cero, ahora el 0 esta en el centro del poro
 #   endif 
@@ -138,7 +138,7 @@ subroutine rota36(xend,xendr,n_in,test)
          vect = (xendr(1, i))**2 + (xendr(2, i))**2 ! distancia desde el centro al segmento ^ 2
          !if ( (abs(dist_ymin) .gt. radio) .or. (vect.gt.radio**2) ) test='N'  ! hay un segmento fuera del poro
 !         if ( (vect.ge.radio**2) ) test='N'  ! hay un segmento fuera del poro
-         if ( (sqrt(vect) > radio) ) test='N'  ! hay un segmento fuera del poro
+         if ( (sqrt(vect) < radio) ) test='N'  ! hay un segmento dentro del rod
 
 # ifdef fdebug_rota36
   print*,"rota36, i, (r^2 -vect), test: ", i, (radio**2 - vect), radio**2 - ( xendr(1,int_ymin)**2 + xendr(2,int_ymin)**2), test 
