@@ -11,8 +11,8 @@ function fmixs()
     fmixs=0
 ! Siempre se calcula la energia respecto de la de bulk
     do iR = 1, dimR
-        fmixs = fmixs + ( xh(iR) /vsol) *( dlog(xh(iR)) -1.0) *delta*(dfloat(iR)-0.5)*delta/Radio 
-        fmixs = fmixs - (xsolbulk/vsol)*(dlog(xsolbulk)-1.0) *delta*(dfloat(iR)-0.5)*delta/Radio
+        fmixs = fmixs + ( xh(iR) /vsol) *( dlog(xh(iR)) -1.0) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio 
+        fmixs = fmixs - (xsolbulk/vsol)*(dlog(xsolbulk)-1.0) *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
     enddo
 
 !    print*, "fmixs llama checknumber: fmixs", fmixs
