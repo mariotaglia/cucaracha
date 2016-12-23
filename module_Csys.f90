@@ -28,7 +28,7 @@ module csys
 ! Bulk values
     real(kind=8) :: cHplus, cOHmin, &
                     pOHbulk, xposbulk, xnegbulk, xsolbulk, &
-                    xHplusbulk, xOHminbulk, &
+                    xHplusbulk, xOHminbulk, expmupol,&
                     std_mupol, expmupos, expmuneg, expmuHplus, expmuOHmin
     real(kind=8), dimension(:), allocatable :: eps
     real(kind=8), dimension(:), allocatable :: pHs, vsigma, vcsalt, vcpol ! list of bulk pHs

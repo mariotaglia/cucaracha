@@ -14,17 +14,17 @@ subroutine read_input
       read(8, *), nsigma   ! Surface coverage
 ! OJO! esta memoria debe ser liberada en el main! becareful!
       allocate(vsigma(nsigma)) 
-      read(8, *), (vsigma(i), i=1, nsigma)
+      read(8, *), (vsigma(i), i=1, nsigma) ![#chains/nm^2]
 
       read(8, *), basura
-      read(8, *), sigmaq   ! Surface chargeable sites
+      read(8, *), sigmaq   ! Surface chargeable sites [e/nm^2]
 
       read(8, *), basura
-      read(8, *), eps1     ! Interaccion Pol-Sup 
+      read(8, *), eps1     ! Interaccion Pol-Sup  [J?]
 
 ! Salt concentration
       read(8, *), basura
-      read(8, *), ncsalt   ! Salt Concentration
+      read(8, *), ncsalt   ! Salt Concentration [M]
       allocate(vcsalt(ncsalt)) 
       read(8, *), (vcsalt(i), i=1, ncsalt)
         csalt=vcsalt(1) ! Me quedo con la primeer sal!
@@ -64,7 +64,7 @@ subroutine read_input
         neq=2*dimR
 
       read(8, *), basura
-      read(8, *), movpos, movneg, movHplus, movOHmin, longporo
+      read(8, *), movpos, movneg, movHplus, movOHmin, longporo ! [(m^2)*mS/M], longporo in micrometers
     close(unit=8)
 
 # if CHAIN != 0

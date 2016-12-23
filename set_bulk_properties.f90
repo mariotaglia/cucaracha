@@ -30,8 +30,8 @@ endif
 
 # if CHAIN == 1 && MUPOL == 1
 ! Volume fraction pol
-    xpolbulk=(cpolbulk/long)*(Na/1.0d24)*(vpol*vsol)
-    xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk - xpolbulk
+    xpolbulk=(cpolbulk)*(Na/1.0d24)*(vpol*vsol)
+    xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk ! - xpolbulk
 # else
 ! En bulk no hay polimero.
          xsolbulk=1.0 -xHplusbulk -xOHminbulk -xnegbulk -xposbulk !- xposbulk2
@@ -74,7 +74,9 @@ endif
 !         Q_bulk , cuantas *xsolbulk**(long*vpol), (1-fdisbulk)**long,long*log(1.0-fdisbulk)
 !expmupol = xpolbulk/vpol / Q_bulk
 
+expmupol = xpolbulk/(long*vpol) / xsolbulk**(long*vpol) /cuantas * (fdisbulk)**long
+
 ! std_mupol : bulk equation
-  std_mupol = dlog(xpolbulk/vpol) - log(1.0*cuantas) - vpol*long*dlog(xsolbulk)+long*dlog(1-fdisbulk)
+  std_mupol = dlog(xpolbulk/(long*vpol) ) - log(1.0*cuantas) - vpol*long*dlog(xsolbulk)+long*dlog(fdisbulk)
 
 end subroutine set_bulk_properties

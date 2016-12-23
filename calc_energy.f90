@@ -28,21 +28,22 @@ subroutine calc_energy(pHbulk)
     F_Mix = 0.0
     F_Mix = fmix() ! Calcula las entropías de mezcla por separado y devuelve el total
                    ! (cada contribucion es guardada en una variable individual)
-    Free_Energy =  Free_Energy + F_Mix
+    Free_Energy =  Free_Energy + F_Mix 
+! Antes se sumaba pero creo que es un error de signo que había en la entropía. 23-08-2016
 
 ! ********************* POLYMER ************************************
 ! 6. Entropia interna polimero + Eq. Quimico (cambiar?)
 ! ******************************************************************
     F_Conf = 0.0
 # if CHAIN != 0 
-    F_Conf = fconf_pol() *sigma *delta/vsol ! elefante por que quitar el delta/vsol?
+    F_Conf = fconf_pol() *sigma ! elefante por que quitar el delta/vsol?
 # endif
     Free_Energy = Free_Energy + F_Conf
 !    print*, "E + F_Fconf" , Free_energy
 
 ! Polymer-Chain Chemical potential inside nanochannel 
 ! If equilibrium it should be equal to std_mupol from bulk.
-    sys_mupol = dlog(sigma) - log_q ! esta expresion no es buena cuando sigma=0
+    sys_mupol = dlog(sigma*delta) - log_q ! esta expresion no es buena cuando sigma=0
 !    sys_mupol = std_mupol
 
 ! 7. Chemical Equilibria
@@ -102,10 +103,11 @@ enddo
     Free_Energy = Free_Energy + F_eps
 
 ! Entropía traslacional del polímero
-! lokking on set_pore_distrib.f90:
+! looking on set_pore_distrib.f90:
 !       sigma = exp( std_mupol + log_q )
 !old    Free_Energy =  Free_Energy + sigma *(dlog(sigma)-1-std_mupol )
-    Free_Energy =  Free_Energy + sigma*(delta/vsol) *( log_q -1 )
+
+!    Free_Energy =  Free_Energy + sigma*(delta/vsol) *( log_q -1 )
 
 
  ! 11. Osmotic-Pressure!? should be zero. this is a check of the packing constraint
@@ -125,13 +127,14 @@ enddo
 !*******************************************************************
     Free_Energy2 = 0.0
     suma_pong = pong_energy() ! pong_energy(): considera la carga superficial sigmaq
-    Free_Energy2 = suma_pong - F_vdW - (delta/vsol)*sigma*log_q !&
+    Free_Energy2 = suma_pong - F_vdW - sigma*log_q !&
 !*********************************************************************************
 ! La siguiente definicion no coincide con la condicion de contorno psi(dimR+1)
 !    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 & 
     
     Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 &
                                 + F_Eq_wall
+    !write(324,*) "c", cpol, -F_vdW, sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0, F_Eq_wall 
 !
 ! Aunque la expresion para la carga superficial aparece en todas mis deducciones 
 ! aparentemente no hace falta. Es un termino constante. 
@@ -153,6 +156,7 @@ enddo
          write(304,*) cpol, F_Mix_neg
          write(305,*) cpol, F_Mix_Hplus
          write(306,*) cpol, F_Mix_OHmin
+         write(206,*) cpol, F_Mix_pol
          write(308,*) cpol, F_Eq
          write(319,*) cpol, F_Eq_wall
          write(202,*) cpol, sys_mupol, std_mupol

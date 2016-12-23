@@ -70,6 +70,7 @@ do iR=1,dimR
 # else 
 fdis(iR) = Ka0 / ( xOHmin(iR)/xh(iR)  + Ka0   ) ! using fdiswall symmetry 
 fdisbulk = Ka0 / (( xOHminbulk/xsolbulk)  + Ka0   ) ! using fdiswall symmetry 
+
 #endif 
 ! fdis(iR) = 1.0 / (1.0 + xOHmin(iR)/(xh(iR)*Ka0) ) ! MARIO EXPRESSION ! Funciona 
 ! fdis(iR) = 0.9
@@ -145,14 +146,15 @@ do iR = 1, dimR
 !    xpot(iR) = (xh(iR)**vpol) !/ (1-fdis(iR))
 #else
     ! Para polimero con regulacion de carga (cargado positivamente) 
-    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) / exp(eps(iR))
+    xpot(iR) = (xh(iR)**vpol) / (fdis(iR)) / exp(eps(iR)) * exp(-psi(iR)*zpol)
+!    xpot(iR) = (xh(iR)**vpol) / (1-fdis(iR))*(1-fdisbulk) / exp(eps(iR))
     !xpot(iR) = (xh(iR)**vpol)*exp(-psi(iR)*zpol) /(1-fdis(iR)-fdis2(iR) )
 !    xpot(iR) = xpot(iR) *exp(-psi(iR)*zpol) *expmuOHmin *Ka0*(1.0-fdis(iR))/fdis(iR)
 #endif
 #   elif POL == 1 /* PMEP */
-    xpot(iR) = (xh(iR)**vpol)/(1.0-fdis(iR)-fdis2(iR) ) 
+    xpot(iR) = (xh(iR)**vpol)/(1.0-fdis(iR)-fdis2(iR) ) / exp(eps(iR))
 #   elif POL == 2 /* Neutral Polymer */
-    xpot(iR) = (xh(iR)**vpol) ! Polimero neutro ! For Neutral Polymers OK!
+    xpot(iR) = (xh(iR)**vpol) / exp(eps(iR))! Polimero neutro ! For Neutral Polymers OK!
 #   endif /* PAH || PMEP */
 # ifdef fdebug_set_pore_distrib
 print*, "spd L149", iR, fdisbulk, xpot(iR), fdis(iR), xh(iR)
@@ -195,7 +197,6 @@ enddo
 # endif
 
 avpol(:)= 0.0 ! line important to probability calculus
-print*, "sigma: ", sigma
 !**************************************************************
 ! Calculo de la densidad de probabilidad de cada configuracion
 ! Estos Do's estan bien, siempre dejar la coma a la izquierda.
@@ -237,12 +238,13 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
     q=q+pro(i)
 !    q=q+pro(i)/shift ! Divido q por shift!
 enddo
-    write(11, *), q/shift_f/shift!, q, shift
+    !write(11, *), q/shift_f/shift!, q, shift
     log_q = dlog(q/shift_f/shift)
 
 #if MUPOL == 1
 ! Para monocapas en superficie interna del nanocanal
-  sigma = exp( std_mupol + log_q ) !*(delta/vsol)! Si saco el log_q entonces no tengo que normalizar avpol!
+! sigma = exp( std_mupol + log_q )/delta !*(delta/vsol)! Si saco el log_q entonces no tengo que normalizar avpol!
+  sigma = expmupol*delta/vsol*q
 #endif
 
 do i=1,chaintot ! i enumerate configurations (configurations ensamble)
@@ -250,8 +252,9 @@ do i=1,chaintot ! i enumerate configurations (configurations ensamble)
         aR = pR(i, j) 
 ! pR devuelve en que layer se encuentra el monómero j del polímero i.
      ! OJO aca no es sigma el factor multiplicativo! elefante! (para el caso de cadenas libres!)
+ avpol(aR) = avpol(aR) + pro(i)*expmupol*vpol*factorcurv(aR) ! cilindro, ver notas
 
-       avpol(aR) = avpol(aR) + pro(i)*(sigma)*(vpol)*factorcurv(aR)!/delta ! cilindro, ver notas
+!       avpol(aR) = avpol(aR) + pro(i)*(sigma)*(vpol)*factorcurv(aR)!/delta ! cilindro, ver notas
 ! Sigma es adimensional la superficie de referencia es delta/vsol (que se simplifico con los factores que venian
 ! de el factor de curvatura (definicion del n(r;r',alpha) y la integral en volumen (2*pi*L*R)
 
@@ -291,7 +294,9 @@ enddo ! End loop over chains/configurations
 
 !    call mpwrite(11,q/shift)
 !    log(q) is nepperian log of q (mofun90 variable). has 15 digits of precision.
-    write(11,*) "q, log_q: ", q, log_q
+
+!    write(11,*) "q, log_q: "
+    write(11,*)  q, log_q
 
     do i=1,chaintot 
         pro(i) = pro(i)/q
@@ -300,12 +305,12 @@ enddo ! End loop over chains/configurations
 !    print*, "pro(:): ", pro(:)
 !    call printstate("L105 set_pore_distrib")
 
-    do iR=1, dimR            ! norma avpol
-        avpol(iR) = avpol(iR)/ q
+!    do iR=1, dimR            ! norma avpol
+!        avpol(iR) = avpol(iR)/ q
 !        avpoln(iR) = avpoln(iR) / q
 !        avpolp(iR) = avpolp(iR) / q 
 !         avpol(iR) = avpoln(iR) + avpolp(iR)
-    enddo
+!    enddo
 
 ! Chequeo avpol
 !     temp2=0.0

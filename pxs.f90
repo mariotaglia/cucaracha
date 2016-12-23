@@ -19,6 +19,7 @@ subroutine pxs
         do j=1,long ! 1 = y, 2 = x, 3 = z... z no se usa...)
             vect = sqrt((in1(i,j,1))**2 + in1(i,j,2)**2) ! distancia del centro al segmento
 # ifdef BMu_const
+!            print*, i,j,vect, (int(vect/delta)+1), dimR
             if(vect.lt.radio) then
                 chaintot=chaintot-1
                 exit

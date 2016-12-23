@@ -104,6 +104,7 @@ subroutine printstate(marca)
     write(1984,*), "fmixneg      :", F_Mix_neg   
     write(1984,*), "fmixHplus    :", F_Mix_Hplus 
     write(1984,*), "fmixOHmin    :", F_Mix_OHmin 
+    write(1984,*), "fmixpol      :", F_Mix_pol 
     write(1984,*), "fconf_pol    :", F_Conf      
     write(1984,*), "fchem_eq     :", F_Eq        
     write(1984,*), "fchem_eq_wall:", F_Eq_wall       
