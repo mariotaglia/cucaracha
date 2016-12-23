@@ -23,8 +23,9 @@ real(kind=dp) :: infinity ! este valor puede ser MUY grande
 
 !integer, dimension(dimR,nmon) :: n_exp 
 
-eps(:) = 0
-eps(dimR) = eps1
+eps = 0.0
+eps(1) = eps1
+
 
 
 infinity=HUGE(q)
