@@ -43,8 +43,9 @@ subroutine calc_energy(pHbulk)
 
 ! Polymer-Chain Chemical potential inside nanochannel 
 ! If equilibrium it should be equal to std_mupol from bulk.
-    sys_mupol = dlog(sigma*delta) - log_q ! esta expresion no es buena cuando sigma=0
-!    sys_mupol = std_mupol
+    sys_mupol = dlog(sigma/delta) - log_q ! esta expresion no es buena cuando sigma=0
+
+
 
 ! 7. Chemical Equilibria
 ! ******************************************************************
