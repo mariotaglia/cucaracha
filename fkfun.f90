@@ -94,7 +94,7 @@ subroutine fkfun(x,f,ier)
 !        call checknumber(norma,'norma en fkfun') ! if NaN or Infinity checknumber stops the program
 !        call Rchecknumber(norma, 'norma en fkfun') ! if NaN or Infinity checknumber stops the program
     enddo
-!    print*, "fkfun67: iter, norma, q", iter, norma
+    print*, "fkfun67: iter, norma, q", iter, norma
 !    write(10,'(A14,I4,A8)', advance='no') "fkfun95: iter ", iter, " norma: "
 !    call mpwrite(10,norma)
     write(10,'(A14,I4,A8,ES14.7)', advance='yes') "fkfun95: iter ", iter, " norma: ", norma
