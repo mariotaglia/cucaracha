@@ -121,7 +121,7 @@ print*, "set_pore_distrib L99 fdiswall, fdis(iR), xh(iR): ", fdiswall, fdis(:), 
 !! Estas ecuaciones son suplementarias a la eq. de Poisson discretizada
 !   *   The derivate at r=0 should be zero. 
 !       Se utiliza orden 1 en la derivada en r=0.
-     psi(0) = psi(1) - delta*(constq)*(sigmaq*delta/vsol)*zwall*fdiswall 
+     psi(0) = psi(1) + delta*(constq)*(sigmaq*delta/vsol)*zwall*fdiswall 
 !   *   The derivate at r=R takes into account the superficial charge: sigmaq. 
 !       Se utiliza orden 2 en la derivada.
      psi(dimR+1) = 0.0
