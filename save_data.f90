@@ -71,7 +71,7 @@ subroutine save_data(ipH,icpol)
 ! Potencial electrostatico
 !        call printstate('save_data L71')
       title = 'poten'
-      call savetodisk(psi, title, cpol, pH, ipH)
+      call savetodisk(psi(1:dimR), title, cpol, pH, ipH)
 
 # ifdef debug
     format_string = '(A5,A1,I2.2,F0.2,A1,I3.3,A4)'
