@@ -70,7 +70,7 @@ subroutine fkfun(x,f,ier)
 
 ! Cilindro (derivada al centro), ver notas mis_apuntes.lyx eq.discret_poisson, f() debe ser cero
         f(iR+dimR)= psi(iR+1) -2*psi(iR) + psi(iR-1) &
-                  + (0.5/(dfloat(iR)-0.5+radio/delta))*(psi(iR+1)-psi(iR-1)) & ! termino de curvatura
+                  + (0.5/(dfloat(iR)-0.5+radio/delta))*2.0*(psi(iR+1)-psi(iR-1)) & ! termino de curvatura
                   + qtot(iR)*delta*delta*constq
       
 !*******************************************************************
