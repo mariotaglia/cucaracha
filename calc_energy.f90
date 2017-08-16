@@ -16,6 +16,8 @@ subroutine calc_energy(pHbulk)
 !    real(kind=8) :: F_Mix_pos, F_Mix_neg, F_Mix_Hplus, F_Mix_OHmin, &
 !                    F_Conf, F_Eq, F_Eq_wall, F_vdW, F_electro, F_eps
     integer :: iR,j
+    real*8 :: rdrR
+  
 
     print*, "Calculating energies..." 
     Free_Energy = 0.0
@@ -65,6 +67,7 @@ subroutine calc_energy(pHbulk)
     F_vdW = 0.0
 # ifdef VDW
     F_vdW = fvdW()
+    stop !! VDW no funciona para coordenadas esfericas !!
     Free_Energy = Free_Energy + F_vdW
     print*, "E + F_vdW" , Free_energy
 # else
@@ -74,12 +77,13 @@ subroutine calc_energy(pHbulk)
 ! 9. Electrostatic - Esta calculada en las unidades correctas
 F_electro = 0.0    
 do iR  = 1, dimR
+    rdrR = (delta**3)*((dfloat(iR)-0.5+radio/delta)**2)/(Radio**2)
     F_electro = F_electro &
-                + psi(iR)*(qtot(iR))/2.0 *(delta)*(dfloat(iR)-0.5+radio/delta)*delta/Radio
+                + psi(iR)*(qtot(iR))/2.0 *rdrR
 enddo
 ! La siguiente opcion no tiene el mismo sigmaq 
 ! que esta en la condicion de borde de psi(dimR+1)
-    F_electro = F_electro + sigmaq*(delta/vsol)*zwall*fdiswall*psi(dimR)/2.0 
+    F_electro = F_electro + sigmaq*(delta/vsol)*zwall*fdiswall*psi(1)/2.0 
 ! La siguiente opcion es coherente con la definicion de psi(dimR+1)
 !    F_electro = F_electro + sigmaq*(delta/vsol)*constq*zwall*fdiswall*psi(dimR)/2.0 
     
@@ -133,7 +137,7 @@ enddo
 ! La siguiente definicion no coincide con la condicion de contorno psi(dimR+1)
 !    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 & 
     
-    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 &
+    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(1)/2.0 &
                                 + F_Eq_wall
     !write(324,*) "c", cpol, -F_vdW, sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0, F_Eq_wall 
 !

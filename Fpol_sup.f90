@@ -6,6 +6,9 @@ function fpol_sup()
     implicit none
     real(kind=8) :: fpol_sup
     integer :: iR
+    real*8 :: rdrR1
+    rdrR1 = (delta**3)*((dfloat(1)-0.5+radio/delta)**2)/(Radio**2)
+
 !  2015-04-20 Interaccion polimero superficie (electrostatica(?)<-nop it could be chemist or entropic interaction)
     fpol_sup=0.0
 
@@ -16,7 +19,7 @@ function fpol_sup()
 !    enddo
         ! Check avpol(iR) expression, here we need rho_pol
 
-        fpol_sup = eps(1)*avpol(1)/vpol/vsol*delta*(dfloat(1)-0.5+radio/delta)*delta/radio
+        fpol_sup = eps(1)*avpol(1)/vpol/vsol*rdrR1
 
     print*, "fpol_sup L16: " , fpol_sup 
 !    print*, "f_vdW llama checknumber: f_vdW", f_vdW

@@ -11,6 +11,7 @@ function pong_energy()
 
     real(kind=8) :: pong_energy, sumpi, sumrho, sumel, sumpol!, sum_disos
     integer :: iR
+    real*8 :: rdrR
 
 ! Energía segun Pong:
 ! Esta energia se obtiene lugeo de reemplazar las expresiones 
@@ -26,20 +27,21 @@ function pong_energy()
 ! y la energia del bulk. Por eso aparecen las magnitudes en bulk. 
 !**********************************************************************************
     do iR=1,dimR
-        sumpi = sumpi+dlog(xh(iR))/vsol *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio     
-        sumpi = sumpi-dlog(xsolbulk)/vsol *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio  
+        rdrR = (delta**3)*((dfloat(iR)-0.5+radio/delta)**2)/(Radio**2)
+        sumpi = sumpi+dlog(xh(iR))/vsol *rdrR
+        sumpi = sumpi-dlog(xsolbulk)/vsol *rdrR  
         
        sumrho = sumrho + ( - xh(iR) -xHplus(iR) -xOHmin(iR) &
                             -(xpos(iR)+xneg(iR))/vsalt &
 !                            - xpos2(iR)/vsalt2 & ! sum over  rho_i i=+,-,si
-                          ) /vsol *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
+                          ) /vsol *rdrR
 ! Bulk sumrho
         sumrho = sumrho - ( - xsolbulk -xHplusbulk -xOHminbulk &
                             -(xposbulk+xnegbulk)/vsalt &
 !                            - xposbulk2/vsalt2 & ! sum over  rho_i i=+,-,si
-                          ) /vsol *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
+                          ) /vsol *rdrR
 ! electrostatic part free energy
-        sumel = sumel - qtot(iR) *psi(iR)/2.0 *delta*(dfloat(iR)-0.5+radio/delta)*delta/Radio
+        sumel = sumel - qtot(iR) *psi(iR)/2.0 *rdrR
 
 ! Bulk polymer chain density
 !        sumpol = sumpol - (- xpolbulk / (long*vpol) )/vsol *delta*(dfloat(iR)-0.5)*delta/Radio 
