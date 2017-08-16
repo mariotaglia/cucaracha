@@ -169,6 +169,8 @@ print*, "spd L149", iR, fdisbulk, xpot(iR), fdis(iR), xh(iR)
    do j = 1, dimR
 !   xpot(iR) = xpot(iR) * dexp(vsol*vpol*Xu(iR,j)*xtotal(j+1))!Porque j+1? (elefante)
        xpot(iR) = xpot(iR) * dexp(vsol*vpol* Xu(iR,j)*xtotal(j))
+   stop
+! VDW no funciona para coordenadas esfericas! !!!
    end do
 #endif /* VDW */
 enddo
