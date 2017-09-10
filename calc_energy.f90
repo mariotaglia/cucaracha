@@ -78,7 +78,7 @@ do iR  = 1, dimR
 enddo
 ! La siguiente opcion no tiene el mismo sigmaq 
 ! que esta en la condicion de borde de psi(dimR+1)
-    F_electro = F_electro + sigmaq*(delta/vsol)*zwall*fdiswall*psi(dimR)/2.0 
+    F_electro = F_electro + sigmaq*(delta/vsol)*zwall*fdiswall*psi(dimR+1)/2.0 
 ! La siguiente opcion es coherente con la definicion de psi(dimR+1)
 !    F_electro = F_electro + sigmaq*(delta/vsol)*constq*zwall*fdiswall*psi(dimR)/2.0 
     
@@ -132,7 +132,7 @@ enddo
 ! La siguiente definicion no coincide con la condicion de contorno psi(dimR+1)
 !    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 & 
     
-    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0 &
+    Free_Energy2 = Free_Energy2 + sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR+1)/2.0 &
                                 + F_Eq_wall
     !write(324,*) "c", cpol, -F_vdW, sigmaq*zwall*fdiswall*(delta/vsol)*psi(dimR)/2.0, F_Eq_wall 
 !
